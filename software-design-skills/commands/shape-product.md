@@ -1,5 +1,5 @@
 ---
-description: Shape a greenfield product idea before writing requirements.
+description: Shape a product idea, or a design baseline for an existing system, before writing requirements.
 disable-model-invocation: true
 argument-hint: [request]
 ---

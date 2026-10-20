@@ -1,9 +1,10 @@
 {
   "name": "software-design-skills",
-  "version": "1.1.0",
-  "description": "Six composable greenfield skills that turn a product idea into an implementation-ready canonical software design package with bounded independent review, explicit reconciliation, contracts, and vertical build planning.",
+  "version": "1.2.0",
+  "description": "Six composable skills that turn a product idea or an existing system into an implementation-ready canonical software design package with bounded independent review, explicit reconciliation, contracts, and vertical build planning.",
   "keywords": [
     "greenfield",
+    "retroactive-design",
     "requirements",
     "prd",
     "software-architecture",
@@ -18,7 +19,7 @@
   "interface": {
     "displayName": "Software Design Skills",
     "shortDescription": "Turn an idea into an implementation-ready design package",
-    "longDescription": "A proportional greenfield workflow for shaping product intent, writing a product-authoritative PRD, designing canonical technical artifacts, running one bounded independent baseline review, reconciling blocking findings separately, verifying fixes by impact cone, and planning vertical build slices without reopening architecture indefinitely.",
+    "longDescription": "A proportional workflow, for new products or a design baseline of an existing system, for shaping product intent, writing a product-authoritative PRD, designing canonical technical artifacts, running mechanical package checks and one bounded independent baseline review, reconciling blocking findings separately, verifying fixes by impact cone, and planning vertical build slices without reopening architecture indefinitely.",
     "developerName": "Sue",
     "category": "Productivity",
     "capabilities": [

@@ -1,9 +1,9 @@
 ---
 name: shaping-product
-description: Shape Product. Turn an ambiguous greenfield software idea into a compact product brief by establishing the problem, users, outcomes, constraints, scope, critical domain language, material stakeholder decisions, and the smallest applicable downstream design-artifact set before choosing implementation details.
+description: Shape Product. Use when starting a new product, or a design baseline for an existing system. Turn the idea into a compact product brief by establishing the problem, users, outcomes, constraints, scope, critical domain language, material stakeholder decisions, and the smallest applicable downstream design-artifact set before choosing implementation details.
 ---
 
-# Shape a Greenfield Product
+# Shape a Product
 
 Read `references/product-brief-template.md` and `references/artifact-sizing.md`.
 
@@ -71,9 +71,19 @@ Conditional:
 - AsyncAPI if asynchronous/event contracts exist;
 - Mermaid for non-trivial user/system flows;
 - HTML prototype when visual interaction is important enough to validate;
-- ADRs only for consequential technical decisions with real alternatives/trade-offs.
+- ADRs only for consequential technical decisions with real alternatives/trade-offs;
+- `docs/design/architecture/quality-attributes.md` when NFRs need a design response and verification evidence (security, reliability, performance, deployment, observability, cost, on-device measurement).
 
-## 5. Output
+## 5. Existing System (Retroactive Package)
+
+When the package describes a system that already exists:
+
+- inspect the code as evidence; the target state still comes from stakeholder intent;
+- record in the brief the current state with `path:line` evidence and the documents the package will supersede;
+- mark the manifest later with the optional retroactive fields (see `designing-system/references/manifest-template.yaml`);
+- list each drift between code and target design in the brief (`DR-001`, what differs, `path:line`, requirement IDs it affects), or turn it into a product decision (PD) in the PRD. It is never a review finding; `writing-build-plan` §3 later copies each drift into the "Stop if" of the milestone that fixes it.
+
+## 6. Output
 
 Write `docs/product/brief.md` with:
 

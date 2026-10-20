@@ -1,13 +1,10 @@
-schema_version: 2
+schema_version: 3
 project: <project-name>
-design_package_version: <version>
 status: draft | ready_for_review | needs_reconciliation | ready_for_verification | approved | blocked | escalate
 
 review:
-  baseline_id: null
-  baseline_design_package_version: null
-  reconciliation_cycles: 0
-  max_automatic_reconciliation_cycles: 3
+  baseline_id: RV-001
+  ledger: docs/design/review.md
 
 read_first:
   - docs/product/prd.md
@@ -17,7 +14,7 @@ read_first:
 authoritative_sources:
   product:
     path: docs/product/prd.md
-    owns: [purpose, users, scope, journeys, functional_requirements, non_functional_requirements, business_rules, product_constraints]
+    owns: [purpose, users, scope, journeys, functional_requirements, non_functional_requirements, business_rules, product_constraints, product_decisions]
   domain:
     path: docs/design/domain.md
     owns: [ubiquitous_language, domain_invariants, domain_boundaries]
@@ -27,6 +24,9 @@ authoritative_sources:
   architecture_decisions:
     path: docs/design/architecture/adr/
     owns: [technical_decision_rationale, tradeoffs]
+  quality_attributes:
+    path: docs/design/architecture/quality-attributes.md
+    owns: [nfr_design_response, nfr_verification_evidence]
   data:
     path: docs/design/data/schema.dbml
     owns: [persistent_schema]
@@ -46,9 +46,25 @@ authoritative_sources:
 not_applicable:
   - <artifact key>
 
+change_folders: docs/changes/
+
+# Optional keys below: keep only the ones that apply.
+checks:
+  - <command the review runs before reading, e.g. the repository's own package verifier>
+
+cross_repo_dependencies:
+  - repository: <repo>
+    must_change: <contract or behavior>
+    deploy_order: <before | after | same window as this repository>
+
+nature: retroactive
+superseded_documents:
+  - <path of a pre-existing document this package replaces>
+
 rules:
   - A more specific canonical contract owns its detail; general prose must not redefine it.
-  - An ADR may explain or supersede a prior technical decision only when its status is Accepted/Superseded explicitly.
-  - Product behavior may not be changed by a technical artifact without an approved PRD/product decision update.
+  - An ADR settles a decision only when its status is Accepted with an "Accepted by" line, or Superseded explicitly.
+  - Product behavior may not be changed by a technical artifact without a decided PRD §15 row.
   - Stop implementation for semantic conflicts that require incompatible behavior or could cause materially different implementations; terminology, formatting, casing, and editorial differences alone are not blocking contradictions.
-  - Review is bounded: one comprehensive baseline review is followed by reconciliation and impact-cone verification, not repeated full adversarial reviews.
+  - No artifact cites the version of another artifact.
+  - After approval, authorities change only through change folders; a new review happens only when a new baseline opens, and it covers the impact of the material change plus global contradictions.

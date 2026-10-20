@@ -1,11 +1,13 @@
 ---
 name: reviewing-system-design
-description: Review System Design. Independently gate a greenfield design package for build readiness using one comprehensive baseline review followed by bounded verification reviews. Record stable findings with severity and evidence, do not modify canonical design artifacts during review, and approve when blocking findings are closed rather than pursuing unlimited perfection.
+description: Review System Design. Use when a design package is ready for review or a new baseline opens. Independently gate it for build readiness: run the mechanical checks first, then one baseline review followed by bounded verification reviews. Record stable findings with severity and evidence, do not modify canonical design artifacts during review, and approve when blocking findings are closed or routed rather than pursuing unlimited perfection.
 ---
 
 # Review the System Design
 
 Read `references/review-checklist.md` and `references/review-ledger-template.md`.
+
+Run the review in a fresh session or subagent that did not author the design.
 
 ## Purpose
 
@@ -21,13 +23,26 @@ Require access to `docs/spec/manifest.yaml`, every applicable authority named by
 
 Select exactly one mode from manifest status:
 
-- `ready_for_review` -> **Baseline Review**. Perform one comprehensive review of the current design package version.
+- `ready_for_review` with `review.baseline_id` `RV-001` -> **Baseline Review**. Perform one comprehensive review of the package.
+- `ready_for_review` with a later baseline (`RV-002` onward) -> **New Baseline Review**. A material change opened that baseline. Review the impact of that change on the authorities it touches, plus global contradictions; do not re-review the whole package.
 - `ready_for_verification` -> **Follow-up Verification**. Verify existing findings and inspect only the impact cone of reconciliation changes for regressions.
-- `approved` -> do not reopen review unless the design package changed materially and the manifest was explicitly returned to `ready_for_review`.
+- `approved` -> refuse to reopen it. Later changes go through change folders; only a new baseline returns the package to `ready_for_review`.
 - `needs_reconciliation` -> stop and invoke `reconciling-system-design` instead.
 - `blocked` or `escalate` -> preserve the state unless the blocking condition has been explicitly resolved outside this skill.
 
-Review as if you did not author the design. Inspect canonical artifacts themselves rather than trusting summaries.
+Inspect canonical artifacts themselves rather than trusting summaries.
+
+## 0. Mechanical Checks
+
+Before reading the package for meaning, run:
+
+1. `node <this skill's directory>/scripts/check-package.mjs <repository root>` — the package verifier. It checks `schema_version: 3` packages and skips older ones.
+2. Every command listed under `checks:` in the manifest.
+3. The official validator of each artifact present, when available: Structurizr for the DSL, an OpenAPI linter, `@dbml/core` for DBML.
+
+Record each command and its result in the ledger. Each failure becomes a finding owned by the artifact it names. Do not spend review effort on what these checks already cover.
+
+In a retroactive package, a drift between code and target design is not a finding: it belongs in the brief's drift list, against the requirement IDs it affects, or in a PRD §15 decision (routing rule: `writing-build-plan` §3). Record a finding only when a drift has neither.
 
 ## 1. Finding Model
 
@@ -114,10 +129,10 @@ Flag artifacts that add no authority or duplicate another source only when the d
 
 At the end of the baseline review:
 
-- create or update `docs/design/review.md` using the ledger template;
-- record the baseline design package version and a baseline identifier;
+- create or update `docs/design/review.md` using the ledger template; it holds only the current baseline. A new baseline rewrites it but carries over every finding still `OPEN`, `ACCEPTED`, or `BLOCKED` with its ID, and continues the numbering; resolved and invalid findings stay in git history;
+- record the baseline identifier (`RV-n`), which is also `review.baseline_id` in the manifest;
 - set all discovered findings to `origin: BASELINE`;
-- initialize reconciliation cycle count to `0` for this baseline;
+- initialize the reconciliation cycle count to `0` in the ledger;
 - do **not** modify canonical design artifacts.
 
 ## 4. Follow-up Verification
@@ -147,14 +162,14 @@ After the baseline, create a new finding only when clear evidence shows one of t
 - `REGRESSION`: reconciliation introduced a new `BLOCKER` or `MAJOR` defect in the impact cone;
 - `CRITICAL_NEW`: a previously unseen `BLOCKER` would make implementation materially incorrect, unsafe, or impossible.
 
-Do not introduce new `MINOR` or `NOTE` findings during follow-up verification. Do not introduce unrelated new `MAJOR` findings that were not caused by reconciliation; they belong to a later explicitly requested full audit after a material design change.
+Do not introduce new `MINOR` or `NOTE` findings during follow-up verification. Do not introduce unrelated new `MAJOR` findings that were not caused by reconciliation; they belong to a new baseline opened after a material design change.
 
 For each existing finding:
 
 - set `RESOLVED` only when canonical evidence satisfies its verification condition;
 - return it to `OPEN` when the attempted correction is insufficient;
 - use `INVALID` only when the original finding is disproven by canonical evidence;
-- use `ACCEPTED` for non-blocking debt intentionally retained;
+- use `ACCEPTED` for non-blocking debt intentionally retained; on a `BLOCKER` or `MAJOR` only with the decision owner's verbatim quote recorded in the finding;
 - use `BLOCKED` when resolution requires a stakeholder decision that must not be invented.
 
 ## 5. Convergence Rules
@@ -168,17 +183,29 @@ For each baseline:
 - if unresolved `BLOCKER + MAJOR` count increases in **two consecutive follow-up verifications**, verdict `Escalate`;
 - a single temporary increase caused by a legitimate regression is allowed and must be recorded explicitly.
 
-Do not continue an automatic loop after `Escalate`.
+Do not continue an automatic loop after `Escalate`. The cycle count lives only in the ledger.
 
-A new comprehensive review is allowed only when the design package changed materially, such as:
+### Leaving `Escalate`
+
+The user chooses the exit, recorded as a PRD §15 decision with their verbatim quote:
+
+- **build the unaffected milestones** (default): build M01 and every milestone the open findings do not touch;
+- **accept with risk**: mark the findings `ACCEPTED` with the quote;
+- **cut scope**: remove the affected capability from the MVP through the §15 decision.
+
+Whatever the exit, record in each open `BLOCKER` or `MAJOR` finding the requirement IDs it affects (`Routed to`); `writing-build-plan` §3 copies it into the "Stop if" of every milestone covering them, so implementation sees it before editing. With the exit recorded and the findings routed, the package becomes `approved`.
+
+### New baseline
+
+A new baseline opens only when the package changes materially after approval, such as:
 
 - major PRD scope/behavior change;
 - new integration or trust/security boundary;
 - material domain lifecycle change;
 - consequential architecture replacement;
-- explicit request for a new full audit.
+- explicit request from the user for a new baseline.
 
-Such a review begins a new baseline generation and preserves prior review history.
+The user decides to open it; the session acting on that decision sets `review.baseline_id` to the next identifier (`RV-n+1`) and the manifest to `ready_for_review`. Its review covers the impact of the change plus global contradictions. A redesign too broad to bound is a compact-change `escalate`, not a new baseline.
 
 ## 6. Objective Approval Threshold
 
@@ -204,6 +231,8 @@ Use `Needs design revision` when one or more resolvable `BLOCKER` or `MAJOR` fin
 Use `Blocked` when progress requires a stakeholder/product decision that cannot be inferred safely.
 
 Use `Escalate` when convergence rules trigger or architectural judgment is required beyond bounded automatic reconciliation.
+
+A package also becomes `Approved for build planning` after `Escalate` once the user's exit is recorded and every open `BLOCKER`/`MAJOR` is routed to the requirement IDs it affects (see Leaving `Escalate`).
 
 ## 7. State Transitions
 

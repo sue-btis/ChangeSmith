@@ -1,10 +1,16 @@
-# Greenfield Build Plan Template
+# Build Plan Template
 
 ````markdown
 # <Product> Build Plan
 
-Status: Ready | Blocked | Stale
-Design package: `<manifest path>@<design_package_version>`
+Baseline: RV-<n>
+Change folders: <manifest change_folders, e.g. docs/changes/>; milestone folders are named YYYY-MM-DD-Mxx-<slug>
+
+Milestone status (no status is stored in this plan):
+
+```bash
+grep -iH -m4 -E '^(Verdict|Acceptance|Verified by|Open limitations):' docs/changes/*-[Mm][0-9]*-*/verification.md
+```
 
 ## Strategy
 <short explanation of vertical slicing and highest-risk assumptions>
@@ -59,7 +65,10 @@ Stop if:
 - implementation requires changing a frozen product behavior;
 - canonical authorities contradict each other;
 - an unapproved architecture decision is required;
-- required scope expands beyond this milestone.
+- required scope expands beyond this milestone;
+- open review finding F-### is still open (only when routed here at approval);
+- <who> has not confirmed <human task> (only when this milestone needs one);
+- <retroactive drift this milestone fixes> (only in a retroactive package).
 
 ## Milestone M02 — <name>
 <repeat>

@@ -15,7 +15,7 @@ Design size: compact | standard | complex
 - Usage context:
 
 ## Desired Outcomes
-- OUT-01 — <observable outcome>
+- OUT-001 — <observable outcome>
 
 ## Scope
 Included:
@@ -25,7 +25,7 @@ Excluded:
 - <non-goal>
 
 ## Constraints
-- CON-01 — <hard stakeholder/product constraint>
+- CON-001 — <hard stakeholder/product constraint>
 
 ## Core Domain Language
 | Term | Meaning |
@@ -50,4 +50,12 @@ Excluded:
 | AsyncAPI | Yes/No | |
 | Mermaid flows | Yes/No | |
 | HTML prototype | Yes/No | |
+| Quality attributes | Yes/No | |
+
+## Drifts (retroactive packages only)
+| ID | What differs from the target | Evidence | Affects |
+|---|---|---|---|
+| DR-001 | | `<path>:<line>` | FR-###, NFR-### |
 ```
+
+The brief is a historical input once the PRD exists: its approved and open decisions move to PRD §15, and the only later edit is `designing-system` removing its `Status:` line.
