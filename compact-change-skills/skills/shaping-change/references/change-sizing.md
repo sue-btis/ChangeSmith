@@ -60,7 +60,9 @@ Create it when either holds:
 - shaping cannot fill all three **evidence facts** with repository evidence:
   1. the entry point of the behavior, as `path:line`;
   2. the tests that cover it, or `none`;
-  3. for each contract the change alters, its consumers in this repository, with the search command that produced the list.
+  3. for each contract the change alters, its consumers in this repository, with the method that produced the list.
+
+Find entry points and consumers with the LSP tool (`findReferences`, `incomingCalls`, `goToImplementation`) when a language server answers for that file: it resolves the symbol, so same-named functions and fields in other types do not inflate the list. A freshly started server often returns only the declaration; retry before concluding there are no consumers. Where no server answers (for example SQL or shell), use a text search and record it as `grep`, because that list may include unrelated matches or miss dynamic uses.
 
 For a `lean` change, only an `unknown` evidence fact triggers the audit. Consumers in other repositories go to the spec's "Other Repositories" section and do not trigger it.
 

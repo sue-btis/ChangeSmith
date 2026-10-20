@@ -13,7 +13,7 @@ Audit trigger: strict | critical | <which evidence fact was unknown at shaping>
 |---|---|
 | Entry point | `<path>:<line>` |
 | Covering tests | `<test path>` / none |
-| Consumers of each altered contract | <contract>: <consumers> — found with `<search command>` |
+| Consumers of each altered contract | <contract>: <consumers> — found with LSP `findReferences` \| grep `<search command>` |
 
 ## Baseline
 | Field | Value |
