@@ -6,6 +6,19 @@ Compatible con **OpenAI Codex** y **Claude Code**. Los `SKILL.md` están en ingl
 
 Funciona por sí solo, en cualquier repositorio. Cuando el repositorio tiene un paquete de diseño de `software-design-skills`, además lo respeta.
 
+## Qué cambia en 2.3
+
+- **Las pruebas no se aflojan en silencio.** Borrar, saltar o debilitar una prueba existente exige una decisión en la spec. Si no la hay, es un defecto.
+- **Cada spec dice cómo se demuestra que funciona** (`Done when`), de punta a punta.
+- **Esfuerzo por etapa.** `medium` por defecto; `high` solo para `critical`, concurrencia, migración o la ronda después de un `Fail`.
+- **Tope de tres rondas de corrección.** Después se replantea el enfoque en vez de seguir parchando.
+- **Hallazgos `pre-existing`.** Un defecto que ya estaba no bloquea el `Pass` ni se le carga al cambio.
+- **Hooks dentro del plugin** (solo Claude Code):
+  - `hooks/presupuesto-comentarios.mjs` revisa el presupuesto de comentarios al editar;
+  - `hooks/git-guard.mjs` aplica la convención de ramas. No se commitea en `main`, `master` ni `development`. A `main` solo entra merge desde `development`. Las ramas se llaman `<feat|fix|docs|refactor|chore|test>/<descripcion>/<Nombre>`. Antes de cualquier otro commit o push pide confirmación.
+
+  Pruebas: `node --test hooks/*.test.mjs`. Al instalar esta versión, quita de `~/.claude/settings.json` la entrada propia del hook de comentarios para que no corra dos veces. En Codex los hooks no aplican y sus reglas quedan como texto en las skills.
+
 ## Qué cambia en 2.2
 
 - **El tamaño ya no decide los documentos.** `quick`, `medium` y `large` eligen la plantilla de la spec. Cada documento opcional tiene su propio disparador.

@@ -112,7 +112,9 @@ Before approval, review the same `spec.md` for:
 9. canonical design synchronization;
 10. scope exclusions;
 11. missing stakeholder decisions;
-12. evidence facts filled, or the audit cited.
+12. evidence facts filled, or the audit cited;
+13. `Done when` names a runnable end-to-end check, or says why none applies;
+14. `Implementation effort` is `medium`, or `high` with its reason.
 
 Revise the same file until the status is correct.
 

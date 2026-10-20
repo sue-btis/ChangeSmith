@@ -19,7 +19,7 @@ and read each value as it is. In those files the first verdict line is usually, 
 
 Verdict: Pass | Fail | Blocked
 Acceptance: Pending — <what awaits the user> | Accepted — <who>, <date>, «<verbatim quote>»
-Verified by: <other session or agent> | Self-verification (<reason or "requested by <user>, <date>">)
+Verified by: <other session or agent> (<effort>) | Self-verification (<reason or "requested by <user>, <date>">)
 Open limitations: L-1, L-2 | None
 
 Size: quick | medium | large
@@ -44,11 +44,12 @@ Reliability: lean | strict | critical
 
 ## Correction Rounds
 <only for self-verified changes without execution.md: Round N — findings addressed, files changed, checks run, new diff range>
+<At most three rounds. If the pass after Round 3 still has an open defect, the verdict is `Blocked` — reconsider approach.>
 
 ## Findings
 | ID | Type | Finding | Evidence | Status |
 |---|---|---|---|---|
-| F-1 | defect / decision | | | Open / Fixed (Round N) / Accepted |
+| F-1 | defect / decision / pre-existing | <bug class>: <finding> | | Open / Fixed (Round N) / Accepted |
 
 ## Requirement Compliance
 | Requirement / AC | Implementation Evidence | Independent Check | Result |
