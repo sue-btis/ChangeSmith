@@ -1,15 +1,25 @@
 # System Design Review
 
-This file is review evidence and workflow state. It is not a canonical product, architecture, schema, or contract authority.
+This file is review evidence and workflow state for the current baseline only. It is not a canonical product, architecture, schema, or contract authority. A new baseline rewrites it, carrying over findings still `OPEN`, `ACCEPTED`, or `BLOCKED` with their IDs; resolved and invalid ones stay in git history.
+
+All enum values below stay in English, whatever language the prose uses.
 
 ## Review State
 
 - Baseline ID: `RV-001`
-- Baseline design package version: `<version>`
-- Current review mode: `baseline | follow_up`
+- Current review mode: `baseline | new_baseline | follow_up`
 - Reconciliation cycles used: `0`
 - Maximum automatic reconciliation cycles: `3`
 - Current verdict: `<verdict>`
+- Escalate exit: `<none | build unaffected milestones | accept with risk | cut scope>, PD-###`
+
+## Mechanical Checks
+
+| Command | Result |
+|---|---|
+| `node <skill dir>/scripts/check-package.mjs <repo root>` | Pass / Fail / Skipped (schema < 3) |
+| `<manifest checks: command>` | |
+| `<official validator>` | |
 
 ## Current Blocking Summary
 
@@ -34,12 +44,13 @@ This file is review evidence and workflow state. It is not a canonical product, 
 - Why it matters: `<material effect>`
 - Required resolution: `<what must become true>`
 - Verification evidence: `<filled by follow-up review>`
+- Routed to: `<requirement IDs it affects, e.g. FR-012, NFR-003 — only when the package is approved with this finding open; writing-build-plan §3 copies it to the matching milestones>`
+- Accepted by: `<who, date, «verbatim quote» — required for ACCEPTED on BLOCKER/MAJOR>`
 
 ## Cycle History
 
 ### Baseline — cycle 0
 
-- Design package version: `<version>`
 - BLOCKER open: `<n>`
 - MAJOR open: `<n>`
 - MINOR open: `<n>`

@@ -1,9 +1,9 @@
 ---
 name: writing-build-plan
-description: Write Build Plan. Convert an approved greenfield design package into an executable sequence of small vertical slices that each deliver observable behavior, map product requirements to canonical contracts and tests, minimize cross-slice dependencies, prove architecture early, and can be handed one at a time to compact-change-skills for controlled implementation and independent verification.
+description: Write Build Plan. Use once the design package is approved. Convert it into an executable sequence of small vertical slices that each deliver observable behavior, map product requirements to canonical contracts and tests, minimize cross-slice dependencies, prove architecture early, and can be handed one at a time to compact-change-skills for controlled implementation and independent verification.
 ---
 
-# Write the Greenfield Build Plan
+# Write the Build Plan
 
 Read `references/build-plan-template.md`.
 
@@ -16,7 +16,7 @@ Require:
 - no blocking product/architecture decision;
 - applicable canonical contract paths known.
 
-Do not redesign the architecture while planning. If planning exposes a new material contradiction, return the manifest to `ready_for_review` for an explicit new baseline/full audit rather than silently reopening the previous verification loop.
+Do not redesign the architecture while planning. If planning exposes a new material contradiction, open a new baseline (manifest back to `ready_for_review`) rather than silently reopening the previous verification loop.
 
 ## 1. Plan Vertical Slices
 
@@ -59,6 +59,18 @@ Every slice must define:
 - implementation stop conditions;
 - completion evidence.
 
+### Stop-if routing
+
+Before the plan exists, three kinds of open item are recorded against the requirement IDs a milestone declares (FR/NFR/BR/CON) instead of milestones:
+
+- open review findings, in the ledger field `Routed to`, when the package was approved with them open;
+- human tasks, in `quality-attributes.md` as `human task: <who> confirms <task>`;
+- in a retroactive package, code-to-design drifts, in the brief's drift list.
+
+While planning, copy each one into the "Stop if" of every milestone that covers its requirement IDs, as "stop while F-### is open", "stop until <who> confirms <task>", or "fixes drift <id>". This section is the single source of the routing rule; other skills point here.
+
+Every MVP FR from PRD §12 appears in at least one slice. The package verifier checks it.
+
 ## 4. Dependencies
 
 Make dependencies explicit. Prefer a sequence that keeps each slice independently verifiable and reduces long-lived partial architecture.
@@ -83,14 +95,13 @@ Implementation agents receive only:
 
 Do not pass the entire design conversation.
 
-## 6. Output
+## 6. Status
 
-Write `docs/build/plan.md`.
+The plan stores no status, neither for itself nor per milestone.
 
-Use one status:
+- **Milestone status** is the fixed header of the milestone's `verification.md` in its change folder (manifest `change_folders`). A milestone is done when its header reads `Verdict: Pass` and `Acceptance: Accepted`. This is informational only: an approval given in chat may still show `Pending`, so nothing automatic depends on it. The plan template carries the command that lists them.
+- **Changes since approval** come from git: find the approval commit with `git log -1 --format=%H -S'status: approved' -- docs/spec/manifest.yaml`, then list later changes with `git log --oneline <sha>.. -- docs/product docs/design`. Without version control, record that later changes cannot be verified.
 
-- `Ready`
-- `Blocked`
-- `Stale`
+## 7. Output
 
-A plan is `Stale` when the approved design package changed materially after planning.
+Write `docs/build/plan.md`. It names the baseline it plans (`RV-n`), never a version of another artifact.

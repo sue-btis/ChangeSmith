@@ -54,12 +54,13 @@ Expected follow-up:
 - verify the finding and impact cone;
 - do not rerun a full adversarial audit.
 
-## 6. Feature added after v0.1
+## 6. Feature added after approval
 
 Expected:
-- do not rerun greenfield workflow for the whole system by default;
-- route ordinary changes to compact-change-skills;
-- if the change materially alters architecture/product boundaries, explicitly start a new design baseline/full audit.
+- do not rerun the design workflow for the whole system;
+- route the change to a compact-change folder that declares the authorities it touches;
+- a behavior change adds or updates its PRD §15 row in the same change;
+- only a material change opens baseline `RV-n+1`, whose review covers the change's impact plus global contradictions.
 
 ## 7. Initial build implementation
 
@@ -116,3 +117,64 @@ Expected:
 Expected:
 - approval is allowed with OPEN/ACCEPTED MINOR or NOTE findings;
 - build planning starts because BLOCKER=0 and MAJOR=0.
+
+## 14. Review asked to reopen an approved package
+
+Expected:
+- `reviewing-system-design` refuses;
+- later changes go through change folders;
+- only a material change opens a new baseline.
+
+## 15. Mechanical checks before the review
+
+Expected:
+- `check-package.mjs`, the manifest `checks:` commands, and the official validators run first, with results in the ledger;
+- each failure becomes a finding owned by the artifact it names;
+- an older manifest (`schema_version` below 3) is skipped, not failed.
+
+## 16. Escalate after three cycles with two MAJOR findings open
+
+Expected:
+- the user chooses the exit, recorded as a PRD §15 decision with a verbatim quote;
+- default exit: build M01 and the milestones the findings do not touch;
+- each finding records the requirement IDs it affects (`Routed to`);
+- the package becomes `approved`;
+- when the plan is written, both finding IDs appear in the "Stop if" of every milestone covering those requirements.
+
+## 17. Stakeholder decides in chat after the PRD is approved
+
+Expected:
+- the decision is a PRD §15 row with who, date, and the verbatim quote;
+- no `decisions` or `resolved` key appears in the manifest;
+- the change that applies it is a compact-change folder.
+
+## 18. ADR written during design
+
+Expected:
+- it starts `Proposed`;
+- it becomes `Accepted` only with an `Accepted by` line quoting the owner;
+- no other authority relies on it while it is `Proposed`.
+
+## 19. Status after the manifest exists
+
+Expected:
+- the brief, PRD, and plan carry no `Status:` line;
+- milestone status is read from the `verification.md` headers of the change folders;
+- changes since approval come from git, not from version lines.
+
+## 20. Retroactive package with many drifts
+
+Expected:
+- each drift is listed in the brief (`DR-###`) with the requirement IDs it affects, or becomes a PRD §15 decision;
+- drifts do not count as review findings and do not exhaust the cycle cap;
+- when the plan is written, each drift appears in the "Stop if" of the milestone that fixes it.
+
+## 21. NFR that needs a human task
+
+Setup:
+NFR-003 requires a leaked credential to be rotated before deployment.
+
+Expected:
+- `quality-attributes.md` has a row citing NFR-003 by ID with `human task: <who> confirms the rotation`;
+- when the plan is written, the milestone covering NFR-003 has a "Stop if" that waits for that confirmation;
+- the NFR target is not restated outside the PRD.
