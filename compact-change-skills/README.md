@@ -6,6 +6,10 @@ Compatible con **OpenAI Codex** y **Claude Code**. Los `SKILL.md` están en ingl
 
 Funciona por sí solo, en cualquier repositorio. Cuando el repositorio tiene un paquete de diseño de `software-design-skills`, además lo respeta.
 
+## Qué cambia en 2.3.1
+
+- **Consumidores con LSP.** La entrada y los consumidores de un contrato se buscan con `findReferences` o `incomingCalls` del LSP cuando hay servidor para ese lenguaje. Si la primera respuesta trae solo la declaración, se reintenta. Sin servidor (SQL, shell) se usa grep, y se anota como tal. Para C#, TypeScript y Python hacen falta sus plugins de LSP instalados.
+
 ## Qué cambia en 2.3
 
 - **Las pruebas no se aflojan en silencio.** Borrar, saltar o debilitar una prueba existente exige una decisión en la spec. Si no la hay, es un defecto.

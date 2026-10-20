@@ -31,7 +31,7 @@ If a blocking decision is not approved, do not invent it. Mark the spec `Blocked
 
 Every template carries:
 
-- **Evidence facts**: entry point (`path:line`), covering tests or `none`, and the consumers of each altered contract with the search command that produced them. With an audit, cite the audit instead of repeating it.
+- **Evidence facts**: entry point (`path:line`), covering tests or `none`, and the consumers of each altered contract with the method that produced them (LSP `findReferences`, or grep with its command; see `change-sizing.md`). With an audit, cite the audit instead of repeating it.
 - **Triggered artifacts**: which of audit, plan, and execution fired, and why.
 - **Canonical design impact**: affected authorities and their required synchronization, or `None`.
 - **Other repositories**, when a consumer or dependency lives outside this repository: repository, contract affected, and who verifies the integration.

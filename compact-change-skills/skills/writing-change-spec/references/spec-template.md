@@ -19,7 +19,7 @@ Goal: <observable outcome>
 Evidence facts:
 - Entry point: `<path>:<line>`
 - Covering tests: `<test path>` | none
-- Consumers of altered contracts: <contract>: <consumers> — `<search command>` | no contract altered
+- Consumers of altered contracts: <contract>: <consumers> — LSP `findReferences` | grep `<search command>` | no contract altered
 
 Scope:
 - Include: <change>
@@ -73,7 +73,7 @@ Parent: <earlier change folder>   # only for an amendment
 ## Evidence and Current Behavior
 - Entry point: `<path>:<line>`
 - Covering tests: `<test path>` | none
-- Consumers of altered contracts: <contract>: <consumers> — `<search command>` | no contract altered
+- Consumers of altered contracts: <contract>: <consumers> — LSP `findReferences` | grep `<search command>` | no contract altered
 - `<path>:<symbol>` — <other relevant fact>
 
 ## Scope
@@ -141,7 +141,7 @@ Reliability: lean | strict | critical
 Implementation effort: medium | high (<critical, concurrency, or migration>)
 Large because: <at least two structural criteria; name the one plan.md records>
 Triggered artifacts: plan.md | audit.md (<strict, critical, or unknown evidence fact>) | execution.md (<handoff>)
-Evidence: `audit.md` at `<commit>` | no audit — entry `<path>:<line>`; tests `<path>` | none; consumers <contract>: <consumers> (`<search command>`)
+Evidence: `audit.md` at `<commit>` | no audit — entry `<path>:<line>`; tests `<path>` | none; consumers <contract>: <consumers> (LSP `findReferences` | grep `<search command>`)
 Parent: <earlier change folder>   # only for an amendment
 
 ## 1. Goal

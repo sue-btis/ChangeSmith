@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.3.1
+
+- Entry points and consumers of altered contracts are found with the LSP tool when a language server answers, retrying when a cold server returns only the declaration; otherwise with a text search recorded as `grep`. Specs and audits record which method produced the consumer list.
+
 ## 2.3.0
 
 - Implementation must not delete, skip, disable, or weaken an existing test or assertion unless the spec records that decision; verification treats an unrecorded one as a `defect`.
