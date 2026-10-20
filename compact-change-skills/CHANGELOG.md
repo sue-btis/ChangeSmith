@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.3.0
+
+- Implementation must not delete, skip, disable, or weaken an existing test or assertion unless the spec records that decision; verification treats an unrecorded one as a `defect`.
+- Every spec template has `Done when`: the command or walkthrough that proves the behavior end to end, or why none applies.
+- Specs record `Implementation effort`: `medium` by default, `high` only for `critical`, concurrency or migration work, or the round after a `Fail`. Verification records the effort used in `Verified by:`.
+- At most three correction rounds; if the pass after Round 3 still has an open defect, the verdict is `Blocked` (`reconsider approach`) and the change returns to spec or shaping. `pre-existing` findings do not block closing. Follow-up passes read only the diff since the previous pass, and each finding names its bug class.
+- New finding type `pre-existing`: a defect present at the base, outside what the change touched. It does not block `Pass`.
+- Verifiers report only findings that affect correctness, requirements, contracts, or required evidence.
+- The plugin ships hooks (Claude Code only): `presupuesto-comentarios.mjs` (comment budget, PostToolUse) and `git-guard.mjs` (PreToolUse on Bash and PowerShell). The guard denies commits on `main`, `master` or `development`, merges into `main`/`master` from anything but `development`, and branches outside `<feat|fix|docs|refactor|chore|test>/<description>/<Name>`; it asks before every other commit and every push.
+
 ## 2.2.0
 
 - Size (`quick`/`medium`/`large`) now picks the spec template only. `audit.md`, `plan.md`, and `execution.md` each have their own trigger in `change-sizing.md`.

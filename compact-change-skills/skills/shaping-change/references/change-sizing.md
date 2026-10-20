@@ -94,3 +94,7 @@ Choose independently:
 - `critical`: authorization, money, destructive operations, sensitive data, concurrency correctness, tenant isolation, irreversible migration, or explicit high-assurance work.
 
 Never downgrade an explicit reliability request.
+
+## Effort
+
+Record `Implementation effort:` in the spec. The default is `medium` for every stage. Use `high` for implementation only with a `critical` profile, concurrency or migration work, or the round after a `Fail`; use it for verification with `critical` or a `large` change with frozen contracts. Never go above `high` by default. Effort buys thoroughness on a well-specified task; on an open question it buys unrequested changes.

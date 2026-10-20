@@ -69,6 +69,8 @@ If an unowned generated file, migration, project file, or lockfile changes, stop
 
 If a required out-of-scope change appears, stop and return to specification/planning rather than broadening scope.
 
+Do not delete, skip, disable, or weaken an existing test or assertion (looser matcher, removed case, raised tolerance, added retry or timeout) unless the spec records that decision. A test that blocks the change is a finding to report, not an obstacle to remove.
+
 When the governing package declares canonical artifacts affected by the work, update them in the same controlled execution or through their explicit integration owner. Do not leave knowingly stale authoritative design artifacts behind.
 
 ## 4. Behavioral Evidence
@@ -101,6 +103,8 @@ Parallel writers require:
 
 If unavailable, use the plan's sequential fallback. Never simulate agents that were not run.
 
+Run implementation at the effort the spec records in `Implementation effort:`. The default is `medium`. Use `high` only for a `critical` profile, concurrency or migration work, or the round after a `Fail`. Never go above `high`: more effort does not fix an unclear spec.
+
 ## 6. Integration Gates
 
 The integration owner must:
@@ -131,7 +135,7 @@ The execution status describes the implementation only. The current state of the
 
 ## 8. Correction Rounds
 
-After `verifying-change` returns `Fail` or `Blocked`:
+After `verifying-change` returns `Fail`, or `Blocked` for any reason other than `reconsider approach`:
 
 1. fix only the open findings of type *defect*, or the blocker named in the verdict;
 2. leave findings of type *decision* to the user;
@@ -139,3 +143,7 @@ After `verifying-change` returns `Fail` or `Blocked`:
 4. return to `verifying-change` for a follow-up pass.
 
 A round is done when every addressed finding has its fix and its check recorded.
+
+A change gets at most three correction rounds. A `Blocked` with `reconsider approach` means the cap was reached: stop fixing, because the approach or the spec is wrong, and return to `writing-change-spec` or `shaping-change`.
+
+Findings of type *pre-existing* are not fixed in a correction round unless the user asks.

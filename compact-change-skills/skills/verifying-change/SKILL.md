@@ -20,6 +20,8 @@ Self-verification is allowed:
 
 Label it `Self-verification (<reason or "requested by <user>, <date>">)` and list the checks you reran.
 
+Verify at `medium` effort. Use `high` for a `critical` profile or a `large` change with frozen contracts. Record the effort used in `Verified by:`. More effort elsewhere tends to produce findings about improvements nobody asked for.
+
 ## 2. Establish the Baseline
 
 Record:
@@ -54,6 +56,7 @@ Check:
 - ownership/write-set compliance;
 - missing required changes;
 - extra/unrequested changes;
+- deleted, skipped, disabled, or weakened tests or assertions: each one needs a decision recorded in the spec, otherwise it is a *defect*;
 - frozen contract fidelity;
 - architecture and boundary consistency;
 - security/tenant/permission/compatibility behavior;
@@ -103,14 +106,19 @@ Give every finding an ID (`F-1`, `F-2`, …) and exactly one type:
 
 - **defect**: behavior, contract, or a required check is wrong. Someone fixes it.
 - **decision**: something only the user can settle, such as an unapproved visual composition, an unrequested-but-reasonable deviation, or a coverage gap the user may accept.
+- **pre-existing**: a defect already present at the declared base, outside what the change touched. Record it with its evidence; it does not block `Pass` and is not charged to the change.
+
+Name the bug class in each finding (for example, missing tenant filter or unhandled empty input), so a follow-up pass checks the class and not only the line.
+
+Report only findings that affect correctness, requirements, contracts, or required evidence. Style preferences are not findings.
 
 ## 8. Verdict
 
 Use exactly one:
 
-- `Pass`: no open defect, required checks pass, ownership is compliant, integration within this repository is complete, no unexplained out-of-scope diff remains, canonical artifacts are synchronized or superseded by an approved decision, and no required evidence depends only on implementation self-report.
+- `Pass`: no open *defect* (open *pre-existing* findings do not count), required checks pass, ownership is compliant, integration within this repository is complete, no unexplained out-of-scope diff remains, canonical artifacts are synchronized or superseded by an approved decision, and no required evidence depends only on implementation self-report.
 - `Fail`: at least one open defect.
-- `Blocked`: verification could not be completed (missing environment, data, tool, or access), or a pending decision changes the required behavior.
+- `Blocked`: verification could not be completed (missing environment, data, tool, or access), a pending decision changes the required behavior, or the round cap was reached (`reconsider approach`, §10).
 
 Any other open decision does not change the verdict; it keeps `Acceptance: Pending`.
 
@@ -130,17 +138,21 @@ Each accepted limitation goes in the limitations table, with its finding ID, who
 
 After a correction round, run a follow-up pass in the same `verification.md`:
 
-1. inspect the open findings and the diff since the previous pass;
+1. inspect the open findings, their bug classes, and only the diff since the previous pass;
 2. rerun every required check in full;
 3. rewrite the header with the current verdict, acceptance, and limitations;
 4. reduce each earlier pass to one line in the pass history.
+
+Do not raise new findings on code the round did not touch, unless it shares the bug class of an open finding.
+
+A change gets at most three correction rounds. When the follow-up pass after Round 3 still has an open *defect*, record `Blocked` with the reason `reconsider approach` instead of `Fail`; no Round 4 opens, and the change returns to `writing-change-spec` or `shaping-change`.
 
 ## 11. Closed
 
 A change is closed when all hold:
 
 - the verdict is `Pass`;
-- every finding is fixed or accepted;
+- every *defect* is fixed and every *decision* is accepted; *pre-existing* findings stay recorded and need no action;
 - `Acceptance:` is `Accepted`.
 
 Committing is the user's decision and happens outside this workflow.

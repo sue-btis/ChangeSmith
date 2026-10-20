@@ -202,3 +202,33 @@ Expected:
 Expected:
 - the preflight records the files to touch and their pre-change state;
 - the verifier uses that list as the baseline instead of a commit range.
+
+## 25. Failing test in the way
+
+Expected:
+- the implementer does not delete, skip, or loosen the existing test to make the change pass;
+- it reports the test as a finding, or the spec records a decision to change it;
+- the verifier marks an unrecorded test weakening as a `defect`.
+
+## 26. Spec without an end-to-end check
+
+Expected:
+- `writing-change-spec` does not mark the spec ready until `Done when` names a runnable check or states why none applies.
+
+## 27. Third failed correction round
+
+Expected:
+- if the pass after Round 3 still has an open defect, the verifier records `Blocked` with `reconsider approach`;
+- no fourth round opens; the change returns to `writing-change-spec` or `shaping-change`.
+
+## 28. Defect that predates the change
+
+Expected:
+- the verifier records it as `pre-existing` with evidence that it exists at the declared base;
+- the verdict can still be `Pass`; the defect is not fixed in a correction round unless the user asks.
+
+## 29. Commit on a protected branch
+
+Expected:
+- with the plugin's `git-guard` hook active, `git commit` on `main`, `master`, or `development` is denied;
+- on a `<type>/<description>/<Name>` branch, `git commit` and `git push` ask the user first.

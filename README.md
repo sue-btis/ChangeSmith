@@ -3,7 +3,7 @@
 Contains two complementary plugins:
 
 1. `software-design-skills/` (1.2.0) — design package: idea or existing system -> product brief -> focused PRD -> canonical system design -> consistency review -> vertical build plan.
-2. `compact-change-skills/` (2.2.0) — execution/change: proportional changes in any repository, plus controlled implementation/verification of one approved build slice. It works without a design package.
+2. `compact-change-skills/` (2.3.0) — execution/change: proportional changes in any repository, plus controlled implementation/verification of one approved build slice. It works without a design package.
 
 ## Recommended flow
 

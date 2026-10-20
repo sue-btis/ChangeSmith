@@ -10,6 +10,7 @@ Omit irrelevant sections. Do not leave generic placeholder prose.
 Status: Ready for implementation
 Size: quick
 Reliability: lean | strict | critical
+Implementation effort: medium | high (<critical, concurrency, or migration>)
 Parent: <earlier change folder>   # only for an amendment
 Triggered artifacts: none | audit.md (<strict, critical, or unknown evidence fact>) | execution.md (<handoff>)
 
@@ -44,6 +45,8 @@ Quality:
 - Static/build: `<commands>`
 - QA: <reproducible check>
 
+Done when: <command or walkthrough that proves the behavior end to end, and what it shows> | none — <why>
+
 Implementation:
 1. <test/regression>
 2. <minimal behavior>
@@ -61,6 +64,7 @@ Stop if:
 Status: Ready for implementation | Ready for planning | Blocked | Escalate
 Size: medium
 Reliability: lean | strict | critical
+Implementation effort: medium | high (<critical, concurrency, or migration>)
 Parent: <earlier change folder>   # only for an amendment
 
 ## Goal
@@ -108,6 +112,9 @@ Omit when every consumer and dependency lives in this repository.
 - Static/build:
 - Coverage/mutation:
 
+## Done When
+<command or walkthrough that proves the behavior end to end, and what it shows> | none — <why>
+
 ## Change Surface
 - Expected edits:
 - Do not touch:
@@ -131,6 +138,7 @@ Omit when every consumer and dependency lives in this repository.
 Status: Ready for planning | Blocked | Escalate
 Size: large
 Reliability: lean | strict | critical
+Implementation effort: medium | high (<critical, concurrency, or migration>)
 Large because: <at least two structural criteria; name the one plan.md records>
 Triggered artifacts: plan.md | audit.md (<strict, critical, or unknown evidence fact>) | execution.md (<handoff>)
 Evidence: `audit.md` at `<commit>` | no audit — entry `<path>:<line>`; tests `<path>` | none; consumers <contract>: <consumers> (`<search command>`)
@@ -205,6 +213,7 @@ If no stakeholder decision was required, write `None.`
 - Required integration/contract checks:
 - Coverage/mutation:
 - Risk-specific checks:
+- Done when: <command or walkthrough that proves the behavior end to end, and what it shows> | none — <why>
 
 ## 14. Explicit Assumptions
 | Assumption | Provenance | Stop If False |
