@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write Change Spec"
+  short_description: "Freeze proportional behavior and contracts"
+  default_prompt: "Use $writing-change-spec to produce a repository-grounded implementation-ready spec with proportional traceability and no unapproved design decisions."

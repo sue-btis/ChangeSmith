@@ -1,0 +1,4 @@
+interface:
+  display_name: "Reconcile System Design"
+  short_description: "Fix bounded blocking review findings"
+  default_prompt: "Use $reconciling-system-design to resolve only the current OPEN BLOCKER and MAJOR findings in docs/design/review.md. Edit the owning canonical artifacts and direct impact cone, mark attempted findings READY_FOR_VERIFICATION, record the change set, and return the manifest to ready_for_verification without self-approving."

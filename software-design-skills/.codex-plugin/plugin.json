@@ -1,0 +1,37 @@
+{
+  "name": "software-design-skills",
+  "version": "1.1.0",
+  "description": "Six composable greenfield skills that turn a product idea into an implementation-ready canonical software design package with bounded independent review, explicit reconciliation, contracts, and vertical build planning.",
+  "keywords": [
+    "greenfield",
+    "requirements",
+    "prd",
+    "software-architecture",
+    "system-design",
+    "c4",
+    "structurizr",
+    "dbml",
+    "openapi",
+    "implementation-planning"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Software Design Skills",
+    "shortDescription": "Turn an idea into an implementation-ready design package",
+    "longDescription": "A proportional greenfield workflow for shaping product intent, writing a product-authoritative PRD, designing canonical technical artifacts, running one bounded independent baseline review, reconciling blocking findings separately, verifying fixes by impact cone, and planning vertical build slices without reopening architecture indefinitely.",
+    "developerName": "Sue",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Shape this product idea before choosing technology.",
+      "Write a focused PRD that owns product intent and requirements, not implementation detail.",
+      "Design the system and create only the canonical technical artifacts that apply.",
+      "Review the design package using a bounded baseline or follow-up verification and record severity-graded findings without editing canonical artifacts.",
+      "Reconcile only the current blocking findings, then return them for independent verification.",
+      "Write a vertical implementation plan from the approved design package."
+    ]
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write Build Plan"
+  short_description: "Plan incremental vertical slices"
+  default_prompt: "Use $writing-build-plan to create an implementation-ready sequence of small vertical slices with requirement, acceptance, test, and canonical-artifact traceability."

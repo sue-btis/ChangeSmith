@@ -1,0 +1,4 @@
+interface:
+  display_name: "Shape Product"
+  short_description: "Turn an idea into a bounded product brief"
+  default_prompt: "Use $shaping-product to establish the product problem, users, outcomes, scope, constraints, open decisions, and the smallest applicable design-artifact set before choosing technology."

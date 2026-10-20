@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write Change Plan"
+  short_description: "Plan dependencies, ownership, waves, and gates"
+  default_prompt: "Use $writing-change-plan to convert the approved spec into a dependency-aware executable plan with safe write ownership and integration gates."

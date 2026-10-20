@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "software-design-skills",
+  "displayName": "Software Design Skills",
+  "version": "1.1.0",
+  "description": "Six composable greenfield skills that turn a product idea into an implementation-ready canonical software design package with bounded independent review, explicit reconciliation, contracts, and vertical build planning.",
+  "author": {
+    "name": "Sue"
+  },
+  "keywords": [
+    "greenfield",
+    "requirements",
+    "prd",
+    "software-architecture",
+    "system-design",
+    "c4",
+    "structurizr",
+    "dbml",
+    "openapi",
+    "implementation-planning"
+  ],
+  "skills": "./skills/",
+  "commands": "./commands/"
+}

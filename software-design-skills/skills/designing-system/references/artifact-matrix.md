@@ -1,0 +1,21 @@
+# Canonical Artifact Matrix
+
+| Concern | Preferred Authority | Create When | Do Not Duplicate In |
+|---|---|---|---|
+| Product intent/behavior | `docs/product/prd.md` | Always | architecture/ADR/contracts |
+| Domain language/invariants | `docs/design/domain.md` | Always | DBML as prose |
+| Architecture structure | `architecture.dsl` | Standard/complex or useful compact | PRD |
+| Technical rationale | ADR | Consequential decision | PRD/contracts |
+| Persistent schema | `schema.dbml` | Structured persistence exists | PRD/domain prose |
+| HTTP contract | `openapi.yaml` | HTTP API exists | PRD/ADR |
+| Async/event contract | `asyncapi.yaml` | Async/event boundary exists | PRD/ADR |
+| User/system flow | `flows.mmd` | Non-trivial flow exists | long prose duplicates |
+| Visual interaction | `prototype.html` | UI behavior needs validation | architecture |
+| Build sequence | `docs/build/plan.md` | After design review | PRD/architecture |
+
+## Format Rules
+
+- Prefer standard schemas/contracts over prose when the standard can own the detail.
+- Keep prose for semantics, rationale, invariants, and constraints.
+- Never create an artifact solely because the template lists it.
+- Generated diagrams may be derived from canonical text; generated output is not the source of truth unless explicitly declared.

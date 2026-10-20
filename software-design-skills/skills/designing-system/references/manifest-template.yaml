@@ -1,0 +1,54 @@
+schema_version: 2
+project: <project-name>
+design_package_version: <version>
+status: draft | ready_for_review | needs_reconciliation | ready_for_verification | approved | blocked | escalate
+
+review:
+  baseline_id: null
+  baseline_design_package_version: null
+  reconciliation_cycles: 0
+  max_automatic_reconciliation_cycles: 3
+
+read_first:
+  - docs/product/prd.md
+  - docs/design/domain.md
+  - docs/design/architecture/architecture.dsl
+
+authoritative_sources:
+  product:
+    path: docs/product/prd.md
+    owns: [purpose, users, scope, journeys, functional_requirements, non_functional_requirements, business_rules, product_constraints]
+  domain:
+    path: docs/design/domain.md
+    owns: [ubiquitous_language, domain_invariants, domain_boundaries]
+  architecture:
+    path: docs/design/architecture/architecture.dsl
+    owns: [system_structure, containers, components, dependencies, deployment_views]
+  architecture_decisions:
+    path: docs/design/architecture/adr/
+    owns: [technical_decision_rationale, tradeoffs]
+  data:
+    path: docs/design/data/schema.dbml
+    owns: [persistent_schema]
+  http_api:
+    path: docs/design/api/openapi.yaml
+    owns: [http_contract]
+  events:
+    path: docs/design/events/asyncapi.yaml
+    owns: [event_contract]
+  ux_flows:
+    path: docs/design/ux/flows.mmd
+    owns: [interaction_flow]
+  ui_prototype:
+    path: docs/design/ux/prototype.html
+    owns: [visual_interaction_reference]
+
+not_applicable:
+  - <artifact key>
+
+rules:
+  - A more specific canonical contract owns its detail; general prose must not redefine it.
+  - An ADR may explain or supersede a prior technical decision only when its status is Accepted/Superseded explicitly.
+  - Product behavior may not be changed by a technical artifact without an approved PRD/product decision update.
+  - Stop implementation for semantic conflicts that require incompatible behavior or could cause materially different implementations; terminology, formatting, casing, and editorial differences alone are not blocking contradictions.
+  - Review is bounded: one comprehensive baseline review is followed by reconciliation and impact-cone verification, not repeated full adversarial reviews.

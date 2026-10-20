@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write PRD"
+  short_description: "Write product authority without architecture leakage"
+  default_prompt: "Use $writing-prd to create a focused PRD with atomic FRs, measurable NFRs, business invariants, MVP scope, and no duplicated technical contracts."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Implement Software Change"
+  short_description: "Execute bounded work with preflight and ownership"
+  default_prompt: "Use $implementing-change to preflight the current repository, execute only the selected approved scope, and record reproducible implementation evidence."

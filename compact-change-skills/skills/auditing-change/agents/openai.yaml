@@ -1,0 +1,4 @@
+interface:
+  display_name: "Audit Software Change"
+  short_description: "Create focused repository evidence for large changes"
+  default_prompt: "Use $auditing-change to perform a focused read-only repository audit for this large bounded change and write the authoritative audit artifact."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Design System"
+  short_description: "Create canonical architecture and contracts"
+  default_prompt: "Use $designing-system to turn the approved PRD into a proportional canonical design package with a manifest and only the technical artifacts that apply."

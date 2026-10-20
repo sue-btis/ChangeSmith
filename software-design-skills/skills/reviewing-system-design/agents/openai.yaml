@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review System Design"
+  short_description: "Gate build readiness with bounded design verification"
+  default_prompt: "Use $reviewing-system-design as an independent review gate. Run one comprehensive baseline review or a bounded follow-up verification based on manifest state, record stable severity-graded findings, never edit canonical design artifacts during review, and apply the objective approval and convergence thresholds."
