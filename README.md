@@ -32,3 +32,15 @@ compact-change-skills
 ```
 
 The design plugin deliberately separates the PRD from technical authorities. `docs/spec/manifest.yaml` declares which artifact owns each kind of decision.
+
+## Instalación desde este repositorio
+
+El repo es su propio marketplace (`.claude-plugin/marketplace.json`). Claude Code lee los archivos de la rama que esté activa.
+
+```bash
+claude plugin marketplace add "C:\Users\Josue Escobar\Documents\projects\software-engineering-skills"
+claude plugin install compact-change-skills@software-engineering-skills
+claude plugin install software-design-skills@software-engineering-skills
+```
+
+Para tomar cambios nuevos: `claude plugin marketplace update software-engineering-skills` y después una sesión nueva.
