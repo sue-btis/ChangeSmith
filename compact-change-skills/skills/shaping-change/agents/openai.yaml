@@ -1,4 +1,4 @@
 interface:
   display_name: "Shape Software Change"
-  short_description: "Classify and route quick through large changes"
-  default_prompt: "Use $shaping-change to inspect this request, resolve material ambiguity, classify it as quick, medium, large, or escalate, and choose the smallest safe workflow."
+  short_description: "Classify a change and pick its artifacts"
+  default_prompt: "Use $shaping-change to inspect this request, resolve material ambiguity, classify size and reliability, decide which artifacts their triggers require, and choose the smallest safe workflow."

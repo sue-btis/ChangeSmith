@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.2.0
+
+- Size (`quick`/`medium`/`large`) now picks the spec template only. `audit.md`, `plan.md`, and `execution.md` each have their own trigger in `change-sizing.md`.
+- `large` requires at least two structural criteria (parallel writers, contract frozen before parallel work, staged migration/rollout), one of them recorded in `plan.md`.
+- `audit.md` is created for every `strict` or `critical` change, and for a `lean` change when shaping cannot establish three evidence facts: entry point, covering tests, and consumers of each altered contract with the search command used. Basis: 56 of 61 past audits found something that changed the spec, and every audit of a critical change found a permission, tenant, or contract issue.
+- Verdicts are `Pass`, `Fail`, or `Blocked`. `Pass with accepted limitations` is removed. Findings are typed `defect` or `decision`. A pending decision never yields `Fail`: one that changes required behavior yields `Blocked`, and any other leaves `Pass` with `Acceptance: Pending`.
+- New fixed header in `verification.md` (`Verdict`, `Acceptance`, `Verified by`, `Open limitations`) holds the current state of a change; one documented `grep` lists the state of every change.
+- User acceptance is recorded separately from the verdict, with a verbatim quote, only by the session that received it.
+- Defined correction rounds (`execution.md`) and follow-up passes in the same `verification.md`, plus the closing rule.
+- Self-verification is allowed by default only for `quick` + `lean`, otherwise only when the user asks; it is labeled with the checks rerun.
+- Coverage and mutation thresholds are reference targets unless the repository has the tool; added a manual mutation protocol.
+- Removed the duplicate verification template from `reliability-profiles.md`.
+- Specs gain evidence facts, triggered artifacts, an "Other Repositories" section, and `Parent:` for amendments. IDs are local to the change folder.
+- Implementation records the full preflight once and deltas afterwards, supports a baseline without version control, and in build-slice mode checks that the slice is complete before editing.
+- The verifier never edits canonical design artifacts or the manifest.
+
 ## 2.1.0
 
 - Added optional discovery of a canonical design manifest and authoritative product/architecture/API/data/UX artifacts.

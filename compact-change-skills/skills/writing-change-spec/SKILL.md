@@ -1,24 +1,24 @@
 ---
 name: writing-change-spec
-description: Write Change Spec. Produce a proportional implementation-ready specification for quick, medium, or large software changes. For large work, use the audit as repository truth, freeze only approved decisions, assign stable requirement and acceptance IDs, preserve provenance, and self-review the same spec before approval.
+description: Write Change Spec. Produce a proportional implementation-ready specification for quick, medium, or large software changes. Ground it in the evidence facts or the audit, freeze only approved decisions, assign stable requirement and acceptance IDs, preserve provenance, and self-review the same spec before approval.
 ---
 
 # Write a Proportional Change Spec
 
 Treat `spec.md` as the behavioral and contract authority for implementation.
 
-Read `references/spec-template.md`.
+Read `references/spec-template.md`. Size picks the template: quick, medium, or large.
 
 ## 1. Inputs and Precedence
 
-For quick/medium:
+Without `audit.md`:
 
 1. explicit user request and decisions;
-2. repository evidence gathered by shaping;
+2. repository evidence gathered by shaping, including the three evidence facts;
 3. applicable canonical design authorities discovered through the manifest, when present;
 4. clearly labeled assumptions.
 
-For large:
+With `audit.md`:
 
 1. explicit approved stakeholder decisions;
 2. `audit.md` for repository facts;
@@ -27,7 +27,19 @@ For large:
 
 If a blocking decision is not approved, do not invent it. Mark the spec `Blocked`.
 
-## 2. Quick Spec
+## 2. Every Spec
+
+Every template carries:
+
+- **Evidence facts**: entry point (`path:line`), covering tests or `none`, and the consumers of each altered contract with the search command that produced them. With an audit, cite the audit instead of repeating it.
+- **Triggered artifacts**: which of audit, plan, and execution fired, and why.
+- **Canonical design impact**: affected authorities and their required synchronization, or `None`.
+- **Other repositories**, when a consumer or dependency lives outside this repository: repository, contract affected, and who verifies the integration.
+- **Parent**, when the change amends an already implemented change: the earlier change folder.
+
+IDs (`R-*`, `REQ-*`, `AC-*`, `TST-*`, `DEC-*`) are local to the change folder. Cite them from elsewhere as `<change-folder>#AC-1`.
+
+## 3. Quick Spec
 
 Keep it compact.
 
@@ -35,17 +47,13 @@ Include:
 
 - one observable goal;
 - included/excluded scope;
-- repository evidence;
 - acceptance checks;
 - relevant change surface;
 - quality obligations;
 - short implementation outline;
-- canonical artifacts affected, if any;
 - stop conditions.
 
-A separate plan is normally unnecessary.
-
-## 3. Medium Spec
+## 4. Medium Spec
 
 Use stable `R-*` and `AC-*` IDs when traceability matters.
 
@@ -56,12 +64,11 @@ Freeze:
 - compatibility expectations;
 - decisions and assumptions;
 - risk controls;
-- executable verification obligations;
-- canonical artifacts affected and required synchronization.
+- executable verification obligations.
 
-State whether `plan.md` is required and why.
+## 5. Large Spec
 
-## 4. Large Spec
+Record the structural criteria that make the change large (see `shaping-change/references/change-sizing.md`).
 
 Use stable:
 
@@ -70,7 +77,7 @@ Use stable:
 - `TST-*`
 - `DEC-*` when decisions materially affect contracts
 
-Every requirement must have provenance from audit evidence or an explicitly approved decision.
+Every requirement must have provenance from repository evidence, audit evidence, or an explicitly approved decision.
 
 Include:
 
@@ -79,16 +86,16 @@ Include:
 - required behavior;
 - architecture/contract decisions actually approved;
 - exact changed/preserved API, data, config, UI, security, tenant, permission, compatibility, migration, and rollout behavior where relevant;
+- the contracts frozen before parallel work starts;
 - expected areas, with confidence rather than invented certainty;
 - test requirements;
 - acceptance criteria;
 - requirement traceability;
-- stop conditions preventing implementation-time redesign;
-- canonical artifacts that must remain unchanged, change together with code, or be superseded by an explicitly approved ADR/decision.
+- stop conditions preventing implementation-time redesign.
 
 Remove obsolete alternatives and discussion from the final spec.
 
-## 5. Self-Review and Freeze In Place
+## 6. Self-Review and Freeze In Place
 
 Do not create separate draft, review, or frozen copies.
 
@@ -104,7 +111,8 @@ Before approval, review the same `spec.md` for:
 8. executable validation;
 9. canonical design synchronization;
 10. scope exclusions;
-11. missing stakeholder decisions.
+11. missing stakeholder decisions;
+12. evidence facts filled, or the audit cited.
 
 Revise the same file until the status is correct.
 
@@ -115,9 +123,11 @@ Use exactly one status:
 - `Blocked`
 - `Escalate`
 
-Large changes should normally end `Ready for planning`.
+A change whose plan trigger fired ends `Ready for planning`.
 
-## 6. Context Boundary
+The status is frozen at approval: it records readiness to implement. The current state of the change lives in the header of `verification.md`.
+
+## 7. Context Boundary
 
 Implementation agents should not need the audit conversation. They should receive `spec.md` plus only the relevant plan section.
 
