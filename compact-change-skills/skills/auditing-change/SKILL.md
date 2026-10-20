@@ -1,17 +1,19 @@
 ---
 name: auditing-change
-description: Audit Software Change. Perform a focused read-only repository audit for a large bounded software change, producing a compact authoritative audit of the current behavior, minimal relevant surface, contracts, tests, commands, candidate ownership, coupling, generated-file hotspots, contradictions, and unknowns.
+description: Audit Software Change. Perform a focused read-only repository audit for every strict or critical change, and for a lean change whose evidence facts shaping could not establish, producing a compact authoritative audit of the current behavior, minimal relevant surface, contracts, consumers, tests, commands, candidate ownership, coupling, generated-file hotspots, contradictions, and unknowns.
 ---
 
-# Audit a Large Software Change
+# Audit a Software Change
 
-Create persistent repository evidence before a large change is specified.
+Create persistent repository evidence before a change is specified.
 
 Read `references/audit-template.md`.
 
 ## Preconditions
 
-Use for `large` changes, or for a medium change when repository uncertainty is too high for a trustworthy spec.
+Use when the audit trigger in `shaping-change/references/change-sizing.md` fired: the change is `strict` or `critical`, or at least one evidence fact (entry point, covering tests, consumers of each altered contract) is `unknown`. Size does not decide it.
+
+The audit is done when all three evidence facts are filled with repository evidence, or each remaining `unknown` is named as a blocking unknown with the exact area still to inspect, and the current code has been compared with every applicable canonical artifact the change touches. Past audits found their most valuable issues in that comparison: permission and tenant gaps, and code that contradicts its contract or design.
 
 Do not use this skill as a global architecture survey unless the requested behavior is genuinely global.
 

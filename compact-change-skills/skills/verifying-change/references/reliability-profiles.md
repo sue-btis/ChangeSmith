@@ -1,10 +1,10 @@
 # Reliability Profiles
 
-Use existing project gates when they are stricter. Thresholds below are defaults for changed production logic, not global repository mandates.
+Use existing project gates when they are stricter. Coverage and mutation numbers below are reference targets for changed production logic. They become gates only when the repository already has the tool; without it, record `no tool` and use the manual mutation protocol where the profile asks for mutation testing.
 
 ## Lean
 
-Use for low-risk quick changes.
+Use for low-risk changes.
 
 Required:
 
@@ -23,7 +23,7 @@ Metrics:
 
 ## Strict
 
-Use for medium changes, shared contracts, important business logic, or explicit high-confidence requests.
+Use for shared contracts, important business logic, persistence, non-trivial integration, or explicit high-confidence requests.
 
 Required:
 
@@ -32,15 +32,15 @@ Required:
 - integration or contract tests for changed boundaries;
 - negative and boundary cases;
 - reproducible QA mapped to acceptance criteria;
-- changed-line coverage target: at least 90% where supported;
-- changed-branch coverage target: at least 80% where supported;
-- targeted mutation testing for high-value pure logic when tooling already exists or is explicitly approved.
+- changed-line coverage target: at least 90%;
+- changed-branch coverage target: at least 80%;
+- targeted mutation testing for high-value pure logic.
 
-Mutation default:
+Mutation reference:
 
 - target score: at least 70% for the selected mutation scope;
 - every surviving mutant reviewed and classified;
-- fail when an important survivor demonstrates a missing behavior assertion.
+- a survivor that shows a missing behavior assertion is a defect finding.
 
 ## Critical
 
@@ -49,19 +49,31 @@ Use for authorization, money, destructive operations, sensitive data, concurrenc
 Required:
 
 - all Strict gates;
-- independent review of requirements and actual diff;
+- independent review of requirements and actual diff, unless the user asked for self-verification in the session (then labeled as such; see `verifying-change` §1);
 - adversarial negative tests and failure-path tests;
 - contract/integration tests across every changed trust boundary;
 - property-based, fuzz, concurrency, or invariant tests where applicable;
 - rollback, idempotency, observability, and migration validation when applicable;
-- changed-line coverage target: at least 95% where supported;
-- changed-branch coverage target: at least 90% where supported;
+- changed-line coverage target: at least 95%;
+- changed-branch coverage target: at least 90%;
 - targeted mutation testing of critical decision logic.
 
-Mutation default:
+Mutation reference:
 
 - target score: at least 80% for the selected critical scope;
-- no surviving mutant in authorization, financial calculation, destructive guard, or invariant logic without explicit accepted-risk approval.
+- a surviving mutant in authorization, financial calculation, destructive guard, or invariant logic is a defect finding unless the user accepts it as a limitation.
+
+## Manual Mutation Protocol
+
+When no mutation tool exists, mutate the selected decision logic by hand:
+
+1. write each mutant as a minimal edit (flip a condition, drop a guard, change a boundary, swap a return value) and list it;
+2. run the focused tests against each mutant;
+3. record each mutant as killed, equivalent (with the reason), or survived;
+4. classify every survivor as a finding;
+5. restore the original code and rerun the focused tests.
+
+Report `written / killed / equivalent / survived`. This is valid mutation evidence; a percentage computed from it is a reference, not a gate.
 
 ## Metrics Interpretation
 
@@ -88,44 +100,3 @@ Add the corresponding gate when relevant:
 | Parser/validator/transformer | property-based or fuzz tests, malformed and boundary inputs |
 | External dependency | timeout, retry, circuit/failure behavior, deterministic boundary fakes |
 | UI workflow | component tests plus reproducible browser/manual QA for critical path |
-
-## Verification Artifact Template
-
-```markdown
-# <Change name> Verification
-
-Verdict: Pass | Pass with accepted limitations | Fail | Blocked
-Base: `<commit>`
-Head/working tree: `<commit or dirty>`
-Reliability: lean | strict | critical
-
-## Requirement Evidence
-| Requirement / AC | Evidence | Result |
-|---|---|---|
-| R-1 / AC-1 | `<test/QA/diff reference>` | Pass/Fail |
-
-## Automated Checks
-| Command | Result | Notes |
-|---|---|---|
-| `<command>` | Pass/Fail/Not run | <evidence or blocker> |
-
-## QA Procedure
-1. <step>
-Expected: <observable result>
-Actual: <result>
-
-## Quality Metrics
-- Changed-line coverage: <value/N/A>
-- Changed-branch coverage: <value/N/A>
-- Mutation scope and score: <value/N/A>
-- Surviving mutants: <count and classification>
-- Flaky/skipped tests affecting scope: <none/details>
-
-## Diff and Scope Review
-- Files changed: <paths>
-- Unrelated changes: none | <details>
-- Contract/lockfile/generated-file review: <result>
-
-## Limitations or Deviations
-- None | <explicit accepted limitation and owner>
-```

@@ -10,11 +10,15 @@ Omit irrelevant sections. Do not leave generic placeholder prose.
 Status: Ready for implementation
 Size: quick
 Reliability: lean | strict | critical
+Parent: <earlier change folder>   # only for an amendment
+Triggered artifacts: none | audit.md (<strict, critical, or unknown evidence fact>) | execution.md (<handoff>)
 
 Goal: <observable outcome>
 
-Evidence:
-- `<path>:<symbol>` — <fact>
+Evidence facts:
+- Entry point: `<path>:<line>`
+- Covering tests: `<test path>` | none
+- Consumers of altered contracts: <contract>: <consumers> — `<search command>` | no contract altered
 
 Scope:
 - Include: <change>
@@ -31,6 +35,9 @@ Change surface:
 Canonical design:
 - Affected authorities: <paths or None>
 - Required synchronization: <update / preserve / supersede via approved decision>
+
+Other repositories:   # only when a consumer or dependency lives elsewhere
+- <repository>: <contract affected>; integration verified by <who/where>
 
 Quality:
 - Tests: <focused checks>
@@ -54,12 +61,16 @@ Stop if:
 Status: Ready for implementation | Ready for planning | Blocked | Escalate
 Size: medium
 Reliability: lean | strict | critical
+Parent: <earlier change folder>   # only for an amendment
 
 ## Goal
 <observable outcome>
 
 ## Evidence and Current Behavior
-- `<path>:<symbol>` — <fact>
+- Entry point: `<path>:<line>`
+- Covering tests: `<test path>` | none
+- Consumers of altered contracts: <contract>: <consumers> — `<search command>` | no contract altered
+- `<path>:<symbol>` — <other relevant fact>
 
 ## Scope
 Included:
@@ -86,6 +97,11 @@ Excluded:
 - Preserve: <authoritative artifacts>
 - Supersede only with approved decision: <artifact/decision>
 
+## Other Repositories
+- <repository>: <contract affected>; integration verified by <who/where>
+
+Omit when every consumer and dependency lives in this repository.
+
 ## Quality Obligations
 - Tests:
 - QA:
@@ -96,9 +112,12 @@ Excluded:
 - Expected edits:
 - Do not touch:
 
-## Planning Decision
-Plan required: Yes / No
-Reason: <why>
+## Triggered Artifacts
+| Artifact | Fired? | Reason |
+|---|---|---|
+| audit.md | Yes/No | |
+| plan.md | Yes/No | |
+| execution.md | Yes/No | |
 
 ## Stop Conditions
 - <condition>
@@ -112,7 +131,10 @@ Reason: <why>
 Status: Ready for planning | Blocked | Escalate
 Size: large
 Reliability: lean | strict | critical
-Audit baseline: `<commit from audit.md>`
+Large because: <at least two structural criteria; name the one plan.md records>
+Triggered artifacts: plan.md | audit.md (<strict, critical, or unknown evidence fact>) | execution.md (<handoff>)
+Evidence: `audit.md` at `<commit>` | no audit — entry `<path>:<line>`; tests `<path>` | none; consumers <contract>: <consumers> (`<search command>`)
+Parent: <earlier change folder>   # only for an amendment
 
 ## 1. Goal
 <final observable implementation goal>
@@ -137,7 +159,7 @@ Audit baseline: `<commit from audit.md>`
 If no stakeholder decision was required, write `None.`
 
 ## 5. Expected Change Areas
-| Area / File | Expected Change | Audit Evidence | Confidence |
+| Area / File | Expected Change | Evidence | Confidence |
 |---|---|---|---|
 | | | | High/Medium/Low |
 
@@ -174,6 +196,9 @@ If no stakeholder decision was required, write `None.`
 - Update with implementation: <authoritative artifacts>
 - Preserve unchanged: <authoritative artifacts>
 - Supersede only through approved `DEC-*`/ADR: <items>
+
+### Other Repositories
+- <repository>: <contract affected>; integration verified by <who/where> | None
 
 ## 13. Quality Obligations
 - Reliability gates:

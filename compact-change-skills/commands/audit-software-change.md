@@ -1,5 +1,5 @@
 ---
-description: Audit a large software change using the canonical auditing-change workflow.
+description: Audit a strict or critical software change, or a lean one whose evidence facts are unknown, using the canonical auditing-change workflow.
 disable-model-invocation: true
 argument-hint: [request]
 ---
