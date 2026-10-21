@@ -1,6 +1,6 @@
 ---
 name: reconciling-system-design
-description: Reconcile System Design. Resolve the bounded BLOCKER and MAJOR findings from an existing design-review ledger by editing only the owning canonical artifacts and their directly affected authorities, preserving product intent, recording a precise change set, and handing the package back for follow-up verification rather than performing another review.
+description: Reconcile System Design. Use when a design review left the package in needs_reconciliation. Resolve the bounded BLOCKER and MAJOR findings from an existing design-review ledger by editing only the owning canonical artifacts and their directly affected authorities, preserving product intent, recording a precise change set, and handing the package back for follow-up verification rather than performing another review.
 ---
 
 # Reconcile the System Design
@@ -41,7 +41,7 @@ For each finding:
 1. identify the owning canonical artifact from the ledger;
 2. change that authority rather than adding reconciliation prose elsewhere;
 3. update directly affected canonical authorities only when necessary to preserve semantic consistency;
-4. preserve PRD product intent unless an approved product decision explicitly changed it;
+4. preserve PRD product intent; edit the PRD only when a decided PRD §15 row authorizes the change, and cite its PD ID in the change set;
 5. do not create a new artifact merely to avoid editing the actual owner.
 
 Use the smallest coherent change set that satisfies the finding's required resolution.
@@ -81,7 +81,7 @@ Independent verification belongs to `reviewing-system-design`.
 
 ## 5. Reconciliation Cycle Budget
 
-Increment the current baseline's reconciliation cycle count exactly once per invocation that changes canonical artifacts.
+Increment the reconciliation cycle count in `docs/design/review.md` exactly once per invocation that changes canonical artifacts. The ledger is the only place that holds it.
 
 Maximum automatic reconciliation cycles per baseline: `3`.
 

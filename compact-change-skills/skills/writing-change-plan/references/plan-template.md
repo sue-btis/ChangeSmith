@@ -7,6 +7,8 @@ Status: Ready | Blocked | Stale
 Size: medium | large
 Reliability: lean | strict | critical
 Base: `<branch>@<commit>`
+Plan trigger: parallel writers | migration/rollout ordered across sessions
+Structural criteria (large only): <the two or more criteria that make it large>
 
 ## Preflight Baseline
 - Working tree:

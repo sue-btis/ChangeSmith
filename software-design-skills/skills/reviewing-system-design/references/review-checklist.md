@@ -1,6 +1,15 @@
 # Design Review Checklist
 
-Use this checklist comprehensively during a baseline review. During follow-up verification, apply only the items relevant to existing findings and the reconciliation impact cone.
+Use this checklist comprehensively during a baseline review. During a new-baseline review, apply it to the authorities the material change touches plus global contradictions. During follow-up verification, apply only the items relevant to existing findings and the reconciliation impact cone.
+
+## Mechanical Checks
+- [ ] `check-package.mjs` ran, with its result recorded.
+- [ ] Every manifest `checks:` command ran, with its result recorded.
+- [ ] Official validators ran for the artifacts present, or their absence is recorded.
+
+## Decisions
+- [ ] Every stakeholder decision lives in PRD §15 with who, date, and verbatim quote.
+- [ ] Every Accepted ADR has its "Accepted by" line; no authority relies on a Proposed ADR.
 
 ## Product Coverage
 - [ ] MVP capabilities map to FRs.

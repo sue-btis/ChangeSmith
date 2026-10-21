@@ -1,11 +1,19 @@
-# Large Change Audit Template
+# Change Audit Template
 
 ```markdown
 # <Change name> Audit
 
 Status: Ready for specification | Ready after explicit decisions | Requires targeted follow-up audit | Blocked | Escalate
-Size: large
+Size: quick | medium | large
 Reliability: lean | strict | critical
+Audit trigger: strict | critical | <which evidence fact was unknown at shaping>
+
+## Evidence Facts
+| Fact | Evidence |
+|---|---|
+| Entry point | `<path>:<line>` |
+| Covering tests | `<test path>` / none |
+| Consumers of each altered contract | <contract>: <consumers> — found with LSP `findReferences` \| grep `<search command>` |
 
 ## Baseline
 | Field | Value |

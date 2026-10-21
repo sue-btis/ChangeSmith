@@ -1,4 +1,4 @@
 interface:
   display_name: "Verify Software Change"
   short_description: "Independently audit the actual implementation diff"
-  default_prompt: "Use $verifying-change to independently verify the actual diff against the approved spec, rerun feasible checks, and produce the final verdict."
+  default_prompt: "Use $verifying-change to independently verify the actual diff against the approved spec, rerun feasible checks, type each finding as defect or decision, and record the verdict and the user's acceptance in the fixed header."

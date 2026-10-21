@@ -9,6 +9,8 @@
 - [ ] Each correction edits the canonical owner of the disputed concern.
 - [ ] Directly affected authorities are updated only when semantic consistency requires it.
 - [ ] Product requirements were not silently changed to make the technical design easier.
+- [ ] Every PRD edit cites the decided PRD §15 row that authorizes it.
+- [ ] New or changed ADRs start `Proposed`; none was marked `Accepted` without the owner's quote.
 - [ ] No duplicate reconciliation specification was created.
 
 ## Change Safety
@@ -19,5 +21,5 @@
 ## Handoff
 - [ ] Attempted findings are READY_FOR_VERIFICATION, not self-declared RESOLVED.
 - [ ] Changed paths and expected verification evidence are recorded.
-- [ ] Reconciliation cycle count was incremented once.
+- [ ] Reconciliation cycle count was incremented once, in `review.md`.
 - [ ] Manifest status is ready_for_verification, blocked, or escalate.

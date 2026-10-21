@@ -1,12 +1,11 @@
 # Focused PRD Template
 
-Delete sections that do not apply. Empty boilerplate is worse than omission.
+Delete sections that do not apply. Empty boilerplate is worse than omission. Every ID uses three digits.
 
 ```markdown
 # PRD — <Product Name>
 
 Status: Ready for system design | Blocked | Escalate
-Version: <version>
 
 ## 1. Product Overview
 ### Product
@@ -29,19 +28,19 @@ Version: <version>
 <device/environment/network/organizational context that matters to product behavior>
 
 ## 3. Goals
-- G-01 — <outcome>
+- G-001 — <outcome>
 
 ## 4. Non-Goals
-- NG-01 — <explicit exclusion>
+- NG-001 — <explicit exclusion>
 
 ## 5. Core User Journeys
-### J-01 — <name>
+### J-001 — <name>
 1. <step>
 2. <step>
 3. <observable outcome>
 
 ## 6. Product Capabilities
-### CAP-01 — <name>
+### CAP-001 — <name>
 <purpose, user-visible behavior, major states/edge cases>
 
 ## 7. Functional Requirements
@@ -59,14 +58,14 @@ Version: <version>
 - BR-001 — <rule that must remain true>
 
 ## 10. Product / UX Principles
-- UX-01 — <concrete, decidable rule>
+- UX-001 — <concrete, decidable rule>
 
 ## 11. Hard Constraints
 - CON-001 — <stakeholder/platform/legal/operational constraint>
 
 ## 12. MVP Scope
 ### In
-- <item>
+- FR-001, FR-002 — <capability in product language>
 
 ### Out
 - <item>
@@ -77,15 +76,15 @@ Version: <version>
 ## 14. Future Product Scope
 - <deferred capability, not architecture speculation>
 
-## 15. Open Product Decisions
-| ID | Decision Needed | Why It Matters | Authority |
-|---|---|---|---|
-| PD-001 | | | |
+## 15. Product Decisions
+| ID | Question | Status | Decision | Decided by | Date | Quote | Affects |
+|---|---|---|---|---|---|---|---|
+| PD-001 | | Open / Decided | | | | «<verbatim>» | <PRD sections / artifacts> |
 
 If none, write `None.`
 
 ## 16. Product Traceability
 | Capability / Journey | Requirements |
 |---|---|
-| CAP-01 / J-01 | FR-001, NFR-001 |
+| CAP-001 / J-001 | FR-001, NFR-001 |
 ```

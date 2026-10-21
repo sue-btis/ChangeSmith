@@ -6,6 +6,8 @@
 Status: Proposed | Accepted | Superseded | Rejected
 Date: YYYY-MM-DD
 Decision owners: <role/person if known>
+Accepted by: <who>, <date>, «<verbatim quote>»   (only when Accepted)
+Superseded by: ADR-###   (only when Superseded)
 Related: <FR/NFR/BR/CON IDs>
 
 ## Context

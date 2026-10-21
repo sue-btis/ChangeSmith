@@ -1,0 +1,21 @@
+{
+  "name": "software-engineering-skills",
+  "owner": {
+    "name": "sue_btis"
+  },
+  "metadata": {
+    "description": "Josue's software design and change workflow plugins, installed from this repository"
+  },
+  "plugins": [
+    {
+      "name": "compact-change-skills",
+      "source": "./compact-change-skills",
+      "description": "Shape, audit, specify, plan, implement and verify bounded changes; ships the comment-budget and git-guard hooks"
+    },
+    {
+      "name": "software-design-skills",
+      "source": "./software-design-skills",
+      "description": "Product brief, PRD, system design, design review and build plan for new products"
+    }
+  ]
+}

@@ -53,6 +53,8 @@ Stop if:
 | Current start commit | |
 | Working tree before edits | |
 | Pre-existing relevant changes | |
+| Untracked files before edits | |
+| Without version control | Files to touch and their pre-change state |
 
 ## Preflight Verdict
 Safe | Safe sequentially only | Stale | Blocked | Spec contradicts repository
@@ -92,4 +94,12 @@ Isolated worktrees | Shared tree with disjoint writes | Sequential | Quick direc
 
 ## Independent Verification Readiness
 Ready | Not ready
+
+## Correction Rounds
+### Round 1 — after verification pass <n> (<date>)
+- Findings addressed: <F-1, F-2>
+- Files changed: <paths>
+- Checks run: <commands and results>
+- New diff range: <base..head or working tree>
+- Preflight delta: <what changed since the previous round, or None>
 ```

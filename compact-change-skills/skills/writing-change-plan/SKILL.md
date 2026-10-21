@@ -1,6 +1,6 @@
 ---
 name: writing-change-plan
-description: Write Change Plan. Convert an approved medium or large specification into an executable dependency-aware plan. For large changes, define true dependencies, optional Gate 0 contract materialization, execution topology, exact write-set ownership, waves, integration gates, generated-file ownership, fallback order, checks, evidence, and stop conditions.
+description: Write Change Plan. Convert an approved specification whose plan trigger fired (parallel writers, or ordered migration/rollout across sessions) into an executable dependency-aware plan. For large changes, define true dependencies, optional Gate 0 contract materialization, execution topology, exact write-set ownership, waves, integration gates, generated-file ownership, fallback order, checks, evidence, and stop conditions.
 ---
 
 # Write an Executable Change Plan
@@ -12,11 +12,11 @@ Read `references/plan-template.md`.
 Require:
 
 - `spec.md` status `Ready for planning`;
+- the plan trigger in `shaping-change/references/change-sizing.md` fired;
 - no open blocker;
 - observable acceptance criteria;
-- current repository baseline available.
-
-For large changes, also require `audit.md`.
+- current repository baseline available;
+- `audit.md` when the spec cites one.
 
 Verify current root, branch, base commit, working tree, named contracts, expected paths, and validation commands before finalizing the plan.
 
@@ -24,7 +24,7 @@ If the repository changed materially since the audit/spec baseline, mark the pla
 
 ## Medium Planning
 
-Create two to six vertical tasks when a flat implementation checklist is insufficient.
+A medium plan carries one structural criterion: parallel writers on disjoint write sets, or a migration/rollout ordered across sessions. Create two to six vertical tasks. When writers run in parallel, also apply the topology and ownership rules of Large Planning.
 
 Each task includes:
 
@@ -36,9 +36,11 @@ Each task includes:
 - evidence;
 - stop conditions.
 
-Prefer sequential execution.
+Order the tasks that do not run in parallel sequentially.
 
 ## Large Planning
+
+Record in the plan header the structural criteria that make the change large.
 
 ### 1. Dependency Graph
 
