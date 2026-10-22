@@ -38,7 +38,7 @@ const VALID = {
   "docs/product/prd.md": "# PRD\n\n### FR-001\nA.\n### FR-002\nB.\n\n## 12. MVP Scope\n- FR-001, FR-002 — core\n\n## 13. Success\n",
   "docs/design/domain.md": "# Domain\nCovers FR-001 per ADR-001.\n",
   "docs/design/architecture/adr/ADR-001-store.md":
-    "# ADR-001\n\nStatus: Accepted\nAccepted by: Josue, 2026-10-19, «va»\n",
+    "# ADR-001\n\nStatus: Accepted\nAccepted by: Alex, 2026-10-19, «va»\n",
   "docs/design/review.md": "## Findings\n- Severity: `MAJOR`\n- Status: `RESOLVED`\n",
   "docs/build/plan.md": "# Plan\n\nBaseline: RV-001\n\n## Milestone M01\n- FR-001\n- FR-002\n",
 };
@@ -195,7 +195,7 @@ test("change specs are found through change_folders and ADRs cite real PRD ids",
     "docs/build/plan.md": "# Plan\n- FR-001\n",
     "docs/build/m02/spec.md": "Covers FR-002.\n",
     "docs/design/architecture/adr/ADR-001-store.md":
-      "# ADR-001\n\nStatus: Accepted\nAccepted by: Josue, 2026-10-19, «va»\nRelated: FR-404\n",
+      "# ADR-001\n\nStatus: Accepted\nAccepted by: Alex, 2026-10-19, «va»\nRelated: FR-404\n",
   });
   assert.doesNotMatch(errors, /FR-002 is in the MVP/);
   assert.match(errors, /ADR-001-store.md cites FR-404/);

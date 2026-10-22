@@ -4,8 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const PROTECTED = new Set(['main', 'master', 'development']);
-const BRANCH_NAME = /^(feat|fix|docs|refactor|chore|test)\/[a-z0-9]+(-[a-z0-9]+)*\/[A-Za-z][A-Za-z0-9]*$/;
+const WINDOWS = process.platform === 'win32';
 const MERGE_VALUE_OPTIONS = new Set(['-m', '--message', '-F', '--file', '-X', '--strategy-option', '-s', '--strategy', '--into-name', '--cleanup']);
 const BRANCH_COPY_MOVE = new Set(['-c', '-C', '-m', '-M', '--copy', '--move']);
 const BRANCH_PLAIN_FLAGS = new Set(['-f', '--force', '-t', '--track', '--no-track']);
@@ -68,38 +67,62 @@ function creationName({ sub, args }) {
   return undefined;
 }
 
-function judge(git, branch) {
+const list = (value) => (value ?? '').split(',').map(v => v.trim()).filter(Boolean);
+
+// Nothing is enforced unless CHANGESMITH_GIT_GUARD=1. A malformed branch pattern is ignored
+// rather than thrown, so a typo in the environment can never block a command.
+export function configFromEnv(env = process.env) {
+  let branchPattern = null;
+  try {
+    if (env.CHANGESMITH_GIT_GUARD_BRANCH_PATTERN) branchPattern = new RegExp(env.CHANGESMITH_GIT_GUARD_BRANCH_PATTERN);
+  } catch {}
+  const mergeOnly = new Map();
+  for (const pair of list(env.CHANGESMITH_GIT_GUARD_MERGE_ONLY)) {
+    const [target, ...sources] = pair.split(':');
+    if (target && sources.length) mergeOnly.set(target, new Set(sources.flatMap(s => [s, `origin/${s}`])));
+  }
+  return {
+    enabled: env.CHANGESMITH_GIT_GUARD === '1',
+    protectedBranches: new Set(list(env.CHANGESMITH_GIT_GUARD_PROTECTED)),
+    branchPattern,
+    ask: new Set(list(env.CHANGESMITH_GIT_GUARD_ASK)),
+    mergeOnly,
+  };
+}
+
+function judge(git, branch, config) {
   const { sub, args } = git;
   if (sub === 'commit') {
-    if (PROTECTED.has(branch)) {
-      return { decision: 'deny', reason: `B-1: no se commitea en ${branch}; usa una rama <tipo>/<descripcion>/<Nombre>` };
+    if (config.protectedBranches.has(branch)) {
+      return { decision: 'deny', reason: `Committing on protected branch "${branch}" is blocked; switch to another branch` };
     }
-    return { decision: 'ask', reason: 'B-1: Josue confirma cada commit; confirma que el codigo ya fue probado' };
+    if (config.ask.has('commit')) return { decision: 'ask', reason: 'Commit requires confirmation' };
   }
-  if (sub === 'push') return { decision: 'ask', reason: 'B-1: push requiere confirmacion de Josue' };
-  if (sub === 'merge' && (branch === 'main' || branch === 'master')) {
+  if (sub === 'push' && config.ask.has('push')) return { decision: 'ask', reason: 'Push requires confirmation' };
+  const sources = config.mergeOnly.get(branch);
+  if (sub === 'merge' && sources) {
     const refs = [];
     for (let i = 0; i < args.length; i++) {
       if (MERGE_VALUE_OPTIONS.has(args[i])) i++;
       else if (!args[i].startsWith('-')) refs.push(args[i]);
     }
-    if (refs.some(r => r !== 'development' && r !== 'origin/development')) {
-      return { decision: 'deny', reason: `B-1: ${branch} solo recibe merge de development` };
+    if (refs.some(r => !sources.has(r))) {
+      return { decision: 'deny', reason: `"${branch}" only accepts merges from: ${[...sources].join(', ')}` };
     }
   }
   const name = creationName(git);
-  if (name !== undefined && !BRANCH_NAME.test(name)) {
-    return { decision: 'deny', reason: `B-1: la rama "${name}" no cumple <tipo>/<descripcion>/<Nombre> (tipos: feat, fix, docs, refactor, chore, test)` };
+  if (config.branchPattern && name !== undefined && !config.branchPattern.test(name)) {
+    return { decision: 'deny', reason: `Branch name "${name}" does not match ${config.branchPattern}` };
   }
   return null;
 }
 
 function resolveDir(base, p) {
-  const gitBash = /^\/([a-zA-Z])(\/|$)/.exec(p);
+  const gitBash = WINDOWS && /^\/([a-zA-Z])(\/|$)/.exec(p);
   return resolve(base, gitBash ? `${gitBash[1].toUpperCase()}:/${p.slice(gitBash[0].length)}` : p);
 }
 
-export function decide(command, branchOf, cwd = '.') {
+export function decide(command, branchOf, cwd = '.', config = configFromEnv()) {
   let dir = cwd;
   let strictest = null;
   for (const words of parse(command)) {
@@ -110,7 +133,7 @@ export function decide(command, branchOf, cwd = '.') {
     const git = gitCommand(words);
     if (!git) continue;
     const target = git.dir ? resolveDir(dir, git.dir) : dir;
-    const result = judge(git, branchOf(target));
+    const result = judge(git, branchOf(target), config);
     if (result && (!strictest || RANK[result.decision] > RANK[strictest.decision])) strictest = result;
   }
   return strictest;
@@ -127,10 +150,11 @@ function currentBranch(dir) {
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {
-    const input = JSON.parse(readFileSync(0, 'utf8'));
+    const config = configFromEnv();
+    const input = config.enabled ? JSON.parse(readFileSync(0, 'utf8')) : null;
     const command = input?.tool_input?.command;
     if (typeof command === 'string') {
-      const result = decide(command, currentBranch, input.cwd ?? process.cwd());
+      const result = decide(command, currentBranch, input.cwd ?? process.cwd(), config);
       if (result) {
         process.stdout.write(JSON.stringify({
           hookSpecificOutput: {

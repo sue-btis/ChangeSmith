@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Synthetic reproduction of crece M02: correct behavior and green tests, but one screen
+# Synthetic reproduction of a real pilot case: correct behavior and green tests, but one screen
 # composition still awaits the owner's approval. Nothing here comes from a client repo.
 set -euo pipefail
 
@@ -48,7 +48,7 @@ The order panel shows the order total formatted as Mexican pesos with two decima
 | R-2 | \`ui/panel.html\` shows the formatted total | AC-2: the panel contains an element with id \`order-total\` |
 
 ## Decisions and Assumptions
-- Pending decision (owner: Josue): the composition of the panel, total at the top or at the bottom of the card. The implementer may propose one; it is not approved yet.
+- Pending decision (owner: the user): the composition of the panel, total at the top or at the bottom of the card. The implementer may propose one; it is not approved yet.
 
 ## Quality Obligations
 - Tests: \`npm test\` (node --test) covers R-1.

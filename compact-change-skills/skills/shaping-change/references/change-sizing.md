@@ -85,7 +85,7 @@ Create it when the work has a **handoff**: someone other than the current sessio
 - the implementation continues in a later session;
 - waves hand their work to an integration owner.
 
-Without a handoff the change is self-verified, and its baseline, deviations, and correction rounds go in `verification.md`.
+Without a handoff, the baseline, deviations, and correction rounds go in `verification.md`.
 
 ## Reliability Axis
 

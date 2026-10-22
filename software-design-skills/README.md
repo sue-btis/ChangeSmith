@@ -1,44 +1,34 @@
 # Software Design Skills
 
-Plugin para convertir una idea de producto, o un sistema que ya existe, en un paquete de diseño de software listo para implementación sin convertir el PRD en un documento monolítico.
+Plugin that turns a product idea, or an existing system, into a software design package ready for implementation, without turning the PRD into a monolithic document.
 
-Compatible con **OpenAI Codex** y **Claude Code**. Los `SKILL.md` están en inglés para portabilidad; los artefactos pueden escribirse en el idioma del usuario.
+Compatible with **OpenAI Codex** and **Claude Code**. The `SKILL.md` files are in English for portability; artifacts can be written in the user's language. Release notes are in [CHANGELOG.md](./CHANGELOG.md).
 
-## Qué cambia en 1.2
+## Core idea
 
-- **Después de aprobar, el paquete cambia por carpetas de compact-change.** Solo un cambio material abre una baseline nueva, y su revisión cubre la zona de impacto más las contradicciones globales.
-- **No hay estados guardados que se desactualicen.** El brief, el PRD y el plan pierden su línea `Status:`. El estado de cada milestone es el encabezado de su `verification.md`.
-- **No hay semver del paquete.** La versión es la baseline (`RV-n`), y lo que cambió después de aprobar se ve en git. Solo los contratos con consumidores llevan semver propio.
-- **Las decisiones viven en un solo registro**, la sección 15 del PRD, con quién, fecha y cita textual. Los ADR nacen `Proposed` y solo pasan a `Accepted` con la cita del dueño.
-- **Un script verificador corre antes de la revisión con el modelo**, sin dependencias y solo en paquetes con `schema_version: 3`.
-- **El tope de 3 ciclos tiene salida**: la elige el usuario, y cada hallazgo abierto va al "Detente si" del milestone que afecta.
-- **Se agregan** `quality-attributes.md`, el modo retroactivo, `cross_repo_dependencies` en el manifest e IDs uniformes de tres dígitos.
+One source of truth per kind of decision:
 
-## Idea central
-
-Una sola fuente de verdad por tipo de decisión:
-
-| Pregunta | Autoridad |
+| Question | Authority |
 |---|---|
-| ¿Por qué existe el producto y qué debe hacer? | `docs/product/prd.md` |
-| ¿Qué decidió el stakeholder? | `docs/product/prd.md` §15 |
-| ¿Qué conceptos y reglas forman el dominio? | `docs/design/domain.md` |
-| ¿Cómo se estructura el sistema? | `docs/design/architecture/architecture.dsl` |
-| ¿Por qué se eligió una decisión técnica? | `docs/design/architecture/adr/` |
-| ¿Cómo responde el diseño a cada NFR y cómo se verificará? | `docs/design/architecture/quality-attributes.md` |
-| ¿Cuál es el modelo persistente? | `docs/design/data/schema.dbml` |
-| ¿Cuál es el contrato HTTP? | `docs/design/api/openapi.yaml` |
-| ¿Cuál es el contrato de eventos? | `docs/design/events/asyncapi.yaml` |
-| ¿Cómo fluye el usuario? | `docs/design/ux/flows.mmd` |
-| ¿Cómo se valida visualmente una UI importante? | `docs/design/ux/prototype.html` |
-| ¿Cuál es el estado de los hallazgos de revisión? | `docs/design/review.md` *(evidencia, no autoridad de diseño)* |
-| ¿En qué orden se construye? | `docs/build/plan.md` |
-| ¿Cómo va cada milestone? | encabezado de `verification.md` en su carpeta de cambio |
-| ¿Dónde se declara qué archivo manda? | `docs/spec/manifest.yaml` |
+| Why does the product exist and what must it do? | `docs/product/prd.md` |
+| What did the stakeholder decide? | `docs/product/prd.md` §15 |
+| Which concepts and rules form the domain? | `docs/design/domain.md` |
+| How is the system structured? | `docs/design/architecture/architecture.dsl` |
+| Why was a technical decision made? | `docs/design/architecture/adr/` |
+| How does the design answer each NFR, and how will it be verified? | `docs/design/architecture/quality-attributes.md` |
+| What is the persistent model? | `docs/design/data/schema.dbml` |
+| What is the HTTP contract? | `docs/design/api/openapi.yaml` |
+| What is the event contract? | `docs/design/events/asyncapi.yaml` |
+| How does the user move through the product? | `docs/design/ux/flows.mmd` |
+| How is an important UI validated visually? | `docs/design/ux/prototype.html` |
+| What is the state of review findings? | `docs/design/review.md` *(evidence, not design authority)* |
+| In what order is it built? | `docs/build/plan.md` |
+| How is each milestone going? | `verification.md` header in its change folder |
+| Where is it declared which file governs? | `docs/spec/manifest.yaml` |
 
-No todos los proyectos necesitan todos los archivos. La skill de diseño crea únicamente los artefactos aplicables.
+Not every project needs every file. The design skill creates only the applicable artifacts.
 
-## Flujo
+## Flow
 
 ```text
 shaping-product
@@ -47,38 +37,38 @@ writing-prd
       ↓
 designing-system
       ↓
-reviewing-system-design        # comprobaciones mecánicas, luego baseline RV-001
+reviewing-system-design        # mechanical checks, then baseline RV-001
       ↓
-   ¿BLOCKER/MAJOR?
+   BLOCKER/MAJOR?
       ├─ no ───────────────→ approved
       │                         ↓
       │                  writing-build-plan
       │
-      └─ sí
+      └─ yes
           ↓
-reconciling-system-design      # corrige findings existentes
+reconciling-system-design      # fixes existing findings
           ↓
-reviewing-system-design        # follow-up por impact cone
+reviewing-system-design        # follow-up over the impact cone
           ↓
       approved / reconcile / blocked / escalate
 ```
 
-La revisión no corrige sus propios hallazgos. `reviewing-system-design` actúa como gate independiente, en una sesión que no escribió el diseño; `reconciling-system-design` modifica las autoridades canónicas y devuelve el paquete a verificación.
+The review does not fix its own findings. `reviewing-system-design` acts as an independent gate, in a session that did not write the design; `reconciling-system-design` edits the canonical authorities and hands the package back for verification.
 
-## Después de aprobar
+## After approval
 
 ```text
-paquete approved (RV-n)
+approved package (RV-n)
    │
-   ├─ milestone del plan ──────────→ carpeta de compact-change (Mxx)
-   ├─ capacidad nueva o enmienda ──→ carpeta de compact-change (Parent: si aplica)
-   └─ cambio material ─────────────→ baseline RV-n+1: revisión del impacto + contradicciones globales
+   ├─ plan milestone ──────────────→ compact-change folder (Mxx)
+   ├─ new capability or amendment ─→ compact-change folder (Parent: if applicable)
+   └─ material change ─────────────→ baseline RV-n+1: impact review + global contradictions
 ```
 
-- La carpeta de cambio declara en su "Canonical Design Impact" qué autoridades toca, y la implementación las actualiza. Un cambio de comportamiento en el PRD agrega o actualiza su fila de la §15 en el mismo cambio.
-- compact-change no necesita saber nada de este plugin.
-- El estado de cada milestone se lee con el comando que trae la plantilla del plan.
-- Lo que cambió después de aprobar:
+- The change folder declares in its "Canonical Design Impact" which authorities it touches, and the implementation updates them. A product behavior change adds or updates its PRD §15 row in the same change.
+- compact-change does not need to know anything about this plugin.
+- Each milestone's status is read with the command in the plan template.
+- What changed after approval:
 
 ```bash
 git log -1 --format=%H -S'status: approved' -- docs/spec/manifest.yaml
@@ -88,28 +78,28 @@ git log -1 --format=%H -S'status: approved' -- docs/spec/manifest.yaml
 git log --oneline <sha>.. -- docs/product docs/design
 ```
 
-## Convergencia de review
+## Review convergence
 
-- Antes de leer el paquete se corren `scripts/check-package.mjs` (dentro de `reviewing-system-design`), los comandos `checks:` del manifest y los validadores oficiales de cada artefacto.
-- Hay una **baseline review** completa para la primera aprobación. Una baseline nueva revisa solo la zona de impacto del cambio material más las contradicciones globales.
-- Los findings llevan IDs estables y severidad `BLOCKER`, `MAJOR`, `MINOR` o `NOTE`, siempre en inglés.
-- Solo `BLOCKER` y `MAJOR` bloquean el plan de construcción.
-- Las follow-up reviews verifican findings existentes y regresiones dentro del **impact cone**, sin agregar `MINOR` ni `NOTE` nuevos.
-- Máximo 3 ciclos automáticos de reconciliación por baseline. El contador vive solo en `review.md`.
-- **Salida de `escalate`:** el usuario elige y queda como decisión en la §15:
-  - construir los milestones no afectados (por defecto);
-  - aceptar con riesgo, con su cita;
-  - recortar alcance.
+- Before reading the package, run `scripts/check-package.mjs` (inside `reviewing-system-design`), the manifest's `checks:` commands, and each artifact's official validators.
+- There is one full **baseline review** for the first approval. A new baseline reviews only the impact zone of the material change plus global contradictions.
+- Findings carry stable IDs and severity `BLOCKER`, `MAJOR`, `MINOR` or `NOTE`, always in English.
+- Only `BLOCKER` and `MAJOR` block the build plan.
+- Follow-up reviews verify existing findings and regressions inside the **impact cone**, adding no new `MINOR` or `NOTE`.
+- At most 3 automatic reconciliation cycles per baseline. The counter lives only in `review.md`.
+- **Exit from `escalate`:** the user chooses, and the choice is recorded as a decision in §15:
+  - build the unaffected milestones (default);
+  - accept the risk, with their quote;
+  - cut scope.
 
-  En cualquier salida, cada `BLOCKER`/`MAJOR` abierto se anota con los IDs de requisito que afecta, y el plan lo copia al "Detente si" de cada milestone que los cubre (regla única en `writing-build-plan` §3).
-- El reviewer nunca modifica fuentes canónicas.
-- `review.md` guarda solo la baseline vigente; las anteriores quedan en git.
+  In every exit, each open `BLOCKER`/`MAJOR` is annotated with the requirement IDs it affects, and the plan copies it into the "Stop if" of each milestone covering them (single rule in `writing-build-plan` §3).
+- The reviewer never modifies canonical sources.
+- `review.md` keeps only the current baseline; earlier ones stay in git.
 
-La aprobación tiene umbral objetivo: cero `BLOCKER`, cero `MAJOR`, cero contradicciones semánticas bloqueantes y ninguna decisión de stakeholder que impida implementar, o la salida de `escalate` registrada con sus hallazgos enrutados. La deuda menor no impide aprobar.
+Approval has an objective threshold: zero `BLOCKER`, zero `MAJOR`, zero blocking semantic contradictions, and no stakeholder decision that prevents implementation, or the `escalate` exit recorded with its findings routed. Minor debt does not prevent approval.
 
-## Artefactos
+## Artifacts
 
-### Núcleo
+### Core
 
 ```text
 docs/
@@ -133,34 +123,34 @@ docs/
     └── plan.md
 ```
 
-`data/`, `api/`, `events/`, `quality-attributes.md` y los prototipos UX son condicionales. `review.md` aparece cuando inicia la revisión y contiene evidencia/estado de workflow, no especificación canónica. El brief es un insumo histórico una vez que existe el PRD.
+`data/`, `api/`, `events/`, `quality-attributes.md` and the UX prototypes are conditional. `review.md` appears when the review starts and holds evidence and workflow state, not canonical specification. The brief is a historical input once the PRD exists.
 
-## Paquete retroactivo
+## Retroactive package
 
-Para un sistema que ya existe:
+For a system that already exists:
 
-- se marca el manifest con `nature: retroactive` y `superseded_documents`;
-- el código puede ser autoridad, con su snapshot marcado como no autoritativo;
-- cada desfase entre código y diseño se lista en el brief con los requisitos que afecta (y el plan lo lleva al "Detente si" del milestone que lo corrige), o se vuelve una decisión en la §15. Nunca es un hallazgo de revisión.
+- the manifest is marked `nature: retroactive` with `superseded_documents`;
+- the code can be the authority, with its snapshot marked non-authoritative;
+- each gap between code and design is listed in the brief with the requirements it affects (and the plan carries it into the "Stop if" of the milestone that fixes it), or becomes a §15 decision. It is never a review finding.
 
-## Reglas de autoridad
+## Authority rules
 
-- El PRD posee **producto, alcance, usuarios, comportamiento requerido, metas de los NFR y decisiones de producto**.
-- Structurizr/C4 posee **estructura técnica y relaciones arquitectónicas**, no objetivos de producto.
-- ADR posee **rationale y trade-offs de decisiones técnicas**.
-- `quality-attributes.md` posee **la respuesta de diseño a cada NFR y su evidencia**; cita el NFR por ID sin repetir la meta.
-- DBML posee **schema persistente**; el PRD no replica columnas/tablas.
-- OpenAPI/AsyncAPI poseen **contratos de integración** y su propio semver; el PRD referencia requisitos, no duplica payloads.
-- Mermaid posee **flujos**, no decisiones arquitectónicas.
-- HTML sirve como **prototipo verificable**, no como arquitectura.
-- `manifest.yaml` declara qué fuentes son autoritativas y cuáles no aplican, y solo lleva las claves de su plantilla.
-- `review.md` registra findings y ciclos, pero no puede redefinir producto ni arquitectura.
-- Ningún artefacto cita la versión de otro.
-- Solo una contradicción **semántica material** detiene implementación. Diferencias editoriales, de casing o de representación no se tratan automáticamente como blockers.
+- The PRD owns **product, scope, users, required behavior, NFR targets and product decisions**.
+- Structurizr/C4 owns **technical structure and architectural relationships**, not product goals.
+- ADRs own **rationale and trade-offs of technical decisions**.
+- `quality-attributes.md` owns **the design's response to each NFR and its evidence**; it cites the NFR by ID without repeating the target.
+- DBML owns the **persistent schema**; the PRD does not replicate columns or tables.
+- OpenAPI/AsyncAPI own **integration contracts** and their own semver; the PRD references requirements and does not duplicate payloads.
+- Mermaid owns **flows**, not architectural decisions.
+- HTML serves as a **verifiable prototype**, not as architecture.
+- `manifest.yaml` declares which sources are authoritative and which do not apply, and carries only the keys of its template.
+- `review.md` records findings and cycles but cannot redefine product or architecture.
+- No artifact cites another's version.
+- Only a **material semantic** contradiction stops implementation. Editorial, casing or representation differences are not automatically blockers.
 
 ## PRD
 
-El PRD de este plugin es deliberadamente más pequeño que un mega-PRD. Conserva:
+This plugin's PRD is deliberately smaller than a mega-PRD. It keeps:
 
 - problem/purpose;
 - users/context;
@@ -168,18 +158,18 @@ El PRD de este plugin es deliberadamente más pequeño que un mega-PRD. Conserva
 - journeys;
 - capabilities;
 - FR/NFR;
-- business rules e invariants;
+- business rules and invariants;
 - constraints;
-- MVP, citando los IDs de sus FR;
+- MVP, citing its FR IDs;
 - success criteria;
 - future scope;
 - product decisions (§15).
 
-La arquitectura, el schema, los contratos y el orden de implementación viven en artefactos separados. El PRD no lleva versión ni secciones "Cambios desde": su historia queda en git y en las carpetas de cambio.
+Architecture, schema, contracts and implementation order live in separate artifacts. The PRD carries no version and no "Changes since" sections: its history stays in git and in the change folders.
 
-## Implementación inicial
+## Initial implementation
 
-No ejecutar todo el proyecto en un único prompt. `writing-build-plan` divide el sistema en slices verticales verificables:
+Do not run the whole project in a single prompt. `writing-build-plan` splits the system into verifiable vertical slices:
 
 ```text
 M01 -> implement -> verify
@@ -187,18 +177,18 @@ M02 -> implement -> verify
 M03 -> implement -> verify
 ```
 
-`compact-change-skills:implementing-change` 2.2+ puede consumir directamente un slice aprobado de este plugin junto con el `manifest.yaml` y las autoridades relevantes. Antes de editar, comprueba que el slice esté completo.
+`compact-change-skills:implementing-change` 2.2+ can consume an approved slice of this plugin directly, together with `manifest.yaml` and the relevant authorities. Before editing, it checks that the slice is complete.
 
-## Principios
+## Principles
 
-- Primero problema y restricciones; después tecnología.
-- No inventar decisiones que el usuario o el repositorio/proyecto no hayan aprobado.
-- Una fuente de verdad por tipo de decisión.
-- Texto versionable y machine-readable cuando existe un estándar mejor que prosa libre.
-- Lo mecánico lo revisa un script; el modelo revisa el significado.
-- Crear solo los artefactos que reduzcan ambigüedad real.
-- No guardar estados que otra fuente ya conoce.
-- No mezclar requisitos de producto con elecciones de implementación.
-- Diseñar para implementación incremental por slices verticales.
-- Separar discovery de defectos, corrección y verificación.
-- Aprobar por build readiness objetivo, no por ausencia absoluta de posibles mejoras.
+- Problem and constraints first; technology after.
+- Do not invent decisions the user or the repository/project has not approved.
+- One source of truth per kind of decision.
+- Versionable, machine-readable text where a standard beats free prose.
+- A script checks the mechanical; the model checks the meaning.
+- Create only the artifacts that reduce real ambiguity.
+- Do not store state that another source already knows.
+- Do not mix product requirements with implementation choices.
+- Design for incremental implementation by vertical slices.
+- Separate discovery of defects from fixing and verification.
+- Approve by objective build readiness, not by the absence of possible improvements.

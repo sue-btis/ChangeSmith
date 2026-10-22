@@ -7,8 +7,11 @@ on:
 
 jobs:
   test:
-    # The hooks parse Windows and Git Bash paths, so the tests run where the hooks do.
-    runs-on: windows-latest
+    # The hooks parse Windows and POSIX paths, so the tests run on both.
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5

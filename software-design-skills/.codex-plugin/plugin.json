@@ -20,7 +20,7 @@
     "displayName": "Software Design Skills",
     "shortDescription": "Turn an idea into an implementation-ready design package",
     "longDescription": "A proportional workflow, for new products or a design baseline of an existing system, for shaping product intent, writing a product-authoritative PRD, designing canonical technical artifacts, running mechanical package checks and one bounded independent baseline review, reconciling blocking findings separately, verifying fixes by impact cone, and planning vertical build slices without reopening architecture indefinitely.",
-    "developerName": "Sue",
+    "developerName": "sue-btis",
     "category": "Productivity",
     "capabilities": [
       "Interactive",

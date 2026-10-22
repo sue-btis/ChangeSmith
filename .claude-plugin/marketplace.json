@@ -1,7 +1,7 @@
 {
   "name": "changesmith",
   "owner": {
-    "name": "sue_btis"
+    "name": "sue-btis"
   },
   "metadata": {
     "description": "Spec-driven change workflow plugins for Claude Code: design a product, then ship bounded changes with independent verification"
