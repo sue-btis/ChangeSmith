@@ -1,6 +1,6 @@
 ---
 name: reviewing-system-design
-description: Review System Design. Use when a design package is ready for review or a new baseline opens. Independently gate it for build readiness: run the mechanical checks first, then one baseline review followed by bounded verification reviews. Record stable findings with severity and evidence, do not modify canonical design artifacts during review, and approve when blocking findings are closed or routed rather than pursuing unlimited perfection.
+description: "Review System Design. Use when a design package is ready for review or a new baseline opens. Independently gate it for build readiness: run the mechanical checks first, then one baseline review followed by bounded verification reviews. Record stable findings with severity and evidence, do not modify canonical design artifacts during review, and approve when blocking findings are closed or routed rather than pursuing unlimited perfection."
 ---
 
 # Review the System Design

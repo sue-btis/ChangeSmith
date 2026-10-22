@@ -119,7 +119,7 @@ Agent summaries are not sufficient evidence.
 
 ## 7. Execution Record
 
-Write `<change-folder>/execution.md` when the work has a handoff, as defined in `shaping-change/references/change-sizing.md`. Without a handoff the change is self-verified, and its baseline, deviations, and correction rounds go in `verification.md`.
+Write `<change-folder>/execution.md` when the work has a handoff, as defined in `shaping-change/references/change-sizing.md`. Without a handoff, its baseline, deviations, and correction rounds go in `verification.md`.
 
 Use statuses:
 
