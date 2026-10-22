@@ -1,6 +1,6 @@
 ---
 name: designing-system
-description: Design System. Use after the PRD is ready for system design. Convert it into a proportional set of canonical technical artifacts: domain model, Structurizr/C4 architecture, ADRs for consequential decisions, DBML for persistent data, OpenAPI/AsyncAPI for contracts, Mermaid flows, quality attributes, optional HTML prototypes, and a manifest declaring authority and applicability without duplicating the PRD.
+description: "Design System. Use after the PRD is ready for system design. Convert it into a proportional set of canonical technical artifacts: domain model, Structurizr/C4 architecture, ADRs for consequential decisions, DBML for persistent data, OpenAPI/AsyncAPI for contracts, Mermaid flows, quality attributes, optional HTML prototypes, and a manifest declaring authority and applicability without duplicating the PRD."
 ---
 
 # Design the System

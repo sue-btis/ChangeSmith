@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.0.0
+
+- **Breaking:** the hooks are opt-in. `git-guard` does nothing unless `CHANGESMITH_GIT_GUARD=1`; protected branches, the branch-name pattern, ask-on-commit/push and merge-only rules are each configured by their own `CHANGESMITH_GIT_GUARD_*` variable. The hard-coded `main`/`master`/`development` workflow and the Spanish messages are gone; messages are neutral English. The values that reproduce the previous behavior are in the README.
+- **Breaking:** `presupuesto-comentarios.mjs` is now `comment-budget.mjs` and only runs with `CHANGESMITH_COMMENT_BUDGET=1`. `--calibrar` is `--calibrate`; the exemption marker is `comment-budget: exempt — <reason>` (the old Spanish marker is still accepted). Docstrings whose `Args:`/`Returns:` tag is not on the first line are no longer flagged by mistake.
+- `git-guard` no longer translates `/c/...` Git Bash paths on non-Windows platforms.
+- Added tests for the comment budget; CI runs on Windows and Ubuntu.
+- Reworded "self-verified" in `change-sizing.md` and `implementing-change`: without a handoff the execution record goes in `verification.md`; who may verify is still decided by `verifying-change`.
+- The READMEs are in English and release notes live here.
+
 ## 2.3.1
 
 - Entry points and consumers of altered contracts are found with the LSP tool when a language server answers, retrying when a cold server returns only the declaration; otherwise with a text search recorded as `grep`. Specs and audits record which method produced the consumer list.

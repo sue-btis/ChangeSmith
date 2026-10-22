@@ -1,6 +1,6 @@
 {
   "name": "compact-change-skills",
-  "version": "2.3.1",
+  "version": "3.0.0",
   "description": "Six composable skills for shaping, auditing, specifying, planning, implementing, and independently verifying bounded software changes, with canonical-design artifact awareness and reusable execution of approved greenfield build slices.",
   "keywords": [
     "software-change",
@@ -15,7 +15,7 @@
     "displayName": "Compact Change Skills",
     "shortDescription": "Run proportional workflows from quick to large changes",
     "longDescription": "A repository-grounded workflow that keeps quick changes lightweight while adding audit, dependency, ownership, wave execution, context-control, canonical-design synchronization, and independent verification controls for bounded software changes. Its implementation and verification skills can also execute an approved greenfield build slice from software-design-skills.",
-    "developerName": "Sue",
+    "developerName": "sue-btis",
     "category": "Productivity",
     "capabilities": [
       "Interactive",
