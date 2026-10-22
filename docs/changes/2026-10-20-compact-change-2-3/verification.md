@@ -15,7 +15,7 @@ Reliability: strict
 ## Baseline
 | Field | Value |
 |---|---|
-| Repository | C:\Users\Josue Escobar\Documents\projects\software-engineering-skills |
+| Repository | `<repo>` |
 | Declared base | `development` @ f21e77d (HEAD is the same commit; nothing committed) |
 | Verified head / working tree | branch `feat/compact-change-2-3/Josue`; 11 modified files and 2 untracked dirs |
 | Untracked before edits | none recorded |

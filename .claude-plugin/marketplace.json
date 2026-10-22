@@ -1,10 +1,10 @@
 {
-  "name": "software-engineering-skills",
+  "name": "changesmith",
   "owner": {
     "name": "sue_btis"
   },
   "metadata": {
-    "description": "Josue's software design and change workflow plugins, installed from this repository"
+    "description": "Spec-driven change workflow plugins for Claude Code: design a product, then ship bounded changes with independent verification"
   },
   "plugins": [
     {

@@ -1,6 +1,6 @@
-# Software Engineering Skills Bundle
+# changesmith
 
-Contains two complementary plugins:
+Spec-driven change workflow for Claude Code, shipped as two complementary plugins:
 
 1. `software-design-skills/` (1.2.0) — design package: idea or existing system -> product brief -> focused PRD -> canonical system design -> consistency review -> vertical build plan.
 2. `compact-change-skills/` (2.3.1) — execution/change: proportional changes in any repository, plus controlled implementation/verification of one approved build slice. It works without a design package.
@@ -33,14 +33,18 @@ compact-change-skills
 
 The design plugin deliberately separates the PRD from technical authorities. `docs/spec/manifest.yaml` declares which artifact owns each kind of decision.
 
-## Instalación desde este repositorio
+## Install
 
-El repo es su propio marketplace (`.claude-plugin/marketplace.json`). Claude Code lee los archivos de la rama que esté activa.
+The repository is its own marketplace (`.claude-plugin/marketplace.json`).
 
 ```bash
-claude plugin marketplace add "C:\Users\Josue Escobar\Documents\projects\software-engineering-skills"
-claude plugin install compact-change-skills@software-engineering-skills
-claude plugin install software-design-skills@software-engineering-skills
+claude plugin marketplace add sue-btis/changesmith
+claude plugin install compact-change-skills@changesmith
+claude plugin install software-design-skills@changesmith
 ```
 
-Para tomar cambios nuevos: `claude plugin marketplace update software-engineering-skills` y después una sesión nueva.
+To pick up new changes: `claude plugin marketplace update changesmith`, then start a new session.
+
+## License
+
+[MIT](./LICENSE)

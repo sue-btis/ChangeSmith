@@ -3,7 +3,7 @@
 Status: approved (Josue, 2026-10-20)
 Size: medium · Profile: strict · Implementation effort: medium
 Base: `development` @ f21e77d · Branch: `feat/compact-change-2-3/Josue`
-Origin: `duma-sidon/docs/audits/2026-10-20-flujo-vs-practica.md` (F-2, F-3, B-1, E-1, V-1, V-2) and `2026-10-20-inventario-reglas.md` (H1–H3).
+Origin: an internal audit of the flow against real use (findings F-2, F-3, B-1, E-1, V-1, V-2) and a rules inventory (H1–H3).
 
 ## Goal
 
@@ -30,7 +30,7 @@ Included: `compact-change-skills/` (skills, references, hooks, tests, README, CH
 Excluded:
 - `~/.claude/agents/*.md` and `~/.claude/settings.json`: Josue's files, edited outside this repo;
 - software-design-skills;
-- duma-web and Data API repos.
+- repositories that consume the plugins.
 
 ## Requirements and Acceptance
 
