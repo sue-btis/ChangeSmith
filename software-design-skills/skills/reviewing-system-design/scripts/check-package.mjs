@@ -32,10 +32,10 @@ function scalar(raw) {
   return raw.replace(/\s+#.*$/, "").trim().replace(/^["']|["']$/g, "");
 }
 
-function parseManifest(text) {
+export function parseManifest(text) {
   const manifest = {
-    topKeys: [], schema: null, status: null, sources: {}, notApplicable: [],
-    readFirst: [], ledger: null, changeFolders: null,
+    topKeys: [], schema: null, project: null, status: null, sources: {}, notApplicable: [],
+    readFirst: [], ledger: null, baseline: null, changeFolders: null,
   };
   let section = null;
   let source = null;
@@ -48,6 +48,7 @@ function parseManifest(text) {
       manifest.topKeys.push(section);
       if (section === "schema_version") manifest.schema = value;
       if (section === "status") manifest.status = value;
+      if (section === "project") manifest.project = value;
       if (section === "change_folders") manifest.changeFolders = value;
       if (section === "not_applicable" && value.startsWith("[")) {
         manifest.notApplicable.push(...value.slice(1, -1).split(",").map((s) => s.trim()));
@@ -63,6 +64,8 @@ function parseManifest(text) {
     if (section === "review") {
       const ledger = line.match(/^ {2}ledger:\s*(.+)$/);
       if (ledger) manifest.ledger = scalar(ledger[1]);
+      const baseline = line.match(/^ {2}baseline_id:\s*(.+)$/);
+      if (baseline) manifest.baseline = scalar(baseline[1]);
     }
     const item = line.match(/^\s+-\s*(?:key:\s*)?([^\s:#]+)/);
     if (item && section === "not_applicable") manifest.notApplicable.push(item[1]);

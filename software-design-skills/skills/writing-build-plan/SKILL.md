@@ -105,3 +105,5 @@ The plan stores no status, neither for itself nor per milestone.
 ## 7. Output
 
 Write `docs/build/plan.md`. It names the baseline it plans (`RV-n`), never a version of another artifact.
+
+Then rebuild the package view with `node <designing-system skill directory>/scripts/render-package.mjs <repository root>`, so `docs/site/<project>-architecture.html` includes the plan.

@@ -84,6 +84,8 @@ The example is illustrative; the exact templates are in `compact-change-skills/s
 
 `compact-change-skills` ships a git guard and a comment-budget check for Claude Code. Both are off until you enable them with `CHANGESMITH_*` environment variables; see [the hooks section](./compact-change-skills/README.md#hooks-claude-code-only-opt-in).
 
+`software-design-skills` ships a hook that rebuilds the design package offline HTML view after each edit, off until `CHANGESMITH_RENDER_PACKAGE=1`; see [Package view](./software-design-skills/README.md#package-view).
+
 ## License
 
 [MIT](./LICENSE)

@@ -1,6 +1,6 @@
 {
   "name": "software-design-skills",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Seven composable skills that turn a product idea or an existing system into an implementation-ready canonical software design package with evidence-based discovery, bounded independent review, explicit reconciliation, contracts, and vertical build planning.",
   "keywords": [
     "greenfield",
