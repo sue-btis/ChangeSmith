@@ -1,0 +1,13 @@
+{
+  "description": "Optional rebuild of docs/site/<project>-architecture.html after an edit to a design package; off until CHANGESMITH_RENDER_PACKAGE=1.",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit|NotebookEdit",
+        "hooks": [
+          { "type": "command", "command": "node", "args": ["${CLAUDE_PLUGIN_ROOT}/hooks/render-on-edit.mjs"] }
+        ]
+      }
+    ]
+  }
+}

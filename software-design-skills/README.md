@@ -129,6 +129,29 @@ docs/
 
 `data/`, `api/`, `events/`, `quality-attributes.md` and the UX prototypes are conditional. `review.md` appears when the review starts and holds evidence and workflow state, not canonical specification. The brief is a historical input once the PRD exists.
 
+### Package view
+
+`docs/site/<project>-architecture.html` is one self-contained page that renders the whole package: Markdown authorities, Mermaid flows, the DBML schema as tables plus an entity-relationship diagram, and the Structurizr views. It opens with a double-click and works offline, because it inlines the pinned libraries and font in `vendor/`. It is generated, never edited, and never an authority.
+
+The page shows one document at a time: a document tree with ADR statuses on the left, the document in the middle, and its sections on the right, with previous and next links at the end. Every link has its own address (`#product/FR-012`), so the browser's back and forward buttons work and a requirement can be shared as a link.
+
+Every mention of an ID that the package defines (`FR-012`, `PD-014`, `ADR-003`, `F-006`) links to its definition and shows it on hover or keyboard focus. Under each definition, "Cited in" lists the places that mention it, grouped by document. A definition is a heading (`### FR-001`), a list line (`- BR-001 — …`) or the first cell of a table row (`| PD-012 |`); when an ID appears in more than one of these forms, the heading wins over the list line and the list line over the table row. IDs inside code or diagrams are not linked.
+
+Diagrams open fitted to the page width and can be zoomed with their buttons or Ctrl and the mouse wheel, moved by dragging or with the arrow keys, and shown full screen; a line under each diagram says how.
+
+The top bar carries the package status and review baseline, a filter over documents, headings and IDs (press `/`), and light, dark and automatic themes. Narrow screens get a document menu, and printing prints the current document.
+
+```bash
+node skills/designing-system/scripts/render-package.mjs <repo>                     # build once
+node skills/designing-system/scripts/render-package.mjs <repo> --watch             # rebuild on every save
+node skills/designing-system/scripts/render-package.mjs <repo> --install-git-hook  # rebuild and stage it on each commit that touches docs/
+```
+
+- The Structurizr views need Java and the official [Structurizr CLI](https://docs.structurizr.com/cli): set `STRUCTURIZR_CLI` to the unzipped CLI folder. Without it, the page shows the DSL source with a note.
+- The page is rewritten only when a source changes, so it does not add noise to every commit.
+- The Claude Code hook in `hooks/` rebuilds the page after an agent edits a file under `docs/`. It is off until you set `CHANGESMITH_RENDER_PACKAGE=1`.
+- The git hook installer never overwrites a `pre-commit` hook it did not write; it prints the line to add instead.
+
 ## Retroactive package
 
 For a system that already exists:

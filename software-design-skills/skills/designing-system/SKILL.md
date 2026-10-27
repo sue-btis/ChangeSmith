@@ -110,6 +110,8 @@ The manifest is an index of authority, not another specification. It holds only 
 
 When the manifest is written, remove the `Status:` line from `docs/product/brief.md` and `docs/product/prd.md`; from then on the review gate status lives only in the manifest.
 
+Then run `node <this skill's directory>/scripts/render-package.mjs <repository root>`. It writes `docs/site/<project>-architecture.html`, a single offline page that renders every applicable authority. The page is a generated view and never an authority: never edit it, and never cite it.
+
 ## 7. Output Readiness
 
 This skill may write only one of these package states:

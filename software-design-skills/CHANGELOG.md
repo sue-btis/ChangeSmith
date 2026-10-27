@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.0
+
+- New `skills/designing-system/scripts/render-package.mjs`: builds `docs/site/<project>-architecture.html`, one offline page that renders every applicable authority from the manifest (Markdown, Mermaid, DBML as tables plus an entity-relationship diagram, Structurizr views through the official CLI when `STRUCTURIZR_CLI` is set). It is a generated view, never an authority, named after the project so it is easy to find. It shows one document at a time with a document tree, section index and previous/next links, hash addresses for every document and definition, IDs linked to their definitions with a preview on hover or focus, a "Cited in" list under each definition, a filter over documents, headings and IDs, light/dark/auto themes that meet WCAG AA (AAA for body text and links), diagrams with zoom, fit to width, drag to pan and full screen, a mobile menu and print styles. `--watch` rebuilds on save; `--install-git-hook` rebuilds and stages it on commits that touch `docs/`.
+- New opt-in Claude Code hook that rebuilds the view after an edit under `docs/` (`CHANGESMITH_RENDER_PACKAGE=1`).
+- Vendors pinned `mermaid` 12.1.0 and `marked` 18.1.0 (MIT) and the Manrope 5.3.0 latin subset (OFL-1.1) in `vendor/`, so the page needs no network and the plugin still installs no dependencies.
+- `designing-system` and `writing-build-plan` rebuild the view at the end. `check-package.mjs` exports `parseManifest` and reads `project` and the review `baseline_id`.
+
 ## 1.3.0
 
 - New `discovering-product` skill and `/discover-product` command, between shaping and the PRD. It answers evidence questions by auditing, researching primary sources, mapping options with distinct mechanisms, ideating with the user, probing with measured spikes, and running a fresh-context challenge. It explains the options with `explaining-skills` so the user decides, and records findings in `docs/discovery/findings.md` as evidence, not authority.

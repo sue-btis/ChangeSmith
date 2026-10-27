@@ -15,7 +15,7 @@ Agents that go straight from a request to a diff skip the decisions that matter:
 ## What is inside
 
 
-1. `software-design-skills/` (1.3.0) — design package: idea or existing system -> product brief -> discovery when the unknowns need evidence -> focused PRD -> canonical system design -> consistency review -> vertical build plan.
+1. `software-design-skills/` (1.4.0) — design package: idea or existing system -> product brief -> discovery when the unknowns need evidence -> focused PRD -> canonical system design -> consistency review -> vertical build plan.
 2. `compact-change-skills/` (3.1.0) — execution/change: proportional changes in any repository, plus controlled implementation/verification of one approved build slice. It works without a design package.
 3. `explaining-skills/` (0.2.0) — explanation for a human reader: plain-language voice, books checked by a cold reader, explanatory diagrams, and indicator diagnostics. Discovery uses it to explain options before the user decides. Its skills are written in Spanish.
 
@@ -83,6 +83,8 @@ The example is illustrative; the exact templates are in `compact-change-skills/s
 ## Optional hooks
 
 `compact-change-skills` ships a git guard, a config guard and a comment-budget check for Claude Code. They are off until you enable them with `CHANGESMITH_*` environment variables; see [the hooks section](./compact-change-skills/README.md#hooks-claude-code-only-opt-in).
+
+`software-design-skills` ships a hook that rebuilds the design package offline HTML view after each edit, off until `CHANGESMITH_RENDER_PACKAGE=1`; see [Package view](./software-design-skills/README.md#package-view).
 
 ## License
 
