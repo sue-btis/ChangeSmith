@@ -1,0 +1,4 @@
+interface:
+  display_name: "Discover Product"
+  short_description: "Research, compare, and explain options before the PRD"
+  default_prompt: "Use $discovering-product to answer the brief's evidence questions with audited facts, sourced research, distinct options, measured probes, and an explanation the user can decide from."
