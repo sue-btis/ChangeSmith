@@ -175,7 +175,7 @@ Use $verifying-change in independent audit mode. Inspect the declared diff range
 
 ## Hooks (Claude Code only, opt-in)
 
-The plugin ships two hooks. **Both do nothing until you enable them** with environment variables, which you can set in your shell or in the `env` block of Claude Code's `settings.json`. Codex ignores hooks.
+The plugin ships three hooks. **They do nothing until you enable them** with environment variables, which you can set in your shell or in the `env` block of Claude Code's `settings.json`. Codex ignores hooks.
 
 ### `git-guard` (PreToolUse on Bash and PowerShell)
 
@@ -198,6 +198,10 @@ CHANGESMITH_GIT_GUARD_BRANCH_PATTERN=^(feat|fix|docs|refactor|chore|test)/[a-z0-
 CHANGESMITH_GIT_GUARD_ASK=commit,push
 CHANGESMITH_GIT_GUARD_MERGE_ONLY=main:development,master:development
 ```
+
+### `config-guard` (PreToolUse on Edit, Write and MultiEdit)
+
+Set `CHANGESMITH_CONFIG_GUARD=1` to ask for confirmation before the agent edits an existing lint, format or type-check config (`eslint`, `prettier`, `biome`, `ruff`, `tsconfig*.json`, `analysis_options.yaml`, `.editorconfig` and similar; the full list is the regular expression in `hooks/config-guard.mjs`). The point is that loosening a rule must be a decision, not the way a red check turns green. Creating a new config file is not asked about, and neither is `package.json` or `pyproject.toml`, which mix config with everything else. A shell command that rewrites the file (`sed -i`) is not seen. Like `git-guard`, it fails open.
 
 ### `comment-budget` (PostToolUse after edits)
 

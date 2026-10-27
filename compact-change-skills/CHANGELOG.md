@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.1.0
+
+- New opt-in hook `config-guard` (PreToolUse on Edit, Write and MultiEdit): with `CHANGESMITH_CONFIG_GUARD=1` it asks for confirmation before an existing lint, format or type-check config is edited, so loosening a rule is a decision and not the way a failing check passes. It fails open and does not see shell rewrites such as `sed -i`.
+- A verification finding must cite the file and line, or the command output, that shows it; zero findings is a valid result.
+- `reliability-profiles.md` adds risk triggers for untrusted input reaching a query, command, path or template, for secrets, for added or upgraded dependencies, and for uploads, deserialization and user-supplied URLs.
+
 ## 3.0.0
 
 - **Breaking:** the hooks are opt-in. `git-guard` does nothing unless `CHANGESMITH_GIT_GUARD=1`; protected branches, the branch-name pattern, ask-on-commit/push and merge-only rules are each configured by their own `CHANGESMITH_GIT_GUARD_*` variable. The hard-coded `main`/`master`/`development` workflow and the Spanish messages are gone; messages are neutral English. The values that reproduce the previous behavior are in the README.
