@@ -12,6 +12,7 @@ One source of truth per kind of decision:
 |---|---|
 | Why does the product exist and what must it do? | `docs/product/prd.md` |
 | What did the stakeholder decide? | `docs/product/prd.md` §15 |
+| What did discovery find, and which options were compared? | `docs/discovery/findings.md` *(evidence, not design authority)* |
 | Which concepts and rules form the domain? | `docs/design/domain.md` |
 | How is the system structured? | `docs/design/architecture/architecture.dsl` |
 | Why was a technical decision made? | `docs/design/architecture/adr/` |
@@ -32,6 +33,9 @@ Not every project needs every file. The design skill creates only the applicable
 
 ```text
 shaping-product
+      ↓
+   Needs discovery?
+      ├─ yes → discovering-product   # audit, research, options, probes, explained to the user
       ↓
 writing-prd
       ↓

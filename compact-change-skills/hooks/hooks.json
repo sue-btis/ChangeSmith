@@ -1,5 +1,5 @@
 {
-  "description": "Optional comment-budget check after edits and git branch/commit guard before shell commands; both are off until enabled with CHANGESMITH_* environment variables.",
+  "description": "Optional comment-budget check after edits, config guard before edits, and git branch/commit guard before shell commands; all are off until enabled with CHANGESMITH_* environment variables.",
   "hooks": {
     "PostToolUse": [
       {
@@ -10,6 +10,12 @@
       }
     ],
     "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          { "type": "command", "command": "node", "args": ["${CLAUDE_PLUGIN_ROOT}/hooks/config-guard.mjs"] }
+        ]
+      },
       {
         "matcher": "Bash|PowerShell",
         "hooks": [

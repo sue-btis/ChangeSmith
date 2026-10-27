@@ -41,6 +41,21 @@ A decision is material when it changes:
 
 Resolve what can be inferred from supplied evidence. Ask only for stakeholder decisions that cannot be safely inferred. Never convert a recommendation into an approval.
 
+## 2a. Separate Decisions From Evidence Questions
+
+Classify each material unknown:
+
+- **stakeholder decision**: only the user can choose it; it stays an open product decision;
+- **evidence question** (`DQ-###`): nobody in the conversation knows the answer yet, because it is a fact about the world (what exists, how well it works), a feasibility question that needs a measurement, or a product that seeks a new approach where several methods compete.
+
+Do not answer an evidence question from memory and do not ask the user to guess it. Write each one in the brief's Discovery section with the decision it unblocks.
+
+Select one discovery depth:
+
+- `none`: no evidence questions; the product follows known patterns;
+- `light`: a few factual questions that sourced research and an audit can answer;
+- `deep`: a feasibility risk, a kill criterion, or a product whose value depends on finding a better approach.
+
 ## 3. Size the Design Package
 
 Select exactly one proportionality level:
@@ -97,11 +112,13 @@ Write `docs/product/brief.md` with:
 - core domain language;
 - approved decisions;
 - open product decisions;
+- discovery depth and evidence questions;
 - proposed artifact applicability matrix.
 
 Use one status:
 
 - `Ready for PRD`
+- `Needs discovery` when the depth is `light` or `deep`; `discovering-product` runs next
 - `Blocked`
 - `Escalate`
 

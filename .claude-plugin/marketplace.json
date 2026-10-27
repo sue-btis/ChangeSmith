@@ -10,12 +10,17 @@
     {
       "name": "compact-change-skills",
       "source": "./compact-change-skills",
-      "description": "Shape, audit, specify, plan, implement and verify bounded changes; ships the comment-budget and git-guard hooks"
+      "description": "Shape, audit, specify, plan, implement and verify bounded changes; ships the comment-budget, config-guard and git-guard hooks"
     },
     {
       "name": "software-design-skills",
       "source": "./software-design-skills",
-      "description": "Product brief, PRD, system design, design review and build plan for new products"
+      "description": "Product brief, discovery, PRD, system design, design review and build plan for new products"
+    },
+    {
+      "name": "explaining-skills",
+      "source": "./explaining-skills",
+      "description": "Explain so a person can understand and decide: plain-language voice, books checked by a cold reader, explanatory diagrams, and indicator diagnostics"
     }
   ]
 }

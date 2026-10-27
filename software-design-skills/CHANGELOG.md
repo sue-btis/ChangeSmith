@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.0
+
+- New `discovering-product` skill and `/discover-product` command, between shaping and the PRD. It answers evidence questions by auditing, researching primary sources, mapping options with distinct mechanisms, ideating with the user, probing with measured spikes, and running a fresh-context challenge. It explains the options with `explaining-skills` so the user decides, and records findings in `docs/discovery/findings.md` as evidence, not authority.
+- `shaping-product` separates stakeholder decisions from evidence questions (`DQ-###`), selects a discovery depth (`none`, `light`, `deep`), and adds the brief status `Needs discovery`.
+- `writing-prd` reads the findings; `designing-system` takes ADR options and evidence from them, and turns a technical decision made in discovery into the ADR's `Accepted by` line.
+- Requires the `explaining-skills` plugin for discovery at `light` or `deep` depth.
+
 ## 1.2.0
 
 - After approval, authorities change only through compact-change folders. A material change opens a new baseline whose review covers the change's impact plus global contradictions, not the whole package. `reviewing-system-design` refuses to reopen an approved package otherwise.
