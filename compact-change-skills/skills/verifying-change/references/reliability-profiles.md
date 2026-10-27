@@ -100,3 +100,7 @@ Add the corresponding gate when relevant:
 | Parser/validator/transformer | property-based or fuzz tests, malformed and boundary inputs |
 | External dependency | timeout, retry, circuit/failure behavior, deterministic boundary fakes |
 | UI workflow | component tests plus reproducible browser/manual QA for critical path |
+| Untrusted input reaching a query, shell command, file path, template, or redirect | injection and path-traversal tests with hostile input; the diff builds the call with parameters or escaping, never by concatenation |
+| Secrets or credentials | scan of the diff and new files for keys and tokens; none in logs, error messages, or fixtures (clearly fake values and checksums are not findings) |
+| Dependency added or upgraded | the ecosystem's audit command run and new advisories recorded; lockfile changes owned per the spec |
+| Upload, deserialization, or outbound request to a user-supplied URL | size and type limits, safe parsing, host allowlist |

@@ -10,7 +10,7 @@
     {
       "name": "compact-change-skills",
       "source": "./compact-change-skills",
-      "description": "Shape, audit, specify, plan, implement and verify bounded changes; ships the comment-budget and git-guard hooks"
+      "description": "Shape, audit, specify, plan, implement and verify bounded changes; ships the comment-budget, config-guard and git-guard hooks"
     },
     {
       "name": "software-design-skills",
