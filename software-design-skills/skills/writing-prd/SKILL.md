@@ -11,6 +11,8 @@ Read `references/prd-template.md`.
 
 For a new PRD, require `docs/product/brief.md` with status `Ready for PRD` or equivalent approved shaping evidence. Amending the PRD of an approved package follows §6 instead and needs no brief status.
 
+When `docs/discovery/findings.md` exists, read it. Its product decisions are already in the brief; an NFR target that a probe measured cites that `DQ-###` instead of inventing a number.
+
 Do not invent unresolved stakeholder decisions. If a missing decision prevents testable requirements, mark the PRD `Blocked`.
 
 ## 1. Authority Boundary
@@ -66,6 +68,7 @@ Every ID uses three digits (`FR-001`, `CON-001`, `PD-001`). The MVP section cite
 §15 "Product Decisions" is the single register of stakeholder decisions for the package. Each row has ID, question, status (`Open` or `Decided`), decision, who decided, date, the decider's verbatim quote, and the authorities affected.
 
 - The brief's approved and open decisions move here when the PRD is born.
+- Before asking for a decision, explain its options as `designing-system` "Explain Decisions" describes.
 - Write `Decided` only from the stakeholder's own message, with its quote. A recommendation is not a decision.
 - A decided row stays in the table; it is never deleted.
 

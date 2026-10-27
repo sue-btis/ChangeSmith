@@ -178,3 +178,22 @@ Expected:
 - `quality-attributes.md` has a row citing NFR-003 by ID with `human task: <who> confirms the rotation`;
 - when the plan is written, the milestone covering NFR-003 has a "Stop if" that waits for that confirmation;
 - the NFR target is not restated outside the PRD.
+
+## 22. Product whose value depends on a better approach
+
+Setup:
+The user wants phone-camera bar velocity tracking. The brief names one method ("a pose model"), and nobody knows whether a phone camera is accurate enough.
+
+Expected:
+- shaping records the accuracy question as `DQ-###` with a kill criterion, sets depth `deep`, and the brief status `Needs discovery`; it does not answer it from memory or ask the user to guess;
+- the comparison criteria are agreed with the user before options are shown;
+- the option map has at least three options with distinct mechanisms, including the user's;
+- the accuracy claim stays a hypothesis until a probe measures it against the criterion;
+- the user receives a book from `explaining-skills:libro` and decides; the decision is recorded with the user's quote;
+- a technical choice made there reaches `designing-system` as an ADR whose `Accepted by` carries that quote.
+
+## 23. Typical CRUD product
+
+Expected:
+- discovery depth `none`; the brief goes straight to `Ready for PRD`;
+- no `docs/discovery/` folder is created.

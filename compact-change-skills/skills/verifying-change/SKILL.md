@@ -112,6 +112,8 @@ Name the bug class in each finding (for example, missing tenant filter or unhand
 
 Report only findings that affect correctness, requirements, contracts, or required evidence. Style preferences are not findings.
 
+A finding cites the file and line, or the command output, that shows it. Without that evidence it is not a finding. Zero findings is a valid result; do not raise one to justify the pass.
+
 ## 8. Verdict
 
 Use exactly one:

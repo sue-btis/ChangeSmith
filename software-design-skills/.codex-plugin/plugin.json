@@ -1,7 +1,7 @@
 {
   "name": "software-design-skills",
-  "version": "1.2.0",
-  "description": "Six composable skills that turn a product idea or an existing system into an implementation-ready canonical software design package with bounded independent review, explicit reconciliation, contracts, and vertical build planning.",
+  "version": "1.5.0",
+  "description": "Seven composable skills that turn a product idea or an existing system into an implementation-ready canonical software design package with evidence-based discovery, bounded independent review, explicit reconciliation, contracts, and vertical build planning.",
   "keywords": [
     "greenfield",
     "retroactive-design",
@@ -19,7 +19,7 @@
   "interface": {
     "displayName": "Software Design Skills",
     "shortDescription": "Turn an idea into an implementation-ready design package",
-    "longDescription": "A proportional workflow, for new products or a design baseline of an existing system, for shaping product intent, writing a product-authoritative PRD, designing canonical technical artifacts, running mechanical package checks and one bounded independent baseline review, reconciling blocking findings separately, verifying fixes by impact cone, and planning vertical build slices without reopening architecture indefinitely.",
+    "longDescription": "A proportional workflow, for new products or a design baseline of an existing system, for shaping product intent, discovering and explaining the options behind its unknowns, writing a product-authoritative PRD, comparing candidate architectures and explaining every decision, designing canonical technical artifacts, running mechanical package checks and one bounded independent baseline review, reconciling blocking findings separately, verifying fixes by impact cone, and planning vertical build slices without reopening architecture indefinitely.",
     "developerName": "sue-btis",
     "category": "Productivity",
     "capabilities": [
@@ -28,6 +28,7 @@
     ],
     "defaultPrompt": [
       "Shape this product idea before choosing technology.",
+      "Research, compare, and explain the options behind this product's unknowns before the PRD.",
       "Write a focused PRD that owns product intent and requirements, not implementation detail.",
       "Design the system and create only the canonical technical artifacts that apply.",
       "Review the design package using a bounded baseline or follow-up verification and record severity-graded findings without editing canonical artifacts.",

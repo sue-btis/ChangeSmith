@@ -1,5 +1,27 @@
 # Changelog
 
+## 1.5.0
+
+- `designing-system` compares two or three candidate architectures that differ in mechanism before deciding parts, including one that reuses an existing platform when one could cover a large part of the system. The user's choice becomes `ADR-001 — System shape`.
+- New "Explain Decisions" section in `designing-system`: before any decision the options are explained in the voice of `explaining-skills:lenguaje`, as a table or, for candidate architectures that differ in mechanism, a book. `writing-prd`, `reviewing-system-design` (the `escalate` exit) and `writing-build-plan` point to it. `designing-system` now requires the `explaining-skills` plugin.
+- Drivers name their source (requirement, user constraint or evidence), and a load estimate (volume, rates, storage, monthly cost) comes before the candidates. ADR options name what eliminated them, and each ADR states its reversibility; a one-way decision needs evidence before acceptance.
+- `quality-attributes.md` gains Tradeoffs, Threats (STRIDE per trust-boundary crossing), Capacity and cost, Operations and Architecture rules sections, written only when they apply. `writing-build-plan` turns each architecture rule into a test and records plan decisions in the milestone they affect.
+- The review checklist covers the new sections; `check-package.mjs` is unchanged, so existing packages still pass.
+
+## 1.4.0
+
+- New `skills/designing-system/scripts/render-package.mjs`: builds `docs/site/<project>-architecture.html`, one offline page that renders every applicable authority from the manifest (Markdown, Mermaid, DBML as tables plus an entity-relationship diagram, Structurizr views through the official CLI when `STRUCTURIZR_CLI` is set). It is a generated view, never an authority, named after the project so it is easy to find. It shows one document at a time with a document tree, section index and previous/next links, hash addresses for every document and definition, IDs linked to their definitions with a preview on hover or focus, a "Cited in" list under each definition, a filter over documents, headings and IDs, light/dark/auto themes that meet WCAG AA (AAA for body text and links), diagrams with zoom, fit to width, drag to pan and full screen, a mobile menu and print styles. `--watch` rebuilds on save; `--install-git-hook` rebuilds and stages it on commits that touch `docs/`.
+- New opt-in Claude Code hook that rebuilds the view after an edit under `docs/` (`CHANGESMITH_RENDER_PACKAGE=1`).
+- Vendors pinned `mermaid` 12.1.0 and `marked` 18.1.0 (MIT) and the Manrope 5.3.0 latin subset (OFL-1.1) in `vendor/`, so the page needs no network and the plugin still installs no dependencies.
+- `designing-system` and `writing-build-plan` rebuild the view at the end. `check-package.mjs` exports `parseManifest` and reads `project` and the review `baseline_id`.
+
+## 1.3.0
+
+- New `discovering-product` skill and `/discover-product` command, between shaping and the PRD. It answers evidence questions by auditing, researching primary sources, mapping options with distinct mechanisms, ideating with the user, probing with measured spikes, and running a fresh-context challenge. It explains the options with `explaining-skills` so the user decides, and records findings in `docs/discovery/findings.md` as evidence, not authority.
+- `shaping-product` separates stakeholder decisions from evidence questions (`DQ-###`), selects a discovery depth (`none`, `light`, `deep`), and adds the brief status `Needs discovery`.
+- `writing-prd` reads the findings; `designing-system` takes ADR options and evidence from them, and turns a technical decision made in discovery into the ADR's `Accepted by` line.
+- Requires the `explaining-skills` plugin for discovery at `light` or `deep` depth.
+
 ## 1.2.0
 
 - After approval, authorities change only through compact-change folders. A material change opens a new baseline whose review covers the change's impact plus global contradictions, not the whole package. `reviewing-system-design` refuses to reopen an approved package otherwise.
