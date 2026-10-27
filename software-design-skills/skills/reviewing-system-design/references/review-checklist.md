@@ -10,6 +10,9 @@ Use this checklist comprehensively during a baseline review. During a new-baseli
 ## Decisions
 - [ ] Every stakeholder decision lives in PRD §15 with who, date, and verbatim quote.
 - [ ] Every Accepted ADR has its "Accepted by" line; no authority relies on a Proposed ADR.
+- [ ] `ADR-001 — System shape` compares candidates that differ in mechanism, including one that reuses an existing platform when one could cover a large part of the system.
+- [ ] Eliminated options name what eliminated them: a user constraint or the evidence.
+- [ ] Every ADR states its reversibility; each one-way ADR cites the evidence it was accepted on.
 
 ## Product Coverage
 - [ ] MVP capabilities map to FRs.
@@ -39,6 +42,10 @@ Use this checklist comprehensively during a baseline review. During a new-baseli
 - [ ] Dependencies respect boundaries.
 - [ ] Architecture complexity is justified by requirements.
 - [ ] Failure, recovery, deployment, observability, and security concerns are covered proportional to documented risk and NFRs.
+- [ ] Decisions that trade one quality attribute for another are listed as tradeoffs.
+- [ ] Every trust-boundary crossing has its threats with a mitigation or a risk the user accepted with their quote.
+- [ ] Capacity and cost estimates exist for the chosen shape, each labeled measured or assumed.
+- [ ] Each boundary or budget the design depends on is an architecture rule with a check.
 
 ## UX
 - [ ] Core journeys are realizable by the flows/prototype.

@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.5.0
+
+- `designing-system` compares two or three candidate architectures that differ in mechanism before deciding parts, including one that reuses an existing platform when one could cover a large part of the system. The user's choice becomes `ADR-001 — System shape`.
+- New "Explain Decisions" section in `designing-system`: before any decision the options are explained in the voice of `explaining-skills:lenguaje`, as a table or, for candidate architectures that differ in mechanism, a book. `writing-prd`, `reviewing-system-design` (the `escalate` exit) and `writing-build-plan` point to it. `designing-system` now requires the `explaining-skills` plugin.
+- Drivers name their source (requirement, user constraint or evidence), and a load estimate (volume, rates, storage, monthly cost) comes before the candidates. ADR options name what eliminated them, and each ADR states its reversibility; a one-way decision needs evidence before acceptance.
+- `quality-attributes.md` gains Tradeoffs, Threats (STRIDE per trust-boundary crossing), Capacity and cost, Operations and Architecture rules sections, written only when they apply. `writing-build-plan` turns each architecture rule into a test and records plan decisions in the milestone they affect.
+- The review checklist covers the new sections; `check-package.mjs` is unchanged, so existing packages still pass.
+
 ## 1.4.0
 
 - New `skills/designing-system/scripts/render-package.mjs`: builds `docs/site/<project>-architecture.html`, one offline page that renders every applicable authority from the manifest (Markdown, Mermaid, DBML as tables plus an entity-relationship diagram, Structurizr views through the official CLI when `STRUCTURIZR_CLI` is set). It is a generated view, never an authority, named after the project so it is easy to find. It shows one document at a time with a document tree, section index and previous/next links, hash addresses for every document and definition, IDs linked to their definitions with a preview on hover or focus, a "Cited in" list under each definition, a filter over documents, headings and IDs, light/dark/auto themes that meet WCAG AA (AAA for body text and links), diagrams with zoom, fit to width, drag to pan and full screen, a mobile menu and print styles. `--watch` rebuilds on save; `--install-git-hook` rebuilds and stages it on commits that touch `docs/`.
