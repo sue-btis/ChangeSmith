@@ -16,7 +16,7 @@ One source of truth per kind of decision:
 | Which concepts and rules form the domain? | `docs/design/domain.md` |
 | How is the system structured? | `docs/design/architecture/architecture.dsl` |
 | Why was a technical decision made? | `docs/design/architecture/adr/` |
-| How does the design answer each NFR, and how will it be verified? | `docs/design/architecture/quality-attributes.md` |
+| How does the design answer each NFR, what does it trade, threaten, cost and need to operate, and how will it be verified? | `docs/design/architecture/quality-attributes.md` |
 | What is the persistent model? | `docs/design/data/schema.dbml` |
 | What is the HTTP contract? | `docs/design/api/openapi.yaml` |
 | What is the event contract? | `docs/design/events/asyncapi.yaml` |
@@ -39,7 +39,7 @@ shaping-product
       ↓
 writing-prd
       ↓
-designing-system
+designing-system               # candidate architectures first, every decision explained to the user
       ↓
 reviewing-system-design        # mechanical checks, then baseline RV-001
       ↓
@@ -165,7 +165,7 @@ For a system that already exists:
 - The PRD owns **product, scope, users, required behavior, NFR targets and product decisions**.
 - Structurizr/C4 owns **technical structure and architectural relationships**, not product goals.
 - ADRs own **rationale and trade-offs of technical decisions**.
-- `quality-attributes.md` owns **the design's response to each NFR and its evidence**; it cites the NFR by ID without repeating the target.
+- `quality-attributes.md` owns **the design's response to each NFR and its evidence**, plus its tradeoffs, threats, capacity and cost, operations and architecture rules; it cites the NFR by ID without repeating the target.
 - DBML owns the **persistent schema**; the PRD does not replicate columns or tables.
 - OpenAPI/AsyncAPI own **integration contracts** and their own semver; the PRD references requirements and does not duplicate payloads.
 - Mermaid owns **flows**, not architectural decisions.
@@ -210,6 +210,8 @@ M03 -> implement -> verify
 
 - Problem and constraints first; technology after.
 - Do not invent decisions the user or the repository/project has not approved.
+- Widen the options before narrowing them: compare whole-system shapes, including reuse, before deciding parts.
+- Explain every decision until the user can defend it; mark what a user constraint ruled out apart from what the evidence ruled out.
 - One source of truth per kind of decision.
 - Versionable, machine-readable text where a standard beats free prose.
 - A script checks the mechanical; the model checks the meaning.

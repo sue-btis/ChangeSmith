@@ -71,6 +71,14 @@ While planning, copy each one into the "Stop if" of every milestone that covers 
 
 Every MVP FR from PRD §12 appears in at least one slice. The package verifier checks it.
 
+### Architecture rules
+
+Each row of the "Architecture rules" section of `quality-attributes.md` becomes a `TST-*` in the milestone that first creates the boundary or budget it guards: a test that fails when the rule is broken, such as an import check between modules or a size or latency budget. The plan cites the rule; the rule's text stays in `quality-attributes.md`.
+
+### Open decisions
+
+A decision the plan needs from the user (an order, a cut, an exit when a milestone's evidence is not conclusive) is explained as `designing-system` "Explain Decisions" describes before asking, and recorded with the user's quote in the milestone it affects. A decision that changes product behavior is not a plan decision: it opens a new baseline.
+
 ## 4. Dependencies
 
 Make dependencies explicit. Prefer a sequence that keeps each slice independently verifiable and reduces long-lived partial architecture.

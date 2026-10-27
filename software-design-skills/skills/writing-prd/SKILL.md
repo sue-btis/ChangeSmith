@@ -68,6 +68,7 @@ Every ID uses three digits (`FR-001`, `CON-001`, `PD-001`). The MVP section cite
 §15 "Product Decisions" is the single register of stakeholder decisions for the package. Each row has ID, question, status (`Open` or `Decided`), decision, who decided, date, the decider's verbatim quote, and the authorities affected.
 
 - The brief's approved and open decisions move here when the PRD is born.
+- Before asking for a decision, explain its options as `designing-system` "Explain Decisions" describes.
 - Write `Decided` only from the stakeholder's own message, with its quote. A recommendation is not a decision.
 - A decided row stays in the table; it is never deleted.
 

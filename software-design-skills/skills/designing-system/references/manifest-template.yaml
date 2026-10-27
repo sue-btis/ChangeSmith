@@ -26,7 +26,7 @@ authoritative_sources:
     owns: [technical_decision_rationale, tradeoffs]
   quality_attributes:
     path: docs/design/architecture/quality-attributes.md
-    owns: [nfr_design_response, nfr_verification_evidence]
+    owns: [nfr_design_response, nfr_verification_evidence, quality_tradeoffs, threats, capacity_and_cost, operations, architecture_rules]
   data:
     path: docs/design/data/schema.dbml
     owns: [persistent_schema]

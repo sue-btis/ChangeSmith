@@ -6,7 +6,7 @@
 | Domain language/invariants | `docs/design/domain.md` | Always | DBML as prose |
 | Architecture structure | `architecture.dsl` | Standard/complex or useful compact | PRD |
 | Technical rationale | ADR | Consequential decision | PRD/contracts |
-| NFR design response and evidence | `quality-attributes.md` | An NFR needs a design response | PRD (targets stay in the PRD) |
+| NFR design response, tradeoffs, threats, capacity, operations, architecture rules | `quality-attributes.md` | An NFR needs a design response or the system runs unattended | PRD (targets stay in the PRD) |
 | Persistent schema | `schema.dbml` | Structured persistence exists | PRD/domain prose |
 | HTTP contract | `openapi.yaml` | HTTP API exists | PRD/ADR |
 | Async/event contract | `asyncapi.yaml` | Async/event boundary exists | PRD/ADR |

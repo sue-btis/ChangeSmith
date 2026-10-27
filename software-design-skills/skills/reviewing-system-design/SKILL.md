@@ -187,7 +187,7 @@ Do not continue an automatic loop after `Escalate`. The cycle count lives only i
 
 ### Leaving `Escalate`
 
-The user chooses the exit, recorded as a PRD §15 decision with their verbatim quote:
+The user chooses the exit, recorded as a PRD §15 decision with their verbatim quote. Before asking, explain the open findings, the requirement IDs each affects, and what each exit implies, as `designing-system` "Explain Decisions" describes:
 
 - **build the unaffected milestones** (default): build M01 and every milestone the open findings do not touch;
 - **accept with risk**: mark the findings `ACCEPTED` with the quote;
