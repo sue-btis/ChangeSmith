@@ -3,7 +3,7 @@
 ```markdown
 # <Product> Product Brief
 
-Status: Ready for PRD | Blocked | Escalate
+Status: Ready for PRD | Needs discovery | Blocked | Escalate
 Design size: compact | standard | complex
 
 ## Problem
@@ -37,6 +37,14 @@ Excluded:
 
 ## Open Product Decisions
 - <decision, authority needed, why it matters>
+
+## Discovery
+Depth: none | light | deep
+Findings: `docs/discovery/findings.md` (once discovery runs)
+
+| ID | Evidence question | Unblocks |
+|---|---|---|
+| DQ-001 | | <decision> |
 
 ## Artifact Applicability
 | Artifact | Required? | Reason |

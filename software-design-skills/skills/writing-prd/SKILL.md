@@ -11,6 +11,8 @@ Read `references/prd-template.md`.
 
 For a new PRD, require `docs/product/brief.md` with status `Ready for PRD` or equivalent approved shaping evidence. Amending the PRD of an approved package follows §6 instead and needs no brief status.
 
+When `docs/discovery/findings.md` exists, read it. Its product decisions are already in the brief; an NFR target that a probe measured cites that `DQ-###` instead of inventing a number.
+
 Do not invent unresolved stakeholder decisions. If a missing decision prevents testable requirements, mark the PRD `Blocked`.
 
 ## 1. Authority Boundary

@@ -64,6 +64,8 @@ Name each file `ADR-###-<slug>.md` and start it with the heading `# ADR-### — 
 
 Every ADR starts `Proposed`. It becomes `Accepted` only with `Accepted by: <who>, <date>, «<verbatim quote>»` from the decision owner's own message. Other authorities may cite an ADR only once it is `Accepted`; the package verifier reports any citation of a `Proposed` one.
 
+When `docs/discovery/findings.md` exists, an ADR whose question discovery explored takes its options and evidence from that `DQ-###` instead of from memory, and cites it. A technical decision the user already made there becomes the ADR's `Accepted by` line, with the quote recorded in the findings.
+
 ## 4. Create Canonical Technical Artifacts
 
 Use the most specific machine-readable/textual authority available:
