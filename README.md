@@ -16,7 +16,7 @@ Agents that go straight from a request to a diff skip the decisions that matter:
 
 
 1. `software-design-skills/` (1.5.0) — design package: idea or existing system -> product brief -> discovery when the unknowns need evidence -> focused PRD -> canonical system design -> consistency review -> vertical build plan.
-2. `compact-change-skills/` (3.2.0) — execution/change: proportional changes in any repository, plus controlled implementation/verification of one approved build slice. It works without a design package.
+2. `compact-change-skills/` (3.3.0) — execution/change: proportional changes in any repository, plus controlled implementation/verification of one approved build slice. It works without a design package.
 3. `explaining-skills/` (0.2.0) — explanation for a human reader: plain-language voice, books checked by a cold reader, explanatory diagrams, and indicator diagnostics. Discovery and design use it to explain options before the user decides. Its skills are written in Spanish.
 
 ## Recommended flow
