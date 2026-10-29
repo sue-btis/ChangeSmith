@@ -86,15 +86,63 @@ export function configFromEnv(env = process.env) {
     protectedBranches: new Set(list(env.CHANGESMITH_GIT_GUARD_PROTECTED)),
     branchPattern,
     ask: new Set(list(env.CHANGESMITH_GIT_GUARD_ASK)),
+    rootDirs: new Set(list(env.CHANGESMITH_GIT_GUARD_ROOT_DIRS).map(name => name.replace(/\/+$/, ''))),
     mergeOnly,
   };
 }
 
-function judge(git, branch, config) {
+const rootName = (path) => {
+  const slash = path.indexOf('/');
+  return slash === -1 ? null : path.slice(0, slash);
+};
+
+function gitLines(dir, args) {
+  return execFileSync('git', ['-C', dir, ...args], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).split('\0').filter(Boolean);
+}
+
+// Top-level directories a commit would add. Staged paths always count; untracked ones count only
+// for what an `add` earlier in the same command is about to stage, because the hook runs before it.
+// --full-tree and --full-name keep paths relative to the repository root from a subdirectory.
+// Without commits ls-tree throws, so the first commit is never asked about (the guard fails open).
+export function newRootDirs(dir, adding) {
+  const known = new Set(gitLines(dir, ['ls-tree', '-d', '--full-tree', '--name-only', '-z', 'HEAD']));
+  const paths = gitLines(dir, ['diff', '--cached', '--no-renames', '--diff-filter=A', '--name-only', '-z']);
+  if (adding) {
+    for (const path of gitLines(dir, ['ls-files', '--others', '--exclude-standard', '--directory', '--full-name', '-z'])) {
+      const name = rootName(path);
+      if (name && (adding.all || adding.names.has(name))) paths.push(path);
+    }
+  }
+  return [...new Set(paths.map(rootName).filter(name => name && !known.has(name)))];
+}
+
+function noteAdd(staging, dir, args) {
+  const entry = staging.get(dir) ?? { all: false, names: new Set() };
+  for (const arg of args) {
+    if (arg === '--all' || /^-[A-Za-z]*A/.test(arg) || ['.', ':/', '*'].includes(arg)) entry.all = true;
+    else if (!arg.startsWith('-')) entry.names.add(arg.replace(/^\.\//, '').split('/')[0]);
+  }
+  staging.set(dir, entry);
+}
+
+function freshRootDirs(config, { dir, adding, newRootDirsOf }) {
+  try {
+    return newRootDirsOf(dir, adding).filter(name => !config.rootDirs.has(name));
+  } catch {
+    return [];
+  }
+}
+
+function judge(git, branch, config, context) {
   const { sub, args } = git;
   if (sub === 'commit') {
     if (config.protectedBranches.has(branch)) {
       return { decision: 'deny', reason: `Committing on protected branch "${branch}" is blocked; switch to another branch` };
+    }
+    const fresh = config.ask.has('root-dir') ? freshRootDirs(config, context) : [];
+    if (fresh.length) {
+      const shown = fresh.slice(0, 5).join(', ') + (fresh.length > 5 ? `, and ${fresh.length - 5} more` : '');
+      return { decision: 'ask', reason: `This commit adds new top-level directories: ${shown}. Approve only if they belong in the repository; otherwise exclude them locally in .git/info/exclude or delete them` };
     }
     if (config.ask.has('commit')) return { decision: 'ask', reason: 'Commit requires confirmation' };
   }
@@ -122,9 +170,10 @@ function resolveDir(base, p) {
   return resolve(base, gitBash ? `${gitBash[1].toUpperCase()}:/${p.slice(gitBash[0].length)}` : p);
 }
 
-export function decide(command, branchOf, cwd = '.', config = configFromEnv()) {
+export function decide(command, branchOf, cwd = '.', config = configFromEnv(), newRootDirsOf = newRootDirs) {
   let dir = cwd;
   let strictest = null;
+  const staging = new Map();
   for (const words of parse(command)) {
     if (words[0] === 'cd' && words[1]) {
       dir = resolveDir(dir, words[1]);
@@ -133,7 +182,8 @@ export function decide(command, branchOf, cwd = '.', config = configFromEnv()) {
     const git = gitCommand(words);
     if (!git) continue;
     const target = git.dir ? resolveDir(dir, git.dir) : dir;
-    const result = judge(git, branchOf(target), config);
+    if (git.sub === 'add') noteAdd(staging, target, git.args);
+    const result = judge(git, branchOf(target), config, { dir: target, adding: staging.get(target), newRootDirsOf });
     if (result && (!strictest || RANK[result.decision] > RANK[strictest.decision])) strictest = result;
   }
   return strictest;
