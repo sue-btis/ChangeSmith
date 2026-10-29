@@ -184,10 +184,13 @@ The plugin ships three hooks. **They do nothing until you enable them** with env
 | `CHANGESMITH_GIT_GUARD` | `1` turns the guard on. Without it nothing below applies. |
 | `CHANGESMITH_GIT_GUARD_PROTECTED` | Comma-separated branches where `git commit` is denied. |
 | `CHANGESMITH_GIT_GUARD_BRANCH_PATTERN` | JavaScript regular expression every newly created branch name must match (`switch -c`, `checkout -b`, `branch`, `worktree add -b`, …). An invalid pattern is ignored. |
-| `CHANGESMITH_GIT_GUARD_ASK` | Comma-separated subset of `commit,push`: those commands ask for confirmation. |
+| `CHANGESMITH_GIT_GUARD_ASK` | Comma-separated subset of `commit,push,root-dir`: those commands ask for confirmation. `root-dir` asks only when a commit adds a top-level directory (see below). |
+| `CHANGESMITH_GIT_GUARD_ROOT_DIRS` | Comma-separated top-level directory names that `root-dir` never asks about, for example `.github,src,docs`. |
 | `CHANGESMITH_GIT_GUARD_MERGE_ONLY` | Comma-separated `target:source` pairs: a merge into `target` is denied unless every merged ref is `source` or `origin/source`. |
 
 The guard fails open: any parse or git error lets the command through.
+
+**`root-dir`.** Tools and plugins often drop a folder of their own in the repository root (`.impeccable/`, `.stryker-tmp/`, a generated map), and the first `git add -A` commits it. With `root-dir` in `CHANGESMITH_GIT_GUARD_ASK`, a `git commit` asks when it adds a top-level directory that has no file in `HEAD` and is not in `CHANGESMITH_GIT_GUARD_ROOT_DIRS`; the reason names the directories. Approve if they belong in the repository; otherwise exclude them locally in `.git/info/exclude` or delete them. After a commit, or an entry in `.git/info/exclude`, the directory is no longer new, so it asks once. It looks at what is staged and, because the hook runs before the command does, at the untracked directories that a `git add` earlier in the same command is about to stage (`git add -A && git commit`, or `git add <dir> && git commit`). Limits: it reads top-level directories only, not root files; the first commit of a repository is not asked about; `git add -f` of an ignored directory in the same command is seen only once it is staged, so a separate commit still asks; and commits made outside Claude Code's shell tools are not seen.
 
 Example that protects `main`/`master`/`development`, requires names like `feat/some-change/Alex`, asks before every commit and push, and lets only `development` merge into `main`/`master`:
 
