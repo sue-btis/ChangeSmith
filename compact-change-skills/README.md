@@ -125,6 +125,16 @@ Do not pass full histories to implementation agents. For a workstream, use only 
 - `implementing-change`: preflight against the current repository, controlled execution by workstream/wave, write boundaries, tests, correction rounds and an evidence record.
 - `verifying-change`: independent verification based on the actual diff and spec traceability, with typed findings, a technical verdict, user acceptance and follow-up passes.
 
+## Subagents (Claude Code only)
+
+The plugin ships five subagents. The skills do not call them by name; you delegate to them from your own instructions (for example a `CLAUDE.md`) or by asking for them. Claude Code namespaces plugin agents, so they appear as `compact-change-skills:<name>`. A user or project agent with the same plain name is a separate agent and is not replaced.
+
+- `scout` (haiku, read-only): repository lookups answered with `path:line` evidence.
+- `researcher` (sonnet, read-only): questions that need official docs, versions or deprecations, with a cited URL per claim.
+- `implementer` (sonnet): one scoped change or plan workstream, inside its write set, with the checks it ran; never commits.
+- `reviewer` (opus, read-only): independent verification of the actual diff; follows `verifying-change` when a change package exists and returns the content for `verification.md`.
+- `e2e-runner` (haiku): runs only the end-to-end command the repository declares and summarizes the failures.
+
 ## Invocation
 
 ### Claude Code
