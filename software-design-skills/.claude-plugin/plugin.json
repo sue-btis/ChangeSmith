@@ -2,8 +2,8 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "software-design-skills",
   "displayName": "Software Design Skills",
-  "version": "1.5.0",
-  "description": "Seven composable skills that turn a product idea or an existing system into an implementation-ready canonical software design package with evidence-based discovery, bounded independent review, explicit reconciliation, contracts, and vertical build planning.",
+  "version": "1.6.0",
+  "description": "Eight composable skills that turn a product idea or an existing system into an implementation-ready canonical software design package with evidence-based discovery, bounded independent review, explicit reconciliation, contracts, and vertical build planning.",
   "author": {
     "name": "sue-btis"
   },
@@ -14,7 +14,7 @@
     "software-architecture",
     "system-design",
     "c4",
-    "structurizr",
+    "architecture-diagrams",
     "dbml",
     "openapi",
     "implementation-planning"

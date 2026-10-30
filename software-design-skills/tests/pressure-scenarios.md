@@ -15,7 +15,7 @@ Expected:
 Expected:
 - PRD;
 - domain;
-- architecture.dsl;
+- architecture.md with diagram.html;
 - DBML;
 - OpenAPI;
 - selected ADRs;

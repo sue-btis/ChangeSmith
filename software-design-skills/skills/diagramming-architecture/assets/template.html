@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SYSTEM-NAME architecture</title>
+
+<!--
+  ARCHITECTURE DIAGRAM TEMPLATE
+  =============================
+  Replace the SYSTEM-NAME markers and the example zones.
+  Keep the stylesheet, the <defs> and the legend: they are the reusable part.
+
+  GRID (viewBox 1560 x height-to-fit)
+  -----------------------------------
+    outer frame         x  8 .. 1552
+    left channel        x 32 .. 60      <- for long vertical arrows (use x=42)
+    wide column         x 60 .. 908
+    corridor            x 908 .. 938    <- for vertical arrows (use x=922)
+    narrow column       x 938 .. 1508
+
+    header bar          y  8 .. 66
+    container           y 86 .. (height - 84)
+    first row           y 130 ..
+    legend              y (height - 38)
+
+  STANDARD RESOURCE BOX
+  ---------------------
+    <rect class="card" data-node="ID" x="X" y="Y" width="W" height="H" rx="7"/>
+    <use href="#ic-XXX" x="X+18" y="Y+20"/>          icon 40x40
+    <text class="n-name" x="X+72" y="Y+27">Title</text>
+    <text class="n-id"   x="X+72" y="Y+45">resource-name</text>
+    <text class="n-sub"  x="X+72" y="Y+63">detail</text>
+    <text class="n-note" x="X+72" y="Y+81">italic note</text>
+
+  VIEWS
+  -----
+    One <section class="view"> per view, each with <svg data-view="NAME">:
+    context and containers always; components when an architecture rule
+    names them; deployment when one container runs in several places.
+    Icons and markers live once in <svg class="defs">.
+
+  CORRESPONDENCE
+  --------------
+    Every box that stands for a container carries data-node="<ID>" and every
+    arrow that stands for a relation carries data-edge="<From>><To>", with the
+    IDs of architecture.md, in the containers view. The package verifier
+    compares both sets there; the other views are summaries.
+
+  Leave corridors between zones and route arrows through them. End each arrow
+  4 to 8 px before the target edge so the arrowhead has room.
+-->
+
+<style>
+  :root {
+    --page-bg: #E9EDF3;
+    --dg-bg: #FFFFFF;
+    --dg-surface: #FFFFFF;
+    --dg-ink: #16202E;
+    --dg-ink2: #4C5A6E;
+    --dg-rule: #C3D0E0;
+    --navy: #14284B;
+    --az-blue: #0F6CBD;
+    --az-blue-d: #0A4D8C;
+    --az-blue-l: #4FA1E3;
+    --az-purple: #8661C5;
+    --az-purple-d: #5C2E91;
+    --az-purple-l: #B49BE0;
+    --az-teal: #0F7B6C;
+    --az-orange: #DE6B1F;
+    --az-grey: #66748A;
+    --font-sans: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --font-disp: "Segoe UI Variable Display", "Segoe UI Semibold", "Segoe UI", system-ui, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page-bg: #0B0F16; --dg-bg: #141A24; --dg-surface: #1B2330;
+      --dg-ink: #E7EDF6; --dg-ink2: #9DAABC; --dg-rule: #303C4D; --navy: #0E1D36;
+      --az-blue: #4FA1E3; --az-blue-d: #7CBCF0; --az-blue-l: #2E7CC0;
+      --az-purple: #A98CE0; --az-purple-d: #C4AEEB; --az-purple-l: #7355A8;
+      --az-teal: #35B39D; --az-orange: #EE8C3E; --az-grey: #93A2B5;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --page-bg: #0B0F16; --dg-bg: #141A24; --dg-surface: #1B2330;
+    --dg-ink: #E7EDF6; --dg-ink2: #9DAABC; --dg-rule: #303C4D; --navy: #0E1D36;
+    --az-blue: #4FA1E3; --az-blue-d: #7CBCF0; --az-blue-l: #2E7CC0;
+    --az-purple: #A98CE0; --az-purple-d: #C4AEEB; --az-purple-l: #7355A8;
+    --az-teal: #35B39D; --az-orange: #EE8C3E; --az-grey: #93A2B5;
+  }
+
+  body {
+    background: var(--page-bg); color: var(--dg-ink);
+    font-family: var(--font-sans); line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1640px; margin: 0 auto; padding: 40px 24px 72px;
+          display: flex; flex-direction: column; gap: 22px; }
+  .head { display: flex; flex-direction: column; gap: 6px; }
+  .eyebrow { font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+             font-weight: 650; color: var(--az-blue); }
+  h1 { font-family: var(--font-disp); font-size: 27px; font-weight: 640;
+       letter-spacing: -.015em; margin: 0; }
+  .sub { font-size: 14.5px; color: var(--dg-ink2); margin: 0; max-width: 78ch; }
+
+  .board { background: var(--dg-bg); border: 1px solid var(--dg-rule);
+           border-radius: 12px; padding: 12px; overflow-x: auto; }
+  .board svg { display: block; width: 100%; min-width: 1280px; height: auto; }
+  /* Holds the shared icons and markers; display:none would break the references in some browsers. */
+  svg.defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+  .view { display: flex; flex-direction: column; gap: 10px; }
+  .view h2 { font-family: var(--font-disp); font-size: 19px; font-weight: 640; margin: 8px 0 0; }
+
+  /* ---------- diagram text ---------- */
+  .z-title { font-family: var(--font-disp); font-size: 15.5px; font-weight: 650; }
+  .z-sub   { font-family: var(--font-sans); font-size: 12.5px; fill: var(--dg-ink2); }
+  .n-name  { font-family: var(--font-disp); font-size: 12.5px; font-weight: 650; fill: var(--dg-ink); }
+  .n-id    { font-family: var(--font-sans); font-size: 11.5px; fill: var(--dg-ink); }
+  .n-sub   { font-family: var(--font-sans); font-size: 11px;   fill: var(--dg-ink2); }
+  .n-note  { font-family: var(--font-sans); font-size: 10.5px; font-style: italic; fill: var(--dg-ink2); }
+  .e-lab   { font-family: var(--font-sans); font-size: 10.5px; font-style: italic; }
+  .grp-lab { font-family: var(--font-disp); font-size: 12.5px; font-weight: 640; fill: var(--dg-ink); }
+  .lg-lab  { font-family: var(--font-sans); font-size: 12px; font-style: italic; fill: var(--dg-ink2); }
+  .rg-lab  { font-family: var(--font-disp); font-size: 15px; font-weight: 650; fill: var(--az-blue-d); }
+  .hd-lab  { font-family: var(--font-disp); font-size: 17px; font-weight: 600; fill: #FFFFFF; }
+
+  /* Punches the background behind the text so a label stays legible where it
+     crosses a line or a border. Use it on EVERY arrow label. */
+  .halo { paint-order: stroke; stroke: var(--dg-bg); stroke-width: 4px; stroke-linejoin: round; }
+
+  /* ---------- boxes ---------- */
+  .card      { fill: var(--dg-surface); stroke: var(--az-blue);   stroke-width: 1.2; }
+  .card-p    { fill: var(--dg-surface); stroke: var(--az-purple); stroke-width: 1.2; }
+  .card-o    { fill: var(--dg-surface); stroke: var(--az-orange); stroke-width: 1.3; }
+  .card-g    { fill: var(--dg-surface); stroke: var(--dg-rule);   stroke-width: 1.2; }
+  /* dashed = outside this deployment */
+  .card-dash { fill: var(--dg-surface); stroke: var(--az-purple); stroke-width: 1.4; stroke-dasharray: 6 4; }
+  .inner     { fill: none; stroke: var(--dg-rule); stroke-width: 1; }
+
+  /* ---------- zones ---------- */
+  .zone   { fill: none; stroke: var(--az-blue);   stroke-width: 1.2; }
+  .zone-t { fill: none; stroke: var(--az-teal);   stroke-width: 1.2; }
+  .zone-g { fill: none; stroke: var(--az-grey);   stroke-width: 1.2; }
+  /* dashed = outside this deployment */
+  .zone-p { fill: none; stroke: var(--az-purple); stroke-width: 1.3; stroke-dasharray: 7 4; }
+  .zone-o { fill: none; stroke: var(--az-orange); stroke-width: 1.3; stroke-dasharray: 7 4; }
+
+  /* ---------- arrows ---------- */
+  .ed-pub  { stroke: var(--az-blue);   stroke-width: 2;   fill: none; }
+  .ed-ci   { stroke: var(--az-blue);   stroke-width: 1.8; fill: none; stroke-dasharray: 7 5; }
+  .ed-priv { stroke: var(--az-teal);   stroke-width: 2;   fill: none; }
+  .ed-dep  { stroke: var(--az-purple); stroke-width: 1.8; fill: none; stroke-dasharray: 6 4; }
+  .ed-int  { stroke: var(--az-orange); stroke-width: 2;   fill: none; stroke-dasharray: 8 5; }
+  .ed-tel  { stroke: var(--az-grey);   stroke-width: 1.8; fill: none; }
+  .ed-loc  { stroke: var(--dg-ink2);   stroke-width: 1.8; fill: none; stroke-dasharray: 2 4; stroke-linecap: round; }
+
+  .foot { display: flex; flex-wrap: wrap; gap: 8px 28px; font-size: 12.5px; color: var(--dg-ink2); }
+  .foot b { color: var(--dg-ink); font-weight: 620; }
+
+  @media (max-width: 700px) { .wrap { padding: 28px 14px 48px; } h1 { font-size: 22px; } }
+</style>
+
+<div class="wrap">
+
+  <div class="head">
+    <div class="eyebrow">Deployment · SYSTEM-NAME</div>
+    <h1>SYSTEM-NAME architecture</h1>
+    <p class="sub">One or two sentences on the idea that organizes the diagram.</p>
+  </div>
+
+  <svg class="defs" width="0" height="0" aria-hidden="true" focusable="false">
+      <defs>
+        <marker id="ar-blue" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--az-blue)"/></marker>
+        <marker id="ar-teal" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--az-teal)"/></marker>
+        <marker id="ar-purp" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--az-purple)"/></marker>
+        <marker id="ar-orng" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--az-orange)"/></marker>
+        <marker id="ar-grey" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--az-grey)"/></marker>
+        <marker id="ar-ink" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--dg-ink2)"/></marker>
+
+        <!-- ===== icons, 40x40 ===== -->
+        <g id="ic-users">
+          <circle cx="13" cy="11" r="6.5" fill="var(--az-purple)"/>
+          <path d="M2,32 a11,11 0 0 1 22,0 z" fill="var(--az-purple)"/>
+          <circle cx="28" cy="13" r="5.5" fill="var(--az-purple-l)"/>
+          <path d="M19,32 a9,9 0 0 1 18,0 z" fill="var(--az-purple-l)"/>
+        </g>
+        <g id="ic-globe">
+          <circle cx="20" cy="20" r="15" fill="none" stroke="var(--az-purple)" stroke-width="2.4"/>
+          <ellipse cx="20" cy="20" rx="6.5" ry="15" fill="none" stroke="var(--az-purple)" stroke-width="1.8"/>
+          <line x1="5" y1="20" x2="35" y2="20" stroke="var(--az-purple)" stroke-width="1.8"/>
+          <line x1="7.5" y1="12" x2="32.5" y2="12" stroke="var(--az-purple)" stroke-width="1.4"/>
+          <line x1="7.5" y1="28" x2="32.5" y2="28" stroke="var(--az-purple)" stroke-width="1.4"/>
+        </g>
+        <g id="ic-swa">
+          <rect x="2" y="5" width="36" height="30" rx="4" fill="var(--az-blue)"/>
+          <rect x="2" y="5" width="36" height="8" rx="4" fill="var(--az-blue-d)"/>
+          <circle cx="8" cy="9" r="1.7" fill="#fff"/><circle cx="14" cy="9" r="1.7" fill="#fff"/>
+          <path d="M14,19 L9,25 L14,31 M26,19 L31,25 L26,31 M22,18 L18,32" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+        <g id="ic-aca">
+          <path d="M20,3 L35,11.5 L35,28.5 L20,37 L5,28.5 L5,11.5 Z" fill="var(--az-purple-l)"/>
+          <path d="M20,3 L35,11.5 L20,20 L5,11.5 Z" fill="var(--az-purple)"/>
+          <path d="M20,20 L35,11.5 L35,28.5 L20,37 Z" fill="var(--az-purple-d)"/>
+          <circle cx="20" cy="20" r="3.4" fill="#fff" opacity=".9"/>
+        </g>
+        <g id="ic-devops">
+          <rect x="3" y="4" width="34" height="32" rx="5" fill="var(--az-blue)"/>
+          <path d="M12,26 L12,13 L20,9 L20,30 Z" fill="#fff" opacity=".92"/>
+          <path d="M22,13 L30,17 L30,25 L22,27 Z" fill="#fff" opacity=".65"/>
+        </g>
+        <g id="ic-acr">
+          <path d="M9,24 a7,7 0 0 1 1.5,-13.8 a9,9 0 0 1 17,1.5 a6.5,6.5 0 0 1 -1.5,12.3 z" fill="var(--az-blue-l)"/>
+          <rect x="7"  y="22" width="10" height="8" rx="1.4" fill="var(--az-blue-d)"/>
+          <rect x="19" y="22" width="10" height="8" rx="1.4" fill="var(--az-blue)"/>
+          <rect x="13" y="31" width="10" height="7" rx="1.4" fill="var(--az-blue-d)"/>
+        </g>
+        <g id="ic-vnet">
+          <rect x="2" y="8" width="36" height="24" rx="5" fill="none" stroke="var(--az-blue)" stroke-width="2.2"/>
+          <circle cx="11" cy="20" r="3.4" fill="var(--az-blue)"/>
+          <circle cx="29" cy="20" r="3.4" fill="var(--az-blue)"/>
+          <line x1="14.5" y1="20" x2="25.5" y2="20" stroke="var(--az-blue)" stroke-width="2"/>
+        </g>
+        <g id="ic-pe">
+          <circle cx="20" cy="20" r="14" fill="none" stroke="var(--az-blue)" stroke-width="2.2"/>
+          <circle cx="13" cy="20" r="3.2" fill="var(--az-blue)"/>
+          <circle cx="27" cy="20" r="3.2" fill="var(--az-blue)"/>
+          <line x1="16" y1="20" x2="24" y2="20" stroke="var(--az-blue)" stroke-width="2"/>
+        </g>
+        <g id="ic-dns">
+          <circle cx="20" cy="20" r="16" fill="var(--az-blue)"/>
+          <text x="20" y="24.5" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="11" font-weight="700" fill="#fff">DNS</text>
+        </g>
+        <g id="ic-sql">
+          <ellipse cx="20" cy="9" rx="15" ry="5.5" fill="var(--az-blue-l)"/>
+          <path d="M5,9 L5,31 a15,5.5 0 0 0 30,0 L35,9 a15,5.5 0 0 1 -30,0 z" fill="var(--az-blue)"/>
+          <ellipse cx="20" cy="9" rx="15" ry="5.5" fill="var(--az-blue-l)"/>
+          <path d="M5,20 a15,5.5 0 0 0 30,0" fill="none" stroke="#fff" stroke-width="1.4" opacity=".55"/>
+        </g>
+        <!-- ic-db is small (24x22): for rows inside a box -->
+        <g id="ic-db">
+          <ellipse cx="12" cy="5.5" rx="9" ry="3.4" fill="var(--az-blue-l)"/>
+          <path d="M3,5.5 L3,18.5 a9,3.4 0 0 0 18,0 L21,5.5 a9,3.4 0 0 1 -18,0 z" fill="var(--az-blue)"/>
+          <ellipse cx="12" cy="5.5" rx="9" ry="3.4" fill="var(--az-blue-l)"/>
+        </g>
+        <g id="ic-pool">
+          <path d="M12,2 L23,7.5 L12,13 L1,7.5 Z" fill="var(--az-purple)"/>
+          <path d="M1,12 L12,17.5 L23,12 L23,15 L12,20.5 L1,15 Z" fill="var(--az-purple-l)"/>
+        </g>
+        <g id="ic-kv">
+          <circle cx="20" cy="20" r="16" fill="var(--az-blue)"/>
+          <circle cx="20" cy="14" r="5" fill="none" stroke="#fff" stroke-width="2.6"/>
+          <path d="M20,19 L20,30 M20,25 L25,25 M20,28.5 L24,28.5" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>
+        </g>
+        <g id="ic-blob">
+          <path d="M3,9 a3,3 0 0 1 3,-3 h9 l3,4 h13 a3,3 0 0 1 3,3 v18 a3,3 0 0 1 -3,3 H6 a3,3 0 0 1 -3,-3 z" fill="var(--az-purple-l)"/>
+          <circle cx="20" cy="21" r="6.5" fill="#fff" opacity=".92"/>
+          <path d="M20,17.5 L20,25 M16.8,21.5 L20,24.8 L23.2,21.5" fill="none" stroke="var(--az-purple-d)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+        <g id="ic-redis">
+          <path d="M20,3  L37,10 L20,17 L3,10 Z" fill="var(--az-purple-l)"/>
+          <path d="M20,14 L37,21 L20,28 L3,21 Z" fill="var(--az-purple)"/>
+          <path d="M20,25 L37,32 L20,39 L3,32 Z" fill="var(--az-purple-d)"/>
+        </g>
+        <g id="ic-gw">
+          <rect x="14" y="2"  width="13" height="10" rx="2" fill="var(--az-orange)"/>
+          <rect x="2"  y="26" width="13" height="10" rx="2" fill="var(--az-orange)"/>
+          <rect x="26" y="26" width="13" height="10" rx="2" fill="var(--az-orange)"/>
+          <path d="M20.5,12 L20.5,20 M8.5,26 L8.5,20 L32.5,20 L32.5,26" fill="none" stroke="var(--az-orange)" stroke-width="2.2"/>
+        </g>
+        <g id="ic-bulb">
+          <circle cx="20" cy="17" r="12" fill="var(--az-purple)"/>
+          <rect x="15" y="27" width="10" height="4" rx="1.6" fill="var(--az-purple-d)"/>
+          <rect x="16" y="32" width="8"  height="4" rx="1.6" fill="var(--az-purple-d)"/>
+          <path d="M20,10 L20,22 M15.5,14.5 L20,10 L24.5,14.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+        <g id="ic-chart">
+          <rect x="2" y="4" width="36" height="32" rx="4" fill="var(--az-blue-l)"/>
+          <rect x="8"  y="20" width="6" height="11" rx="1.4" fill="#fff"/>
+          <rect x="17" y="13" width="6" height="18" rx="1.4" fill="#fff"/>
+          <rect x="26" y="17" width="6" height="14" rx="1.4" fill="#fff"/>
+        </g>
+      </defs>
+  </svg>
+
+  <section class="view">
+    <h2>Context</h2>
+    <p class="sub">The system as one box: who uses it and which outside systems it talks to.</p>
+    <div class="board">
+      <svg data-view="context" viewBox="0 0 1560 520" role="img"
+           aria-label="Describe the context in prose here: who uses the system and what it depends on.">
+        <rect x="8" y="8" width="1544" height="504" rx="13" fill="var(--dg-bg)" stroke="var(--dg-rule)" stroke-width="1.3"/>
+
+        <rect class="card" x="100" y="190" width="300" height="110" rx="7"/>
+        <use href="#ic-users" x="118" y="225"/>
+        <text class="n-name" x="172" y="238">Users</text>
+        <text class="n-sub"  x="172" y="256">who they are</text>
+
+        <rect class="card" x="630" y="160" width="300" height="170" rx="7" stroke-width="2"/>
+        <text class="z-title" x="780" y="230" text-anchor="middle" fill="var(--az-blue)">SYSTEM-NAME</text>
+        <text class="n-sub"   x="780" y="254" text-anchor="middle">one-line purpose</text>
+
+        <rect class="card-dash" x="1160" y="190" width="300" height="110" rx="7"/>
+        <use href="#ic-globe" x="1178" y="225"/>
+        <text class="n-name" x="1232" y="238">External system</text>
+        <text class="n-sub"  x="1232" y="256">what it provides</text>
+
+        <line class="ed-pub" x1="400" y1="245" x2="622" y2="245" marker-end="url(#ar-blue)"/>
+        <text class="e-lab halo" x="511" y="237" text-anchor="middle" fill="var(--az-blue)">uses</text>
+        <line class="ed-dep" x1="930" y1="245" x2="1152" y2="245" marker-end="url(#ar-purp)"/>
+        <text class="e-lab halo" x="1041" y="237" text-anchor="middle" fill="var(--az-purple)">depends on</text>
+
+        <line x1="32" y1="452" x2="1528" y2="452" stroke="var(--dg-rule)" stroke-width="1"/>
+        <line class="ed-pub" x1="52" y1="482" x2="98" y2="482" marker-end="url(#ar-blue)"/>
+        <text class="lg-lab" x="108" y="486">public HTTPS</text>
+        <line class="ed-dep" x1="302" y1="482" x2="348" y2="482" marker-end="url(#ar-purp)"/>
+        <text class="lg-lab" x="358" y="486">external dependency</text>
+      </svg>
+    </div>
+  </section>
+
+  <section class="view">
+    <h2>Containers and deployment</h2>
+    <p class="sub">Every person, container and relation of architecture.md, placed in the zone where it runs.</p>
+  <div class="board">
+    <svg data-view="containers" viewBox="0 0 1560 1160" role="img"
+         aria-label="Describe the whole route in prose here, for readers who cannot see the diagram.">
+
+
+      <!-- ============ outer frame and header ============ -->
+      <rect x="8" y="8" width="1544" height="1140" rx="13" fill="var(--dg-bg)" stroke="var(--dg-rule)" stroke-width="1.3"/>
+      <path d="M8,21 A13,13 0 0 1 21,8 H1539 A13,13 0 0 1 1552,21 V66 H8 Z" fill="var(--navy)"/>
+      <g transform="translate(26,15)">
+        <path d="M20,4 L31,32 L18,32 L23,22 L15,22 Z" fill="#fff" opacity=".95"/>
+        <path d="M13,4 L20,4 L9,32 L1,32 Z" fill="#fff" opacity=".62"/>
+      </g>
+      <text class="hd-lab" x="76" y="44">Cloud account</text>
+
+      <!-- ============ resource container ============ -->
+      <rect class="zone" x="32" y="86" width="1496" height="990" rx="9"/>
+      <rect x="46" y="96" width="26" height="26" rx="5" fill="var(--az-blue)"/>
+      <path d="M52,109 L59,105 L66,109 L59,113 Z" fill="#fff"/>
+      <path d="M52,113 L59,117 L66,113" fill="none" stroke="#fff" stroke-width="1.6"/>
+      <text class="rg-lab" x="82" y="115">Resource group: SYSTEM-NAME</text>
+
+      <!-- ============ EXAMPLE · zone with boxes and arrows ============ -->
+      <rect class="zone" x="60" y="130" width="848" height="320" rx="8"/>
+      <text class="z-title halo" x="484" y="163" text-anchor="middle" fill="var(--az-blue)">1 · Zone name</text>
+
+      <!-- simple box -->
+      <rect class="card" data-node="users" x="84" y="236" width="130" height="96" rx="7"/>
+      <use href="#ic-users" x="129" y="252"/>
+      <text class="n-name" x="149" y="316" text-anchor="middle">Web users</text>
+
+      <!-- dashed box = outside this deployment -->
+      <rect class="card-dash" data-node="provider" x="262" y="236" width="176" height="96" rx="7"/>
+      <use href="#ic-globe" x="330" y="248"/>
+      <text class="n-name" x="350" y="306" text-anchor="middle">Component</text>
+      <text class="n-sub"  x="350" y="322" text-anchor="middle">existing-name</text>
+
+      <!-- box with the icon on the left and several lines -->
+      <rect class="card-p" data-node="api" x="524" y="300" width="360" height="124" rx="7"/>
+      <use href="#ic-aca" x="542" y="320"/>
+      <text class="n-name" x="596" y="327">Main service</text>
+      <text class="n-id"   x="596" y="345">resource-name</text>
+      <text class="n-sub"  x="596" y="363">technical detail</text>
+      <text class="n-sub"  x="596" y="381">Environment: environment-name</text>
+      <text class="n-note" x="596" y="401">italic note</text>
+
+      <!-- straight arrow -->
+      <line class="ed-pub" data-edge="users>provider" x1="214" y1="284" x2="254" y2="284" marker-end="url(#ar-blue)"/>
+
+      <!-- orthogonal arrow with an elbow, haloed label in the gap -->
+      <polyline class="ed-pub" data-edge="provider>api" points="438,298 481,298 481,352 516,352" marker-end="url(#ar-blue)"/>
+      <text class="e-lab halo" x="481" y="378" text-anchor="middle" fill="var(--az-blue)">label line 1</text>
+      <text class="e-lab halo" x="481" y="392" text-anchor="middle" fill="var(--az-blue)">line 2</text>
+
+      <!-- ============ EXAMPLE · zone with nested subgroups ============ -->
+      <rect class="zone-t" x="60" y="470" width="848" height="300" rx="8"/>
+      <text class="z-title halo" x="484" y="503" text-anchor="middle" fill="var(--az-teal)">2 · Zone with subgroups</text>
+
+      <!-- subgroup: the label sits ON the border, with a halo -->
+      <rect class="inner" x="84" y="540" width="800" height="82" rx="6"/>
+      <text class="grp-lab halo" x="106" y="545">Subgroup name</text>
+      <use href="#ic-pe" x="100" y="560"/>
+      <text class="n-name" x="150" y="579">Label:</text>
+      <text class="n-sub"  x="280" y="579">value</text>
+
+      <!-- nesting: a box INSIDE another expresses real containment -->
+      <rect class="card-g" x="152" y="648" width="352" height="88" rx="5"/>
+      <use href="#ic-pool" x="158" y="652"/>
+      <text class="n-sub" x="186" y="667"><tspan class="n-name">Container:</tspan> name</text>
+      <rect class="inner" x="166" y="676" width="324" height="48" rx="4"/>
+      <use href="#ic-db" x="172" y="684"/>
+      <text class="n-sub" x="204" y="694"><tspan class="n-name">Content:</tspan> what it groups</text>
+      <text class="n-note" x="174" y="714">detail</text>
+
+      <!-- vertical arrow between zones, through the corridor -->
+      <polyline class="ed-priv" points="700,424 700,534" marker-end="url(#ar-teal)"/>
+      <text class="e-lab halo" x="712" y="480" fill="var(--az-teal)">private network</text>
+
+      <!-- long arrow down the left channel, rotated label -->
+      <polyline class="ed-int" points="620,424 620,460 42,460 42,900 78,900" marker-end="url(#ar-orng)"/>
+      <text class="e-lab halo" x="54" y="680" fill="var(--az-orange)" text-anchor="middle" transform="rotate(-90 54 680)">route label</text>
+
+      <!-- ============ legend ============ -->
+      <line x1="32" y1="1092" x2="1528" y2="1092" stroke="var(--dg-rule)" stroke-width="1"/>
+      <line class="ed-pub" x1="52" y1="1122" x2="98" y2="1122" marker-end="url(#ar-blue)"/>
+      <text class="lg-lab" x="108" y="1126">public HTTPS</text>
+      <line class="ed-ci" x1="262" y1="1122" x2="308" y2="1122" marker-end="url(#ar-blue)"/>
+      <text class="lg-lab" x="318" y="1126">CI/CD (deployment)</text>
+      <line class="ed-priv" x1="472" y1="1122" x2="518" y2="1122" marker-end="url(#ar-teal)"/>
+      <text class="lg-lab" x="528" y="1126">private network</text>
+      <line class="ed-dep" x1="682" y1="1122" x2="728" y2="1122" marker-end="url(#ar-purp)"/>
+      <text class="lg-lab" x="738" y="1126">external dependency</text>
+      <line class="ed-int" x1="892" y1="1122" x2="938" y2="1122" marker-end="url(#ar-orng)"/>
+      <text class="lg-lab" x="948" y="1126">corporate network</text>
+      <line class="ed-tel" x1="1102" y1="1122" x2="1148" y2="1122" marker-end="url(#ar-grey)"/>
+      <text class="lg-lab" x="1158" y="1126">telemetry</text>
+      <line class="ed-loc" x1="1312" y1="1122" x2="1358" y2="1122" marker-end="url(#ar-ink)"/>
+      <text class="lg-lab" x="1368" y="1126">same host</text>
+
+    </svg>
+  </div>
+  </section>
+
+  <div class="foot">
+    <span><b>Dashed border</b> · outside this deployment · <b>Orange border</b> · to create</span>
+  </div>
+
+</div>

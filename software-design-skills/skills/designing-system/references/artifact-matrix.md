@@ -4,7 +4,8 @@
 |---|---|---|---|
 | Product intent/behavior | `docs/product/prd.md` | Always | architecture/ADR/contracts |
 | Domain language/invariants | `docs/design/domain.md` | Always | DBML as prose |
-| Architecture structure | `architecture.dsl` | Standard/complex or useful compact | PRD |
+| Architecture structure | `architecture.md` | Standard/complex or useful compact | PRD |
+| Architecture view | `diagram.html` (a view, not an authority) | With `architecture.md` | nowhere: it only draws `architecture.md` |
 | Technical rationale | ADR | Consequential decision | PRD/contracts |
 | NFR design response, tradeoffs, threats, capacity, operations, architecture rules | `quality-attributes.md` | An NFR needs a design response or the system runs unattended | PRD (targets stay in the PRD) |
 | Persistent schema | `schema.dbml` | Structured persistence exists | PRD/domain prose |

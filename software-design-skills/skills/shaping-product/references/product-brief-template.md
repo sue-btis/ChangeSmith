@@ -51,7 +51,7 @@ Findings: `docs/discovery/findings.md` (once discovery runs)
 |---|---:|---|
 | PRD | Yes | Product authority |
 | Domain model | Yes | Shared vocabulary and invariants |
-| Structurizr DSL | Yes/No | |
+| Architecture tables and diagram | Yes/No | |
 | ADR | Yes/No | |
 | DBML | Yes/No | |
 | OpenAPI | Yes/No | |
