@@ -1,6 +1,6 @@
 {
   "name": "compact-change-skills",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "Six composable skills for shaping, auditing, specifying, planning, implementing, and independently verifying bounded software changes, with canonical-design artifact awareness and reusable execution of approved greenfield build slices.",
   "keywords": [
     "software-change",

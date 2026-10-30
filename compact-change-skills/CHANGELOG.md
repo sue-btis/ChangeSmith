@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.3.0
+
+- Ships five subagents in `agents/`: `scout`, `researcher`, `implementer`, `reviewer` and `e2e-runner`. Claude Code lists them as `compact-change-skills:<name>`; the skills do not depend on them.
+
+## 3.2.0
+
+- `git-guard` accepts `root-dir` in `CHANGESMITH_GIT_GUARD_ASK`: a `git commit` that adds a top-level directory not yet in `HEAD` asks first, naming the directories, so a folder a tool dropped in the repository root is a decision and not something `git add -A` commits by accident. `CHANGESMITH_GIT_GUARD_ROOT_DIRS` lists names that never ask. It sees what is staged plus what an `add` earlier in the same command will stage, reads top-level directories only, skips a repository's first commit, and fails open. Nothing changes unless `root-dir` is set.
+
 ## 3.1.0
 
 - New opt-in hook `config-guard` (PreToolUse on Edit, Write and MultiEdit): with `CHANGESMITH_CONFIG_GUARD=1` it asks for confirmation before an existing lint, format or type-check config is edited, so loosening a rule is a decision and not the way a failing check passes. It fails open and does not see shell rewrites such as `sed -i`.
