@@ -1,0 +1,4 @@
+interface:
+  display_name: "Diagram Architecture"
+  short_description: "Draw an offline architecture or deployment diagram"
+  default_prompt: "Use $diagramming-architecture to draw the architecture as an offline HTML diagram, from the design package's architecture.md or from the repository's real external dependencies, with every box and arrow traceable to the inventory."

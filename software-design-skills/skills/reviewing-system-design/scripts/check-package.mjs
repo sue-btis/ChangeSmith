@@ -16,6 +16,9 @@ const PACKAGE_STATUSES = new Set([
 ]);
 const ADR_STATUSES = new Set(["Proposed", "Accepted", "Superseded", "Rejected"]);
 const DECISION_STATUSES = new Set(["Open", "Decided"]);
+const BOUNDARIES = new Set(["inside", "outside"]);
+const CONTAINER_STATES = new Set(["exists", "to_create"]);
+const RELATION_KINDS = new Set(["public", "deploy", "private", "dependency", "internal", "telemetry", "local"]);
 const SEVERITIES = new Set(["BLOCKER", "MAJOR", "MINOR", "NOTE"]);
 const FINDING_STATUSES = new Set([
   "OPEN", "READY_FOR_VERIFICATION", "RESOLVED", "ACCEPTED", "INVALID", "BLOCKED",
@@ -57,9 +60,11 @@ export function parseManifest(text) {
     }
     if (section === "authoritative_sources") {
       const key = line.match(/^ {2}([A-Za-z_]+):\s*$/);
-      if (key) source = manifest.sources[key[1]] = { path: null };
+      if (key) source = manifest.sources[key[1]] = { path: null, view: null };
       const path = line.match(/^ {4}path:\s*(.+)$/);
       if (path && source) source.path = scalar(path[1]);
+      const view = line.match(/^ {4}view:\s*(.+)$/);
+      if (view && source) source.view = scalar(view[1]);
     }
     if (section === "review") {
       const ledger = line.match(/^ {2}ledger:\s*(.+)$/);
@@ -81,6 +86,55 @@ function section(markdown, headingPattern) {
   const rest = lines.slice(start + 1);
   const end = rest.findIndex((l) => /^## /.test(l));
   return (end === -1 ? rest : rest.slice(0, end)).join("\n");
+}
+
+function tableRows(markdown, headingPattern) {
+  return (section(markdown, headingPattern) ?? "").split(/\r?\n/)
+    .filter((l) => /^\s*\|/.test(l))
+    .slice(2)
+    .map((l) => l.trim().replace(/^\||\|$/g, "").split("|").map((cell) => cell.trim().replace(/^`|`$/g, "")));
+}
+
+const pending = (cell) => /^to confirm\b/i.test(cell ?? "");
+
+function checkArchitecture(text, viewText, viewLabel, fail) {
+  const containers = tableRows(text, /^## Containers\b/);
+  const relations = tableRows(text, /^## Relations\b/);
+  const ids = new Set();
+  for (const [id] of tableRows(text, /^## People\b/)) {
+    if (ids.has(id)) fail("architecture", `${id} is defined twice`);
+    ids.add(id);
+  }
+  for (const [id, , , , , boundary, state] of containers) {
+    if (ids.has(id)) fail("architecture", `${id} is defined twice`);
+    ids.add(id);
+    if (!BOUNDARIES.has(boundary) && !pending(boundary)) fail("architecture", `${id}: boundary not inside/outside: ${boundary}`);
+    if (!CONTAINER_STATES.has(state) && !pending(state)) fail("architecture", `${id}: state not exists/to_create: ${state}`);
+  }
+  const edges = new Set();
+  for (const [from, to, , , kind] of relations) {
+    for (const end of [from, to]) {
+      if (!ids.has(end)) fail("architecture", `relation ${from} -> ${to} names ${end}, which is not a person or container`);
+    }
+    if (!RELATION_KINDS.has(kind) && !pending(kind)) fail("architecture", `relation ${from} -> ${to}: kind not in ${[...RELATION_KINDS].join("/")}: ${kind}`);
+    edges.add(`${from}>${to}`);
+  }
+  if (viewText === null) return;
+  // The template documents the attributes in an HTML comment; only drawn elements count.
+  const markup = viewText.replace(/<!--[\s\S]*?-->/g, "");
+  // Only the containers view maps one to one to the tables; context and component views summarize.
+  const hasViews = /<svg\b[^>]*\bdata-view="/.test(markup);
+  const drawn = hasViews ? markup.match(/<svg\b[^>]*\bdata-view="containers"[\s\S]*?<\/svg>/)?.[0] ?? null : markup;
+  if (drawn === null) {
+    fail("architecture-view", `${viewLabel} has views but no data-view="containers"`);
+    return;
+  }
+  const drawnNodes = new Set([...drawn.matchAll(/data-node="([^"]+)"/g)].map((m) => m[1]));
+  const drawnEdges = new Set([...drawn.matchAll(/data-edge="([^"]+)"/g)].map((m) => m[1].replace(/&gt;/g, ">")));
+  for (const id of ids) if (!drawnNodes.has(id)) fail("architecture-view", `${viewLabel} does not draw ${id}`);
+  for (const id of drawnNodes) if (!ids.has(id)) fail("architecture-view", `${viewLabel} draws ${id}, which is not a person or container`);
+  for (const edge of edges) if (!drawnEdges.has(edge)) fail("architecture-view", `${viewLabel} does not draw relation ${edge.replace(">", " -> ")}`);
+  for (const edge of drawnEdges) if (!edges.has(edge)) fail("architecture-view", `${viewLabel} draws ${edge.replace(">", " -> ")}, which is not a relation`);
 }
 
 function changesDir(root, folder) {
@@ -134,6 +188,7 @@ export function checkPackage(root) {
     .filter(([key, source]) => source.path && !manifest.notApplicable.includes(key));
   for (const [key, source] of applicable) {
     if (!existsSync(join(root, source.path))) fail("paths", `${key}: ${source.path} does not exist`);
+    if (source.view && !existsSync(join(root, source.view))) fail("paths", `${key}: view ${source.view} does not exist`);
   }
   // superseded_documents are not checked: a milestone may delete them once they are replaced.
   for (const path of manifest.readFirst) {
@@ -147,6 +202,14 @@ export function checkPackage(root) {
   for (const doc of ["docs/product/brief.md", "docs/product/prd.md", "docs/build/plan.md"]) {
     const text = read(join(root, doc));
     if (text && /^Status:/m.test(text)) fail("status-lines", `${doc} still has a Status: line`);
+  }
+
+  // A Structurizr .dsl authority from an older package is validated by the Structurizr CLI, not here.
+  const architecture = applicable.find(([key]) => key === "architecture")?.[1];
+  const architectureText = architecture?.path.endsWith(".md") ? read(join(root, architecture.path)) : null;
+  if (architectureText !== null) {
+    const viewText = architecture.view ? read(join(root, architecture.view)) : null;
+    checkArchitecture(architectureText, viewText, architecture.view, fail);
   }
 
   const adrFiles = filesUnder(pathOf("architecture_decisions"));

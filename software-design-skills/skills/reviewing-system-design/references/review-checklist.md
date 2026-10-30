@@ -23,6 +23,7 @@ Use this checklist comprehensively during a baseline review. During a new-baseli
 ## Authority
 - [ ] One source of truth per concern.
 - [ ] Manifest paths exist for applicable authorities.
+- [ ] The architecture diagram draws the state in `architecture.md`, with its encoding declared in the legend.
 - [ ] No empty canonical artifacts.
 - [ ] ADR statuses and supersession are explicit.
 - [ ] Apparent conflicts are classified by semantic impact rather than wording alone.

@@ -300,6 +300,7 @@ export function collect(root) {
     const items = existsSync(path)
       ? filesOf(path).filter((f) => !f.endsWith(".gitkeep")).map((f) => item(root, f))
       : [{ kind: "missing", path: source.path }];
+    if (source.view && existsSync(join(root, source.view))) items.push(item(root, join(root, source.view)));
     sections.push({ id: key, title: TITLES[key] ?? key, items });
   }
   for (const [id, title, path] of [["review", "Design review", manifest.ledger], ["plan", "Build plan", "docs/build/plan.md"]]) {
@@ -313,7 +314,8 @@ export function collect(root) {
       let id = s.items.length === 1 ? s.id : slug(file.replace(/\.[^.]+$/, ""));
       while (taken.has(id)) id += "-2";
       taken.add(id);
-      const h1 = it.kind === "markdown" ? (it.text.match(/^#\s+(.+)$/m) ?? [])[1] : null;
+      const h1 = it.kind === "markdown" ? (it.text.match(/^#\s+(.+)$/m) ?? [])[1]
+        : it.kind === "html" ? (it.text.match(/<title>([^<]+)<\/title>/) ?? [])[1] ?? null : null;
       it.id = id;
       it.title = s.items.length === 1 ? s.title : plain(h1 ?? file);
       it.heading = h1 ? plain(h1) : it.title;

@@ -39,7 +39,7 @@ Requirements:
 
 Canonical authorities:
 - `docs/design/domain.md`
-- `docs/design/architecture/architecture.dsl`
+- `docs/design/architecture/architecture.md`
 - `docs/design/api/openapi.yaml`
 - `docs/design/data/schema.dbml`
 

@@ -1,11 +1,11 @@
 ---
 name: designing-system
-description: "Design System. Use after the PRD is ready for system design. Compare candidate architectures with the user, then convert the chosen one into a proportional set of canonical technical artifacts: domain model, Structurizr/C4 architecture, ADRs for consequential decisions, DBML for persistent data, OpenAPI/AsyncAPI for contracts, Mermaid flows, quality attributes with tradeoffs, threats, capacity and operations, optional HTML prototypes, and a manifest declaring authority and applicability without duplicating the PRD."
+description: "Design System. Use after the PRD is ready for system design. Compare candidate architectures with the user, then convert the chosen one into a proportional set of canonical technical artifacts: domain model, architecture tables with an offline diagram, ADRs for consequential decisions, DBML for persistent data, OpenAPI/AsyncAPI for contracts, Mermaid flows, quality attributes with tradeoffs, threats, capacity and operations, optional HTML prototypes, and a manifest declaring authority and applicability without duplicating the PRD."
 ---
 
 # Design the System
 
-Read `references/artifact-matrix.md`, `references/manifest-template.yaml`, and `references/adr-template.md`.
+Read `references/artifact-matrix.md`, `references/manifest-template.yaml`, `references/architecture-template.md`, and `references/adr-template.md`.
 
 ## Preconditions
 
@@ -104,7 +104,7 @@ When `docs/discovery/findings.md` exists, an ADR whose question discovery explor
 
 Use the most specific machine-readable/textual authority available:
 
-- architecture: Structurizr DSL when useful; otherwise a concise text/Mermaid architecture only for compact systems;
+- architecture: `docs/design/architecture/architecture.md` from `references/architecture-template.md`, drawn as `docs/design/architecture/diagram.html` with `diagramming-architecture` in design mode;
 - persistent schema: DBML;
 - HTTP contract: OpenAPI;
 - async/event contract: AsyncAPI;
