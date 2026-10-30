@@ -137,6 +137,23 @@ test("render without the Structurizr CLI shows the DSL source with a note", (t) 
   assert.match(dsl.note, /STRUCTURIZR_CLI/);
 });
 
+test("render embeds an architecture view after its tables, titled by the page title", (t) => {
+  const files = packageFiles();
+  delete files["docs/design/architecture/architecture.dsl"];
+  const root = fixture({
+    ...files,
+    "docs/spec/manifest.yaml": MANIFEST.replace("    path: docs/design/architecture/architecture.dsl\n",
+      "    path: docs/design/architecture/architecture.md\n    view: docs/design/architecture/diagram.html\n"),
+    "docs/design/architecture/architecture.md": "# Architecture — Demo\n",
+    "docs/design/architecture/diagram.html": "<!doctype html><title>Demo architecture</title><svg></svg>",
+  });
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const html = readFileSync(render(root).out, "utf8");
+  const data = JSON.parse(html.match(/id="package">(.*?)<\/script>/s)[1]);
+  const items = data.sections.find((s) => s.id === "architecture").items;
+  assert.deepEqual(items.map((i) => [i.kind, i.title]), [["markdown", "Architecture — Demo"], ["html", "Demo architecture"]]);
+});
+
 test("render does not rewrite the page when the sources did not change", (t) => {
   const root = fixture(packageFiles());
   t.after(() => rmSync(root, { recursive: true, force: true }));

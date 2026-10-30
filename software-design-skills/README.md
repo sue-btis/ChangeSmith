@@ -14,7 +14,7 @@ One source of truth per kind of decision:
 | What did the stakeholder decide? | `docs/product/prd.md` §15 |
 | What did discovery find, and which options were compared? | `docs/discovery/findings.md` *(evidence, not design authority)* |
 | Which concepts and rules form the domain? | `docs/design/domain.md` |
-| How is the system structured? | `docs/design/architecture/architecture.dsl` |
+| How is the system structured? | `docs/design/architecture/architecture.md` |
 | Why was a technical decision made? | `docs/design/architecture/adr/` |
 | How does the design answer each NFR, what does it trade, threaten, cost and need to operate, and how will it be verified? | `docs/design/architecture/quality-attributes.md` |
 | What is the persistent model? | `docs/design/data/schema.dbml` |
@@ -40,6 +40,7 @@ shaping-product
 writing-prd
       ↓
 designing-system               # candidate architectures first, every decision explained to the user
+      ↓                        #   draws diagram.html with diagramming-architecture
       ↓
 reviewing-system-design        # mechanical checks, then baseline RV-001
       ↓
@@ -116,7 +117,8 @@ docs/
 │   ├── review.md
 │   ├── domain.md
 │   ├── architecture/
-│   │   ├── architecture.dsl
+│   │   ├── architecture.md
+│   │   ├── diagram.html
 │   │   ├── quality-attributes.md
 │   │   └── adr/
 │   ├── data/
@@ -129,9 +131,13 @@ docs/
 
 `data/`, `api/`, `events/`, `quality-attributes.md` and the UX prototypes are conditional. `review.md` appears when the review starts and holds evidence and workflow state, not canonical specification. The brief is a historical input once the PRD exists.
 
+### Architecture diagram
+
+`diagramming-architecture` draws `architecture.md` as `diagram.html`: inline SVG with light and dark themes, no libraries, opened with a double-click. It holds one view per question, at the C4 zoom levels: context and containers always, components and deployment when they apply. In the containers view every box carries `data-node="<ID>"` and every arrow `data-edge="<From>><To>"`, so `check-package.mjs` reports any container or relation the diagram misses or invents. The same skill also works on an existing repository, building the inventory from its real external dependencies, and exports each view as SVG and PNG with `scripts/export-diagram.mjs` (headless Chrome or Edge).
+
 ### Package view
 
-`docs/site/<project>-architecture.html` is one self-contained page that renders the whole package: Markdown authorities, Mermaid flows, the DBML schema as tables plus an entity-relationship diagram, and the Structurizr views. It opens with a double-click and works offline, because it inlines the pinned libraries and font in `vendor/`. It is generated, never edited, and never an authority.
+`docs/site/<project>-architecture.html` is one self-contained page that renders the whole package: Markdown authorities, Mermaid flows, the DBML schema as tables plus an entity-relationship diagram, and the architecture diagram. It opens with a double-click and works offline, because it inlines the pinned libraries and font in `vendor/`. It is generated, never edited, and never an authority.
 
 The page shows one document at a time: a document tree with ADR statuses on the left, the document in the middle, and its sections on the right, with previous and next links at the end. Every link has its own address (`#product/FR-012`), so the browser's back and forward buttons work and a requirement can be shared as a link.
 
@@ -147,7 +153,7 @@ node skills/designing-system/scripts/render-package.mjs <repo> --watch          
 node skills/designing-system/scripts/render-package.mjs <repo> --install-git-hook  # rebuild and stage it on each commit that touches docs/
 ```
 
-- The Structurizr views need Java and the official [Structurizr CLI](https://docs.structurizr.com/cli): set `STRUCTURIZR_CLI` to the unzipped CLI folder. Without it, the page shows the DSL source with a note.
+- A package from before 1.6.0 may still declare `architecture.dsl`. Its Structurizr views need Java and the official [Structurizr CLI](https://docs.structurizr.com/cli): set `STRUCTURIZR_CLI` to the unzipped CLI folder. Without it, the page shows the DSL source with a note.
 - The page is rewritten only when a source changes, so it does not add noise to every commit.
 - The Claude Code hook in `hooks/` rebuilds the page after an agent edits a file under `docs/`. It is off until you set `CHANGESMITH_RENDER_PACKAGE=1`.
 - The git hook installer never overwrites a `pre-commit` hook it did not write; it prints the line to add instead.
@@ -163,7 +169,7 @@ For a system that already exists:
 ## Authority rules
 
 - The PRD owns **product, scope, users, required behavior, NFR targets and product decisions**.
-- Structurizr/C4 owns **technical structure and architectural relationships**, not product goals.
+- `architecture.md` owns **technical structure and architectural relationships** (containers and relations at the C4 container level), not product goals. `diagram.html` draws it for people; the package verifier checks that both match.
 - ADRs own **rationale and trade-offs of technical decisions**.
 - `quality-attributes.md` owns **the design's response to each NFR and its evidence**, plus its tradeoffs, threats, capacity and cost, operations and architecture rules; it cites the NFR by ID without repeating the target.
 - DBML owns the **persistent schema**; the PRD does not replicate columns or tables.

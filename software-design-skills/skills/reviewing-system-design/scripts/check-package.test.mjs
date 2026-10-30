@@ -200,3 +200,104 @@ test("change specs are found through change_folders and ADRs cite real PRD ids",
   assert.doesNotMatch(errors, /FR-002 is in the MVP/);
   assert.match(errors, /ADR-001-store.md cites FR-404/);
 });
+
+const WITH_ARCHITECTURE = MANIFEST.replace("  architecture_decisions:", `  architecture:
+    path: docs/design/architecture/architecture.md
+    view: docs/design/architecture/diagram.html
+    owns: [system_structure]
+  architecture_decisions:`);
+
+const ARCHITECTURE = `# Architecture
+
+## People
+| ID | Name | Role |
+|---|---|---|
+| user | User | Signs in |
+
+## Containers
+| ID | Name | Responsibility | Technology | Zone | Boundary | State |
+|---|---|---|---|---|---|---|
+| web | Web app | UI | React | public internet | inside | to_create |
+| api | API | Rules | .NET | private network | inside | to_create |
+| idp | Identity | Sign-in | Entra ID | third party | outside | exists |
+
+## Relations
+| From | To | Purpose | Protocol | Kind |
+|---|---|---|---|---|
+| user | web | Uses | HTTPS | public |
+| web | api | Calls | HTTPS/JSON | public |
+| api | idp | Validates tokens | OIDC | dependency |
+`;
+
+const DIAGRAM = `<svg viewBox="0 0 10 10">
+<rect data-node="user"/><rect data-node="web"/><rect data-node="api"/><rect data-node="idp"/>
+<line data-edge="user>web"/><line data-edge="web>api"/><polyline data-edge="api&gt;idp"/>
+</svg>`;
+
+function architectureErrors(overrides) {
+  return errorsFor({
+    "docs/spec/manifest.yaml": WITH_ARCHITECTURE,
+    "docs/design/architecture/architecture.md": ARCHITECTURE,
+    "docs/design/architecture/diagram.html": DIAGRAM,
+    ...overrides,
+  });
+}
+
+test("a diagram that draws exactly the architecture tables passes", () => {
+  assert.equal(architectureErrors({}), "");
+});
+
+test("a container or relation missing from the diagram is reported", () => {
+  const errors = architectureErrors({
+    "docs/design/architecture/diagram.html": DIAGRAM.replace('<rect data-node="idp"/>', "").replace('<polyline data-edge="api&gt;idp"/>', ""),
+  });
+  assert.match(errors, /\[architecture-view\] .*diagram.html does not draw idp/);
+  assert.match(errors, /does not draw relation api -> idp/);
+});
+
+test("a box or arrow with no row in the tables is reported", () => {
+  const errors = architectureErrors({
+    "docs/design/architecture/diagram.html": DIAGRAM.replace("</svg>", '<rect data-node="cache"/><line data-edge="idp>web"/></svg>'),
+  });
+  assert.match(errors, /draws cache, which is not a person or container/);
+  assert.match(errors, /draws idp -> web, which is not a relation/);
+});
+
+test("relations to unknown containers and values outside the enums are reported", () => {
+  const errors = architectureErrors({
+    "docs/design/architecture/architecture.md": ARCHITECTURE
+      .replace("| api | idp | Validates tokens | OIDC | dependency |", "| api | db | Reads | SQL | sql |")
+      .replace("| inside | to_create |\n| api", "| dentro | nuevo |\n| api"),
+  });
+  assert.match(errors, /relation api -> db names db, which is not a person or container/);
+  assert.match(errors, /kind not in .*: sql/);
+  assert.match(errors, /web: boundary not inside\/outside: dentro/);
+  assert.match(errors, /web: state not exists\/to_create: nuevo/);
+});
+
+test("a pending cell is accepted in an enum column", () => {
+  const errors = architectureErrors({
+    "docs/design/architecture/architecture.md": ARCHITECTURE.replace("| outside | exists |", "| to confirm: shared tenant? | exists |"),
+  });
+  assert.equal(errors, "");
+});
+
+test("a declared view that does not exist is reported", () => {
+  assert.match(architectureErrors({ "docs/design/architecture/diagram.html": null }), /\[paths\] architecture: view .* does not exist/);
+});
+
+test("data attributes inside HTML comments are not counted as drawn", () => {
+  const commented = `<!-- <rect data-node="ID"/> <line data-edge="<From>><To>"/> -->\n${DIAGRAM}`;
+  assert.equal(architectureErrors({ "docs/design/architecture/diagram.html": commented }), "");
+});
+
+test("with views, only the containers view is compared with the tables", () => {
+  const containers = DIAGRAM.replace("<svg ", '<svg data-view="containers" ');
+  const context = '<svg data-view="context" viewBox="0 0 10 10"><rect data-node="system"/><line data-edge="user>system"/></svg>';
+  assert.equal(architectureErrors({ "docs/design/architecture/diagram.html": context + containers }), "");
+});
+
+test("a page with views but no containers view is reported", () => {
+  const context = '<svg data-view="context" viewBox="0 0 10 10"></svg>';
+  assert.match(architectureErrors({ "docs/design/architecture/diagram.html": context }), /has views but no data-view="containers"/);
+});

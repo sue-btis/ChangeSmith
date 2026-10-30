@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.6.0
+
+- The architecture authority is now `docs/design/architecture/architecture.md`: Containers and Relations tables from `designing-system/references/architecture-template.md`, with a People table and boundary, state and kind enums (`local` for same-host relations). It replaces `architecture.dsl`, which needed Java and the Structurizr CLI to be seen and that no step validated.
+- New `diagramming-architecture` skill and `/diagram-architecture` command. It draws the tables as `docs/design/architecture/diagram.html`, an offline SVG page with light and dark themes and one view per C4 zoom level (context and containers always, components and deployment when they apply), or builds the inventory from an existing repository's external dependencies. It includes Azure, cost-estimate and environment-replication guidance, and `scripts/export-diagram.mjs` for SVG and PNG exports.
+- The manifest's `architecture` source gains an optional `view` key. `check-package.mjs` checks the tables' enums and references, and that the containers view draws every person, container and relation and nothing else (the other views summarize it); `render-package.mjs` embeds the view after the tables.
+- Packages that still declare `architecture.dsl` keep working: `render-package.mjs` renders them as before, and `check-package.mjs` skips the new architecture checks for them.
+
 ## 1.5.0
 
 - `designing-system` compares two or three candidate architectures that differ in mechanism before deciding parts, including one that reuses an existing platform when one could cover a large part of the system. The user's choice becomes `ADR-001 — System shape`.

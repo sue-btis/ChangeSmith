@@ -38,7 +38,7 @@ Before reading the package for meaning, run:
 
 1. `node <this skill's directory>/scripts/check-package.mjs <repository root>` — the package verifier. It checks `schema_version: 3` packages and skips older ones.
 2. Every command listed under `checks:` in the manifest.
-3. The official validator of each artifact present, when available: Structurizr for the DSL, an OpenAPI linter, `@dbml/core` for DBML.
+3. The official validator of each artifact present, when available: an OpenAPI linter, `@dbml/core` for DBML, and the Structurizr CLI for an `architecture.dsl` from a package older than 1.6.0.
 
 Record each command and its result in the ledger. Each failure becomes a finding owned by the artifact it names. Do not spend review effort on what these checks already cover.
 
