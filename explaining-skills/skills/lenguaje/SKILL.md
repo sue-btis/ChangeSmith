@@ -1,6 +1,6 @@
 ---
 name: lenguaje
-description: Voz que desmitifica, para todo texto que lee una persona, en español latinoamericano. Úsala al redactar explicaciones, documentos, textos de tablero o mensajes para un cliente.
+description: Voz que desmitifica, para todo texto que lee una persona, en español latinoamericano o en inglés. Úsala al redactar explicaciones, documentos o mensajes para un cliente, y al escribir o tocar textos de pantalla (títulos, subtítulos, etiquetas, el «?» de un tablero), también cuando están en el código.
 ---
 
 La voz **desmitifica**: toma algo que suena difícil y lo deja en palabras que cualquiera entiende, sin perder exactitud. Quien lee tiene que salir pensando "ah, era eso", no "qué inteligentes son".
@@ -19,6 +19,10 @@ Escribe en el español neutro y actual de Latinoamérica, con México como base.
 - **Números:** coma para los miles y punto para los decimales (35,765 t; 1.5 g/t). Usa "mil" y "M" para millones cuando la cifra es grande (35.8 mil t; 2,493 M MXN).
 - **Fechas:** "6 oct 2026"; para meses, "jun 2026".
 - **Moneda:** MXN o USD después de la cifra.
+
+## Inglés
+
+Cuando el texto va en inglés, escribe en el inglés sencillo y actual de Estados Unidos. Todo lo de abajo vale igual. Números como en español (35,765 t; 1.5 g/t); fechas "Oct 6, 2026" y, para meses, "Jun 2026".
 
 ## Desmitificar
 
@@ -40,6 +44,18 @@ Escribe en el español neutro y actual de Latinoamérica, con México como base.
   - **Preguntar:** solo el cliente lo sabe.
   - **Problema:** dato roto o incompleto.
 
-## Textos de tablero
+## Textos de pantalla
 
-Títulos, leyendas y etiquetas se escriben como habla la gente de la operación, no como habla el sistema. Por ejemplo, "Pendiente de arrancar" en vez de "Cola sin iniciar", o "Tiempo de la pieza por etapa" en vez de "Tramos de emisión a carga". Si dudas entre dos formas, ofrece 2 o 3 opciones al usuario.
+Títulos, subtítulos, etiquetas y el «?» de un tablero o una app, también cuando están en una cadena dentro del código. Primero se escriben; después se reescriben en una **pasada aparte**:
+
+1. Junta todos los textos de pantalla que escribiste o tocaste.
+2. Lee cada uno como lo leería alguien de la operación que ve la pantalla por primera vez. Si suena a sistema, a informe o a etiqueta de base de datos, reescríbelo como lo diría esa persona.
+3. Antes de cambiar un término, revisa en el código o en el dato qué significa. El texto nuevo dice lo mismo que el viejo.
+
+Al reescribir:
+
+- **La combinación que se dice.** Se corrige la frase que nadie diría, no la corta: "Viajes bien pesados" se queda; "Costo con planta" pasa a "Costo que dice de qué planta es".
+- **Anotar en el taller, registrar en el sistema.** Si el cliente usa otra palabra para esa acción, gana la suya.
+- **El «?» se cuenta en orden:** qué pasó, por qué y qué conviene revisar.
+
+La pasada termina cuando cada texto que tocaste se leyó así y los que sonaban a sistema quedaron reescritos. Si dudas entre dos formas, ofrece 2 o 3 al usuario.
