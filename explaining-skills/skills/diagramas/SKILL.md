@@ -1,6 +1,6 @@
 ---
 name: diagramas
-description: Dibujar diagramas que explican: flujos de proceso, relaciones entre empresas o personas, cadenas de cálculo, líneas de tiempo y arquitectura de despliegue en la nube, como HTML, PNG y SVG. Úsala cuando haga falta un diagrama, al documentar un proceso, una infraestructura o cómo desplegar un proyecto, o cuando una explicación necesite un dibujo.
+description: "Dibujar diagramas que explican: flujos de proceso, relaciones entre empresas o personas, cadenas de cálculo, líneas de tiempo y arquitectura de despliegue en la nube, como HTML, PNG y SVG. Úsala cuando haga falta un diagrama, al documentar un proceso, una infraestructura o cómo desplegar un proyecto, o cuando una explicación necesite un dibujo."
 ---
 
 # Diagramas que explican
