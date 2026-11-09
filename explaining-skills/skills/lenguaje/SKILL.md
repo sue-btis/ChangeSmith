@@ -1,6 +1,6 @@
 ---
 name: lenguaje
-description: Voz que desmitifica, para todo texto que lee una persona, en español latinoamericano o en inglés. Úsala al redactar explicaciones, documentos o mensajes para un cliente, y al escribir o tocar textos de pantalla (títulos, subtítulos, etiquetas, el «?» de un tablero), también cuando están en el código.
+description: "Títulos, etiquetas y todo texto que lee una persona, en español latinoamericano o en inglés: voz que desmitifica. Úsala antes de proponer, escribir o cambiar títulos, subtítulos, etiquetas o el «?» de un tablero o una app (también en el código), y al redactar explicaciones, documentos o mensajes para un cliente."
 ---
 
 La voz **desmitifica**: toma algo que suena difícil y lo deja en palabras que cualquiera entiende, sin perder exactitud. Quien lee tiene que salir pensando "ah, era eso", no "qué inteligentes son".
