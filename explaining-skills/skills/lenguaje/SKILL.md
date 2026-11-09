@@ -49,8 +49,9 @@ Cuando el texto va en inglés, escribe en el inglés sencillo y actual de Estado
 Títulos, subtítulos, etiquetas y el «?» de un tablero o una app, también cuando están en una cadena dentro del código. Primero se escriben; después se reescriben en una **pasada aparte**:
 
 1. Junta todos los textos de pantalla que escribiste o tocaste.
-2. Lee cada uno como lo leería alguien de la operación que ve la pantalla por primera vez. Si suena a sistema, a informe o a etiqueta de base de datos, reescríbelo como lo diría esa persona.
-3. Antes de cambiar un término, revisa en el código o en el dato qué significa. El texto nuevo dice lo mismo que el viejo.
+2. Antes de cambiar un término, revisa en el código o en el dato qué significa. El texto nuevo dice lo mismo que el viejo.
+3. Para cada título y subtítulo, ofrece al usuario tres formas: la actual y dos nuevas, como lo diría alguien de la operación que ve la pantalla por primera vez. El usuario elige. Saber si un título ya se entiende le toca a quien conoce la operación.
+4. Los demás textos (etiquetas, el «?») léelos como esa persona, y reescribe los que suenen a sistema, a informe o a etiqueta de base de datos.
 
 Al reescribir:
 
@@ -58,4 +59,4 @@ Al reescribir:
 - **Anotar en el taller, registrar en el sistema.** Si el cliente usa otra palabra para esa acción, gana la suya.
 - **El «?» se cuenta en orden:** qué pasó, por qué y qué conviene revisar.
 
-La pasada termina cuando cada texto que tocaste se leyó así y los que sonaban a sistema quedaron reescritos. Si dudas entre dos formas, ofrece 2 o 3 al usuario.
+La pasada termina cuando cada título y subtítulo tiene sus tres formas frente al usuario, y cada uno de los demás textos que tocaste se leyó y, si sonaba a sistema, quedó reescrito.
